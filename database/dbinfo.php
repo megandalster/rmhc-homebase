@@ -17,8 +17,8 @@
 
 function connect() {
     $host = "localhost";
-    $database = "rmhphomebasedb";
-    $user = "rmhphomebasedb";
+    $database = "rmhchomebasedb";
+    $user = "rmhchomebasedb";
     $pass = "math204";
 
     $connected = mysql_connect($host, $user, $pass);
