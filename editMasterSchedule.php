@@ -127,7 +127,7 @@ session_cache_expire(30);
                         	echo "<br>Removed a master schedule shift <br><br>";
                         	$returnpoint = "viewSchedule.php?venue=" . $venue;
                         	echo "<table align=\"center\"><tr><td align=\"center\" width=\"442\">
-									<><a href=\"" . $returnpoint . "\">
+									<a href=\"" . $returnpoint . "\">
 									Back to Master Schedule</a></td></tr></table>";
                         	add_log_entry('<a href=\"personEdit.php?id=' . $_SESSION['_id'] . '\">' . $_SESSION['f_name'] . ' ' .
                             		$_SESSION['l_name'] . '</a> deleted a new master schedule shift: <a href=\"editMasterSchedule.php?group=' .

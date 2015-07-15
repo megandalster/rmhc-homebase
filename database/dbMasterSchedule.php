@@ -341,7 +341,8 @@ function get_person_ids($venue, $week_no, $day, $time) {
         die("get_person_ids could not query the database");
     if (mysql_num_rows($result) !== 1) {
         mysql_close();
-        die("Error: week-day-time-venue not valid:see get_person_ids");
+        return array();
+      //  die("Error: week-day-time-venue not valid:see get_person_ids");
     }
     $result_row = mysql_fetch_array($result, MYSQL_ASSOC);
     $person_ids = explode(',', $result_row['persons']);
@@ -363,8 +364,8 @@ function get_total_slots($id) {
         die("get_total_slots could not query the database");
     if (mysql_num_rows($result) !== 1) {
         mysql_close();
-        echo "Error: group-day-time not valid:see get_total_slots".$id;
-        return false;
+    //    echo "Error: group-day-time not valid:see get_total_slots".$id;
+        return 0;
     }
     $result_row = mysql_fetch_assoc($result, MYSQL_ASSOC);
     return $result_row['slots'];
