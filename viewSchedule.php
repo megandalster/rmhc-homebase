@@ -59,8 +59,8 @@ include_once("domain/MasterScheduleEntry.php");
 function show_master_schedule($venue) {
 	$groups = array("1st", "2nd", "3rd", "4th", "5th");
 	$altgroups = array("odd", "even");
-    $shifts = array("9-1","1-5","5-9","night");
-	$venues = array("house"=>"House","fam"=>"Family Room");
+    $shifts = array("9-12","12-3","3-6","6-9","night");
+	$venues = array("house"=>"Portland House","fam"=>"Bangor House");
     $days = array("Mon" => "Monday", "Tue" => "Tuesday", "Wed" => "Wednesday",
                     "Thu" => "Thursday", "Fri" => "Friday", "Sat" => "Saturday", "Sun" => "Sunday");
     echo ('<br><table id="calendar" align="center" ><tr class="weekname"><td colspan="' . (sizeof($days) + 2) . '" ' .

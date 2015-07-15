@@ -86,19 +86,19 @@
         if ($_SESSION['access_level'] == 0)
             echo(' | <a href="' . $path . 'personEdit.php?id=' . 'new' . '"><b>apply</b></a>');
         if ($_SESSION['access_level'] >= 1) {
-            echo(' | <strong>calendars:</strong> <a href="' . $path . 'calendar.php?venue=house">house, </a>');
-            echo('<a href="' . $path . 'calendar.php?venue=fam">family room, </a>');
-            echo('<a href="' . $path . 'calendar.php?venue=mealprep">meal prep, </a>');
-            echo('<a href="' . $path . 'calendar.php?venue=activities">activity, </a>');
-            echo('<a href="' . $path . 'calendar.php?venue=group">group </a>');
+            echo(' | <strong>calendars:</strong> <a href="' . $path . 'calendar.php?venue=house">Portland House, </a>');
+            echo('<a href="' . $path . 'calendar.php?venue=fam">Bangor House, </a>');
+            echo('<a href="' . $path . 'calendar.php?venue=mealprep">guest chef, </a>');
+            echo('<a href="' . $path . 'calendar.php?venue=activities">activities, </a>');
+            echo('<a href="' . $path . 'calendar.php?venue=group">parking </a>');
         }
         if ($_SESSION['access_level'] == 1.5) {
             echo('<br>');
             echo('<strong>volunteers :</strong> <a href="' . $path . 'personSearch.php">search</a>');
         }
         if ($_SESSION['access_level'] >= 2) {
-            echo('<br><strong>master schedules : </strong><a href="' . $path . 'viewSchedule.php?venue=house">house, </a>'.
-            		'<a href="' . $path . 'viewSchedule.php?venue=fam">family room </a> | ');
+            echo('<br><strong>master schedules : </strong><a href="' . $path . 'viewSchedule.php?venue=house">Portland House, </a>'.
+            		'<a href="' . $path . 'viewSchedule.php?venue=fam">Bangor House </a> | ');
             echo('<strong>volunteers : </strong> <a href="' . $path . 'personSearch.php">search</a>, 
 			        <a href="personEdit.php?id=' . 'new' . '">add, </a> <a href="viewScreenings.php?type=new">screenings</a>');
             echo(' | <strong><a href="' . $path . 'reports.php">reports</a> </strong>');

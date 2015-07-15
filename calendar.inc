@@ -66,7 +66,7 @@ function do_week_nav($week, $edit, $venue) {
 function show_week($days, $week, $edit, $year, $doy, $venue) {
     // gets all of the dates for this week
     // sets up the table, with title, and then day of month
-    $venues = array("house" => "House", "fam" => "Family Room");
+    $venues = array("house" => "Portland House", "fam" => "Bangor House");
 	$free_hour = array();
     for ($i = 0; $i < 91; $i++)
         $free_hour[] = true;
@@ -87,7 +87,8 @@ function show_week($days, $week, $edit, $year, $doy, $venue) {
             	$shift_length = get_shift_end($shiftid) - get_shift_start($shiftid);
             	if (substr($shiftid,9,5)=="night")
             	    $t="night";
-            	else $t = substr($shiftid,9,3);
+            	else $t = substr($shiftid,9,strrpos($shiftid,":")-9);
+          //  	echo "shift id,length,start,end,t = ".$shiftid.",".$shift_length.",".get_shift_start($shiftid).",".get_shift_end($shiftid).",".$t;
             	echo do_shift($days[$i], $t, $shift_length, $edit, $venue);
                 for ($j = $hour; $j < $hour + $shift_length; $j++)
                     $free_hour[7 * ($j - 9) + $i] = false;

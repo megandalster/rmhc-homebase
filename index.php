@@ -38,7 +38,7 @@ session_cache_expire(30);
                     echo "<p>Welcome, " . $person->get_first_name() . ", to Homebase!";
                 }
                 else 
-                    echo "<p>Welcome to Homebase!";
+                    echo "<p>Welcome!";
                 echo "   Today is " . date('l F j, Y') . ".<p>";
                 ?>
 
@@ -46,8 +46,8 @@ session_cache_expire(30);
                 <p>
                     <?PHP
                     if ($_SESSION['access_level'] == 0)
-                        echo('<p> To apply for a volunteer position at the Ronald McDonald House, select <a href="' . 
-                              $path . 'personEdit.php?id=' . 'new' . '">apply</a>.');
+                        echo('<p> To apply for volunteering at the Portland or Bangor Ronald McDonald House, '.
+                        		'please select <b>apply</b>.');
                     if ($person) {
                         /*
                          * Check type of person, and display home page based on that.

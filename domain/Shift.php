@@ -41,8 +41,10 @@ class Shift {
         $i = strpos($this->hours, "-");
         if ($i>0) {
         	$this->start_time = substr($this->hours, 0, $i);   
-        	$this->end_time = substr($this->hours, $i + 1) + 12;
-        	if ($this->start_time != "9") {
+        	$this->end_time = substr($this->hours, $i + 1);
+        	if ($this->end_time!=12)
+        		$this->end_time += 12;
+        	if ($this->start_time != "9" && $this->start_time != "12") {
         		$this->start_time += 12;
         	}
         }
