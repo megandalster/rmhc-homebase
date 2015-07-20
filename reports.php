@@ -34,8 +34,8 @@ include_once('domain/Shift.php');
 <script src="lib/jquery-ui.js"></script>
 <script>
 $(function() {
-	$( "#from" ).datepicker({dateFormat: 'mm-dd-y',changeMonth:true,changeYear:true});
-	$( "#to" ).datepicker({dateFormat: 'mm-dd-y',changeMonth:true,changeYear:true});
+	$( "#from" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true});
+	$( "#to" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true});
 
 	$(document).on("keyup", ".volunteer-name", function() {
 		var str = $(this).val();

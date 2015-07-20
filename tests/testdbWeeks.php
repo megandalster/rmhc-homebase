@@ -23,11 +23,11 @@ class testdbWeeks extends UnitTestCase {
 		//Create two weeks and add them to the database
 		$days1 = array();
       	for($i=9;$i<16;$i++) {
-      		$days1[] = new RMHDate(date('m-d-y',mktime(0,0,0,2,$i,2015)),"house",array(),"");
+      		$days1[] = new RMHDate(date('y-m-d',mktime(0,0,0,2,$i,2015)),"house",array(),"");
       	}
       	$days2 = array();
       	for($i=16;$i<23;$i++) {
-      		$days2[] = new RMHDate(date('m-d-y',mktime(0,0,0,2,$i,2015)),"fam",array(),"");
+      		$days2[] = new RMHDate(date('y-m-d',mktime(0,0,0,2,$i,2015)),"fam",array(),"");
       	}
         $w1 = new Week($days1,"house","archived");
         $w2 = new Week($days2,"fam","unpublished");

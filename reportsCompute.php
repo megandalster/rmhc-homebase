@@ -48,7 +48,7 @@ function show_report() {
 
 function report_volunteer_hours_by_day($from, $to, $venue) { 
 	if($from == ""){$from ="00-00-00";}
-	if($to == ""){$to = date("m-d-y");}
+	if($to == ""){$to = date("y-m-d");}
 		
 	echo "<br><b>Total Volunteer Hours Report</b><br>"; 
 	if ($from!="00-00-00")
@@ -58,14 +58,14 @@ function report_volunteer_hours_by_day($from, $to, $venue) {
 	echo " for the ".pretty_venue($venue).".";
 
 	$report = get_volunteer_hours($from, $to, $venue);
-	$row_labels = array("9-1","1-5","5-9","night","Total");
+	$row_labels = array("9-12","12-3","3-6","6-9","night","Total");
 	$col_labels = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun","Total");
 	display_totals_table($col_labels, $row_labels, $report, $export);	
 }
 
 function report_shifts_staffed_vacant_by_day($from, $to, $venue) {
 	if($from == ""){$from ="00-00-00";}
-	if($to == ""){$to = date("m-d-y");}
+	if($to == ""){$to = date("y-m-d");}
 		
 	echo "<br><b>Shifts/Vacancies Report</b><br>"; 
 	if ($from!="00-00-00")
@@ -75,7 +75,7 @@ function report_shifts_staffed_vacant_by_day($from, $to, $venue) {
 	echo " for the ".pretty_venue($venue).".";
 
 	$report = get_shifts_staffed($from, $to, $venue);
-	$row_labels = array("9-1","1-5","5-9","night","Total");
+	$row_labels = array("9-12","12-3","3-6","6-9","night","Total");
 	$col_labels = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun","Total");
 	display_vacancies_table($col_labels, $row_labels, $report, $export);
 }
@@ -93,7 +93,7 @@ function report_volunteer_birthdays($name_from, $name_to, $venue, $export) {
 
 function report_volunteer_history($from, $to, $name_from, $name_to, $venue, $export) {
 	if($from == ""){$from ="00-00-00";}
-	if($to == ""){$to = date("m-d-y");}
+	if($to == ""){$to = date("y-m-d");}
 	if($name_from == ""){$name_from="A";}
 	if($name_to == ""){$name_to = "Z";}
 	
@@ -178,23 +178,23 @@ function display_birthdays($report, $export) { //Create a table to display birth
 }
 
 function pretty_date($date){
-	//eg. date is 03-30-78, this function can convert it into "March 30, 1978"
+	//eg. date is 78-03-30, this function can convert it into "March 30, 1978"
   	//explode the date to get month, day and year
 	$dob=explode("-",$date); 
 	//if the year is less than 30, we can assume the person was born after 2000; if the year is greater than 30, we can 
 	//assume the person was born before 2000. 
-	if ($dob[2]=="XX")
-	    $dob[2] = "19XX";
-	elseif ( ((int) $dob[2] ) <= date("y")){
-		$dob[2] = "20".$dob[2];  	
+	if ($dob[0]=="XX")
+	    $dob[0] = "19XX";
+	elseif ( ((int) $dob[0] ) <= date("y")){
+		$dob[0] = "20".$dob[0];  	
 	} else{
-		$dob[2] = "19".$dob[2];
+		$dob[0] = "19".$dob[0];
 	}
-    if ( ((int) $dob[1] ) < 10)
-		$dob[1] = substr($dob[1],1);  		
-	$dateObj   = DateTime::createFromFormat('!m', $dob[0]);
-	$dob[0] = $dateObj->format('M'); 
-	return $dob[0]." ".$dob[1].", ".$dob[2];
+    if ( ((int) $dob[2] ) < 10)
+		$dob[2] = substr($dob[1],1);  		
+	$dateObj   = DateTime::createFromFormat('!m', $dob[1]);
+	$dob[1] = $dateObj->format('M'); 
+	return $dob[1]." ".$dob[2].", ".$dob[0];
 }
 
 
@@ -348,16 +348,16 @@ function calculate_age($date){
 	
 	//if the year is less than 30, we can assume the person was born after 2000; if the year is greater than 30, we can 
 	//assume the person was born before 2000. 
-	if ( ((int) $dob[2] ) <= date("y")){
-		$dob[2] = "20".$dob[2];  	
+	if ( ((int) $dob[0] ) <= date("y")){
+		$dob[2] = "20".$dob[0];  	
 	} else{
-		$dob[2] = "19".$dob[2];
+		$dob[2] = "19".$dob[0];
 	}	
 	$curMonth = date("m");
 	$curDay = date("j");
 	$curYear = date("Y");
 	$age = $curYear - $dob[2]; 
-	if($curMonth<$dob[0] || ($curMonth==$dob[1] && $curDay<$dob[1])){ 
+	if($curMonth<$dob[1] || ($curMonth==$dob[1] && $curDay<$dob[2])){ 
 		$age--; 
 	}
     return $age; 

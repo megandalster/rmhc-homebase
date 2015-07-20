@@ -21,7 +21,7 @@ include_once('RMHdate.php');
 
 class Week {
 
-    private $id;    // id of the first day of the week, mm-dd-yy;venue, e.g., "02-06-12:house"
+    private $id;    // id of the first day of the week, yy-mm-dd;venue, e.g., "02-06-12:house"
     private $dates;    // array of 7 RMHdates, beginning Monday
     private $venue; // venue "house" or "fam"
     private $name;     // the name of the week (ie March 7, 2008 - March 14, 2008)

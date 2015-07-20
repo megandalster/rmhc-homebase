@@ -14,7 +14,7 @@
 
 class SCL {
 
-    private $id;   // mm-dd-yy:hours:venue, the same id as the shift it belongs to
+    private $id;   // yy-mm-dd:hours:venue, the same id as the shift it belongs to
     private $persons;  // array of person information arrays
     // person[i]=array(personid, first_name, last_name, phone1, phone2,
     // date_called, result, accepted);

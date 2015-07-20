@@ -33,6 +33,7 @@ session_cache_expire(30);
                 include_once('domain/Shift.php');
                 include_once('database/dbShifts.php');
                 date_default_timezone_set('America/New_York');
+            //    fix_all_birthdays();
                 if ($_SESSION['_id'] != "guest") {
                     $person = retrieve_person($_SESSION['_id']);
                     echo "<p>Welcome, " . $person->get_first_name() . ", to Homebase!";

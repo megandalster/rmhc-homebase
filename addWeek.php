@@ -115,7 +115,7 @@ session_cache_expire(45);
                     // set the group names the format used by master schedule
                     $weekdays = array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
                     $weeksofmonth = array(1=>"1st",2=>"2nd",3=>"3rd",4=>"4th",5=>"5th");
-                    $day_id = $m . "-" . $d . "-" . $y;
+                    $day_id = $y . "-" . $m . "-" . $d;
                     $dates = array();
                     $daysinmonth=date("t",mktime(0, 0, 0, $m, $d, $y));
                         
@@ -151,7 +151,7 @@ session_cache_expire(45);
                         	    {$m =1; $y++;}
                         	else $m++;
                         }
-                        $day_id = date("m-d-y", mktime(0, 0, 0, $m, $d, $y));
+                        $day_id = date("y-m-d", mktime(0, 0, 0, $m, $d, $y));
                     }
                      // creates a new week from the dates
                     $newweek = new Week($dates, $venue, "unpublished");

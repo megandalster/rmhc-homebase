@@ -152,6 +152,22 @@ function update_hours($id, $new_hours) {
     return $result;
 }
 
+function update_birthday($id, $new_birthday) {
+	connect();
+	$query = 'UPDATE dbPersons SET birthday = "' . $new_birthday . '" WHERE id = "' . $id . '"';
+	$result = mysql_query($query);
+	mysql_close();
+	return $result;
+}
+
+function update_start_date($id, $new_start_date) {
+	connect();
+	$query = 'UPDATE dbPersons SET start_date = "' . $new_start_date . '" WHERE id = "' . $id . '"';
+	$result = mysql_query($query);
+	mysql_close();
+	return $result;
+}
+
 /*
  * @return all rows from dbPersons table ordered by last name
  * if none there, return false
@@ -379,6 +395,32 @@ function get_logged_hours($from, $to, $name_from, $name_to, $venue) {
 	}
    	mysql_close();
    	return $thePersons;
+}
+
+function fix_all_birthdays () {
+	$persons = getall_dbPersons("A","Z");
+	foreach ($persons as $p) {
+		$b = $p->get_birthday();
+		$s = $p->get_start_date();
+		if ($b!=""){
+			$a = explode("-",$b);
+			if (strlen($a[1])>2)
+				$a[1] = substr($a[1],0,2);
+			if (strlen($a[2])>2)
+				$a[2] = substr($a[2],0,2);
+			$b = $a[2]."-".$a[0]."-".$a[1];
+			update_birthday($p->get_id(), $b);
+		}
+		if ($s!=""){
+			$a = explode("-",$s);
+			if (strlen($a[1])>2)
+				$a[1] = substr($a[1],0,2);
+			if (strlen($a[2])>2)
+				$a[2] = substr($a[2],0,2);
+			$s = $a[2]."-".$a[0]."-".$a[1];
+			update_start_date($p->get_id(), $s);
+		}
+	}
 }
 
 ?>

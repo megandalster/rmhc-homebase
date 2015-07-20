@@ -49,9 +49,9 @@
 					}
 					if(!$id) {
 						// The first 8 characters of the shift id shows the dates for the week. 
-						$mm_dd_yy = substr($_GET['shift'], 0, 8);
+						$yy_mm_dd = substr($_GET['shift'], 0, 8);
 						// Displays the option of going back to the Calendar.
-						back_to_calendar($mm_dd_yy, 700, $venue);
+						back_to_calendar($yy_mm_dd, 700, $venue);
 						
 						do_scl_index($id,$venue);
 					}

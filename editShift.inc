@@ -82,7 +82,7 @@ include_once('database/dbLog.php');
 			</form></td></tr>";
 		echo "</table>";
 		echo "<table align=\"center\"><tr><td align=\"center\" width=\"400\">
-		&nbsp;<a href=\"editShift.php?shift=".$shift->get_mm_dd_yy().":".$shift->get_hours().
+		&nbsp;<a href=\"editShift.php?shift=".$shift->get_yy_mm_dd().":".$shift->get_hours().
 		              "&venue=".$venue."\">Back to Shift</a><br></td></tr></table>";
 		return true;
 
@@ -178,7 +178,7 @@ include_once('database/dbLog.php');
 			   		    $shift->get_id().'\">'.get_shift_name_from_id($shift->get_id()).'</a>.');
 				}
 			}
-			$shift = new Shift($shift->get_mm_dd_yy().":".$shift->get_hours(), $shift->get_venue(), 
+			$shift = new Shift($shift->get_yy_mm_dd().":".$shift->get_hours(), $shift->get_venue(), 
 								0, array(),array(), "", "");
 			update_dbShifts($shift);
 			add_log_entry('<a href=\"personEdit.php?id='.$_SESSION['_id'].'\">'.$_SESSION['f_name'].' '.
@@ -208,7 +208,7 @@ include_once('database/dbLog.php');
 			</form></td></tr>";
 		echo "</table>";
 		echo "<table align=\"center\"><tr><td align=\"center\" width=\"400\">
-		<br><a href=\"editShift.php?shift=".$shift->get_mm_dd_yy().":".$shift->get_hours().
+		<br><a href=\"editShift.php?shift=".$shift->get_yy_mm_dd().":".$shift->get_hours().
 		           "\">Back to Shift</a><br></td></tr></table>";
 		return true;
     }

@@ -42,8 +42,8 @@
                 if ($week) 
                     $last = $week -> get_id();
                 else 
-                    $last = date('m-d-y',strtotime("last Monday"));   
-                $new_week_timestamp = mktime(0, 0, 0, substr($last, 0, 2), substr($last, 3, 2) + 7, substr($last, 6, 2));
+                    $last = date('y-m-d',strtotime("last Monday"));   
+                $new_week_timestamp = mktime(0, 0, 0, substr($last, 3, 2), substr($last, 6, 2) + 7, substr($last, 0, 2));
                 echo ('<tr><td>');
             	echo "<input type=\"hidden\" name=\"_new_week_timestamp\" value=\"" . $new_week_timestamp . "\">
 								<input type=\"hidden\" name=\"_submit_check_newweek\" value=\"1\">

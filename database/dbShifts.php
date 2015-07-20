@@ -24,7 +24,7 @@ include_once('dbinfo.php');
 /**
  * Drops the dbShifts table if it exists, and creates a new one
  * Table fields:
- * 0 id: "mm-dd-yy:hours:venue" is a unique key for this shift
+ * 0 id: "yy-mm-dd:hours:venue" is a unique key for this shift
  * 1 start_time: Integer: e.g. 10 (meaning 10:00am)
  * 2 end_time: Integer: e.g. 13 (meaning 1:00pm)
  * 3 venue = "house" or "fam"
@@ -324,7 +324,7 @@ function get_all_shifts() {
 }
 // this function is for exporting volunteer data
 function get_all_people_in_past_shifts() {
-    $today = date('m-d-y');
+    $today = date('y-m-d');
     $people_in_shifts = array();
     $all_shifts = get_all_shifts();
     foreach ($all_shifts as $a_shift){
@@ -343,7 +343,7 @@ function get_all_people_in_past_shifts() {
 }
 // this function is for reporting volunteer data
 function get_all_peoples_histories() {
-    $today = date('m-d-y');
+    $today = date('y-m-d');
     $histories = array();
     $all_shifts = get_all_shifts();
     foreach ($all_shifts as $a_shift){
@@ -366,11 +366,11 @@ function get_all_peoples_histories() {
     return $histories;
 }
 
-function date_create_from_mm_dd_yyyy ($mm_dd_yyyy) {
-    if (strpos($mm_dd_yyyy,"/")>0)
-        return mktime(0,0,0,substr($mm_dd_yyyy,0,2),substr($mm_dd_yyyy,3,2),substr($mm_dd_yyyy,6,4));
-    else
-        return mktime(0,0,0,substr($mm_dd_yyyy,0,2),substr($mm_dd_yyyy,3,2),"20".substr($mm_dd_yyyy,6,2));
+function date_create_from_yyyy_mm_dd($yyyy_mm_dd) {
+	if (strpos($yyyy_mm_dd,"/")>0)
+		return mktime(0,0,0,substr($yyyy_mm_dd,0,2),substr($yyyy_mm_dd,3,2),substr($yyyy_mm_dd,6,4));
+	else
+		return mktime(0,0,0,substr($yyyy_mm_dd,3,2),substr($yyyy_mm_dd,6,2),"20".substr($yyyy_mm_dd,0,2));
 }
 
 //returns an array of date:shift:venue:totalhours
@@ -406,7 +406,7 @@ function get_volunteer_hours($from,$to,$venue){ //Used for Total Hours Report
        		if($a_shift->get_hours() == "night"){	
         		$length = 8;
        		}else{
-        		$length = 4;
+        		$length = 3;
        		}
        		$count = substr_count($people,"+");		
        		$num_people = $count / 2;

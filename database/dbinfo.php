@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015 by student1, student2, student3, student4, and Allen Tucker. 
+ * Copyright 2015 by Allen Tucker. 
  * This program is part of RMHP-Homebase, which is free software.  It comes with 
  * absolutely no warranty. You can redistribute and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation

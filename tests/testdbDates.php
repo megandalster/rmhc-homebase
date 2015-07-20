@@ -19,9 +19,9 @@
 class testdbDates extends UnitTestCase {
     function testdbDatesModule() {
 		$my_shifts = array();
-		$my_shifts[] = new Shift("02-28-10:9-1", "house", 1, array(), array(), null ,"");
-		$my_shifts[] = new Shift("02-28-10:1-5", "house", 1, array(), array(), null ,"");
-		$my_date = new RMHdate("02-28-10","house",$my_shifts,"");
+		$my_shifts[] = new Shift("10-02-28:9-1", "house", 1, array(), array(), null ,"");
+		$my_shifts[] = new Shift("10-02-28:1-5", "house", 1, array(), array(), null ,"");
+		$my_date = new RMHdate("10-02-28","house",$my_shifts,"");
 		$this->assertTrue(insert_dbDates($my_date));
 		$this->assertTrue(delete_dbDates($my_date));
 		

@@ -4,7 +4,7 @@
  * Xun Wang, and Allen Tucker. This program is part of RMHP-Homebase, which is free 
  * software.  It comes with absolutely no warranty. You can redistribute and/or 
  * modify it under the terms of the GNU General Public License as published by the 
- * Free Software Foundation (see <http://www.gnu.org/licenses/ for more information).
+ * Free Software Foundation (see <http://www.gnu.org/licenses/ for more information).mm_dd_yy
  */
 /*
  * class Shift characterizes a time interval in a day new Shift
@@ -18,7 +18,7 @@ include_once(dirname(__FILE__).'/../database/dbPersons.php');
 
 class Shift {
 
-    private $mm_dd_yy;      // String: "mm-dd-yy".
+    private $yy_mm_dd;      // String: "yy-mm-dd".
     private $hours;          // String: '9-1', '1-5', '5-9' or 'night'
     private $start_time;    // Integer: e.g. 10 (meaning 10:00am)     
     private $end_time;      // Integer: e.g. 13 (meaning 1:00pm)	  
@@ -28,16 +28,16 @@ class Shift {
     private $removed_persons; // array of persons who have previously been removed from this shift.
     private $sub_call_list; // SCL if sub call list exists, otherwise null
     private $day;           // string name of day "Monday"...
-    private $id;            // "mm-dd-yy:hours:venue is a unique key for this shift
+    private $id;            // "yy-mm-dd:hours:venue is a unique key for this shift
     private $notes;         // notes written by the manager
 
     /*
      * construct an empty shift with a certain number of vacancies
      */
 
-    function __construct($mm_dd_yyhours, $venue, $vacancies, $persons, $removed_persons, $sub_call_list, $notes) {
-    	$this->mm_dd_yy = substr($mm_dd_yyhours, 0, 8);
-        $this->hours = substr($mm_dd_yyhours, 9);
+    function __construct($yy_mm_ddhours, $venue, $vacancies, $persons, $removed_persons, $sub_call_list, $notes) {
+    	$this->yy_mm_dd = substr($yy_mm_ddhours, 0, 8);
+        $this->hours = substr($yy_mm_ddhours, 9);
         $i = strpos($this->hours, "-");
         if ($i>0) {
         	$this->start_time = substr($this->hours, 0, $i);   
@@ -57,8 +57,8 @@ class Shift {
         $this->persons = $persons;
         $this->removed_persons = $removed_persons;
         $this->sub_call_list = $sub_call_list;
-        $this->day = date("D", mktime(0, 0, 0, substr($this->mm_dd_yy, 0, 2), substr($this->mm_dd_yy, 3, 2), "20" . substr($this->mm_dd_yy, 6, 2)));
-        $this->id = $mm_dd_yyhours.":".$venue;
+        $this->day = date("D", mktime(0, 0, 0, substr($this->yy_mm_dd, 3, 2), substr($this->yy_mm_dd, 6, 2), "20" . substr($this->yy_mm_dd, 0, 2)));
+        $this->id = $yy_mm_ddhours.":".$venue;
         $this->notes = $notes;	
     }
 
@@ -68,7 +68,7 @@ class Shift {
      * Precondition:  0 <= $st && $st < $et && $et < 24
      *          && the shift is not "chef" or "night"
      * Postcondition: $this->start_time == $st && $this->end_time == $et
-     *          && $this->id == $this->mm_dd_yy .  "-"
+     *          && $this->id == $this->yy_mm_dd .  "-"
      *          . $this->start_time . "-" . $this->end_time . $this->venue
      *          && $this->hours == substr($this->id, 9)
      */
@@ -81,7 +81,7 @@ class Shift {
             	$st -= 12;
             if ($et>12)
             	$et -=12;
-            $this->id = $this->mm_dd_yy . ":" . $st
+            $this->id = $this->yy_mm_dd . ":" . $st
                     . "-" . $et;
             $this->hours = substr($this->id, 9);
             return $this;
@@ -130,8 +130,8 @@ class Shift {
     /*
      * getters and setters
      */
-    function get_mm_dd_yy() {
-    	return $this->mm_dd_yy;
+    function get_yy_mm_dd() {
+    	return $this->yy_mm_dd;
     }
 
     function get_hours() {
@@ -150,7 +150,7 @@ class Shift {
     }
     
     function get_date() {
-        return $this->mm_dd_yy;
+        return $this->yy_mm_dd;
     }
 
     function get_venue() {
@@ -208,44 +208,5 @@ class Shift {
     }
     
 }
-
-function report_shifts_staffed_vacant($from, $to) {
-	$min_date = "01/01/2000";
-	$max_date = "12/31/2020";
-	if ($from == '') $from = $min_date;
-	if ($to == '') $to = $max_date;
-	error_log("from date = " . $from);
-	error_log("to date = ". $to);
-	$from_date = date_create_from_mm_dd_yyyy($from);
-	$to_date   = date_create_from_mm_dd_yyyy($to);
-	$reports = array(
-		'morning' => array('Mon' => array(0, 0), 'Tue' => array(0, 0), 'Wed' => array(0, 0), 'Thu' => array(0, 0),
-    				'Fri' => array(0, 0), 'Sat' => array(0, 0), 'Sun' => array(0, 0)), 
-		'earlypm' => array('Mon' => array(0, 0), 'Tue' => array(0, 0), 'Wed' => array(0, 0), 'Thu' => array(0, 0),
-    				'Fri' => array(0, 0), 'Sat' => array(0, 0), 'Sun' => array(0, 0)),
-		'latepm' => array('Mon' => array(0, 0), 'Tue' => array(0, 0), 'Wed' => array(0, 0), 'Thu' => array(0, 0),
-    				'Fri' => array(0, 0), 'Sat' => array(0, 0), 'Sun' => array(0, 0)),
-		'evening' => array('Mon' => array(0, 0), 'Tue' => array(0, 0), 'Wed' => array(0, 0), 'Thu' => array(0, 0),
-    				'Fri' => array(0, 0), 'Sat' => array(0, 0), 'Sun' => array(0, 0)),
-		'overnight' => array('Mon' => array(0, 0), 'Tue' => array(0, 0), 'Wed' => array(0, 0), 'Thu' => array(0, 0),
-    				'Fri' => array(0, 0), 'Sat' => array(0, 0), 'Sun' => array(0, 0)),
-		'total' => array('Mon' => array(0, 0), 'Tue' => array(0, 0), 'Wed' => array(0, 0), 'Thu' => array(0, 0),
-    				'Fri' => array(0, 0), 'Sat' => array(0, 0), 'Sun' => array(0, 0)),
-	);
-	$all_shifts = get_all_shifts();
-	foreach ($all_shifts as $s) {
-		$shift_date = date_create_from_mm_dd_yyyy($s->get_mm_dd_yy());
-		if ($shift_date >= $from_date && $shift_date <= $to_date && 
-		    (strlen($s->get_persons())>0 || $s->get_vacancies()>0)) {
-		    $reports[$s->get_time_of_day()][$s->get_day()][0] += 1;
-			$reports[$s->get_time_of_day()][$s->get_day()][1] += $s->get_vacancies();
-			$reports['total'][$s->get_day()][0] += 1;
-			$reports['total'][$s->get_day()][1] += $s->get_vacancies();
-		}
-	}
-	return $reports;
-}
-
-
 
 ?>

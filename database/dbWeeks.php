@@ -26,7 +26,7 @@ include_once('domain/Shift.php');
 /**
  * Drops the dbWeeks table if it exists, and creates a new one slots =
  * Table fields:
- * [0] id: mm-dd-yy:venue
+ * [0] id: yy-mm-dd:venue
  * [1] dates: array of RMHDate ids
  * [2] venue: "house" or "fam"
  * [3] status: "unpublished", "published" or "archived"
@@ -123,7 +123,7 @@ function select_dbWeeks($id) {
     } else {
         $timestamp = mktime(0, 0, 0, substr($id, 0, 2), substr($id, 3, 2), substr($id, 6, 2));
         $dow = date("N", $timestamp);
-        $id2 = date("m-d-y", mktime(0, 0, 0, substr($id, 0, 2), substr($id, 3, 2) - $dow + 1, substr($id, 6, 2)))
+        $id2 = date("y-m-d", mktime(0, 0, 0, substr($id, 0, 2), substr($id, 3, 2) - $dow + 1, substr($id, 6, 2)))
         . ":" . substr($id,9);
     }
     connect();

@@ -24,7 +24,7 @@ include_once('dbinfo.php');
 /**
  * Drops dbDates table and creates a new one.
  * Elements of dbDates:
- *  id: mm-dd-yy:venue
+ *  id: yy-mm-dd:venue
  *  shifts - * delimited list of shift ids
  *  manager notes
  */

@@ -28,7 +28,7 @@ include_once('dbinfo.php');
 function create_dbLog() {
     connect();
     mysql_query("DROP TABLE IF EXISTS dbLog");
-    //NOTE: primary key set to id.  id is text in the form: mm-dd-yy-ss-se,  ss=shift start,  se=shift end
+    //NOTE: primary key set to id.  id is text in the form: yy-mm-dd-ss-se,  ss=shift start,  se=shift end
     $result = mysql_query("CREATE TABLE dbLog (id INT(3) NOT NULL AUTO_INCREMENT,time TEXT, message TEXT, PRIMARY KEY(id))");
     if (!$result)
         echo mysql_error();

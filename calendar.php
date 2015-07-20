@@ -45,7 +45,7 @@ session_cache_expire(30);
                         $venue = $_GET['venue'];
                         $weekid = $_GET['id'];
                         if (!$weekid)
-                            $weekid = date("m-d-y", time()). ":" .$venue;
+                            $weekid = date("y-m-d", time()). ":" .$venue;
                         $week = get_dbWeeks($weekid); // get the week
                         // if invalid week or unpublished week and not a manager
                         if (!$week instanceof Week || $week->get_status() == "unpublished" && $_SESSION['access_level'] < 1.5) {

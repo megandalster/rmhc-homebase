@@ -4,7 +4,7 @@
  * Xun Wang, and Allen Tucker. This program is part of RMHP-Homebase, which is free 
  * software.  It comes with absolutely no warranty. You can redistribute and/or 
  * modify it under the terms of the GNU General Public License as published by the 
- * Free Software Foundation (see <http://www.gnu.org/licenses/ for more information).
+ * Free Software Foundation (see <http://www.gnu.org/licenses/ for more information). new RMHdate
  */
 include_once("Shift.php");
 include_once("database/dbMasterSchedule.php");
@@ -15,7 +15,7 @@ include_once("database/dbMasterSchedule.php");
 
 class RMHdate {
 
-    private $id;    // "mm-dd-yy:venue" form of this date: used as a key
+    private $id;    // "yy-mm-dd:venue" form of this date: used as a key
     private $month;       // Textual month of the year  (e.g., Jan)
     private $day;         // Textual day of the week (Mon - Sun)
     private $dom;         // Numerical day of month
@@ -35,10 +35,10 @@ class RMHdate {
      * function checkdate
      */
 
-    function __construct($mm_dd_yy, $venue, $shifts, $mgr_notes) {
-        $mm = substr($mm_dd_yy, 0, 2);
-        $dd = substr($mm_dd_yy, 3, 2);
-        $yy = substr($mm_dd_yy, 6, 2);
+    function __construct($yy_mm_dd, $venue, $shifts, $mgr_notes) {
+        $mm = substr($yy_mm_dd, 3, 2);
+        $dd = substr($yy_mm_dd, 6, 2);
+        $yy = substr($yy_mm_dd, 0, 2);
         if (!checkdate($mm, $dd, $yy)) {
             $this->id = null;
             echo "Error: invalid date for RMHdate constructor " . $mm . $dd . $yy;
@@ -46,7 +46,7 @@ class RMHdate {
         }
     
         $my_date = mktime(0, 0, 0, $mm, $dd, $yy);
-        $this->id = $mm_dd_yy . ":" . $venue;
+        $this->id = $yy_mm_dd . ":" . $venue;
         $this->month = date("M", $my_date);
         $this->day = date("D", $my_date);
         $this->year = date("Y", $my_date);
@@ -88,7 +88,7 @@ class RMHdate {
     }
 
     /*
-     * @return "mm-dd-yy:venue"
+     * @return "yy-mm-dd:venue"
      */
 
     function get_id() {
