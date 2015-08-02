@@ -1,7 +1,6 @@
 <?php
 /*
- * Copyright 2015 by Adrienne Beebe, Connor Hargus, Phuong Le, 
- * Xun Wang, and Allen Tucker. This program is part of RMHP-Homebase, which is free 
+ * Copyright 2015 by Allen Tucker. This program is part of RMHC-Homebase, which is free 
  * software.  It comes with absolutely no warranty. You can redistribute and/or 
  * modify it under the terms of the GNU General Public License as published by the 
  * Free Software Foundation (see <http://www.gnu.org/licenses/ for more information).
@@ -53,10 +52,10 @@ if ($_SESSION['access_level'] == 0) {
     <input type="hidden" name="_form_submit" value="1">
     <script>
 			$(function(){
-				$( "#birthday" ).datepicker({dateFormat: 'mm-dd-y',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
-				$( "#start_date" ).datepicker({dateFormat: 'mm-dd-y',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
-				$( "#end_date" ).datepicker({dateFormat: 'mm-dd-y',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
-				$( "#screening_status[]" ).datepicker({dateFormat: 'mm-dd-y',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
+				$( "#birthday" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
+				$( "#start_date" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
+				$( "#end_date" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
+				$( "#screening_status[]" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
 			})
 	</script>
     <?PHP 
@@ -105,47 +104,7 @@ foreach ($states as $st) {
 <script src="lib/jquery-1.9.1.js"></script>
 		<script src="lib/jquery-ui.js"></script>
 		
-<?PHP
-    /*    echo('&nbsp;&nbsp;Gender:&nbsp;&nbsp;');
-        echo('<select name="gender">');
-        echo ('<option value=""');
-        if ($person->get_gender() == '')
-            echo (' SELECTED'); echo('></option>');
-        echo ('<option value="female"');
-        if ($person->get_gender() == 'female')
-            echo (' SELECTED'); echo('>female</option>');
-        echo ('<option value="male"');
-        if ($person->get_gender() == 'male')
-            echo (' SELECTED'); echo('>male</option>');
-        echo('</select>');
-
-        echo '<p>End Date: '. '<input name="end_date" type="text" id="end_date" value="'.$person->get_end_date().'">';
-
-        echo "&nbsp;&nbsp;&nbsp;&nbsp;Reason For Leaving:";
-        echo('<select name="reason_left">');
-        echo ('<option value=""');
-        if ($person->get_reason_left() == '')
-            echo (' SELECTED'); echo('></option>');
-        echo ('<option value="New Employment"');
-        if ($person->get_reason_left() == 'New Employment')
-            echo (' SELECTED'); echo('>New Employment</option>');
-        echo ('<option value="Moved Away"');
-        if ($person->get_reason_left() == 'Moved Away')
-            echo (' SELECTED'); echo('>Moved Away</option>');
-        echo ('<option value="Illness"');
-        if ($person->get_reason_left() == 'Illness')
-            echo (' SELECTED'); echo('>Illness</option>');
-        echo ('<option value="Family Obligation"');
-        if ($person->get_reason_left() == 'Family Obligation')
-            echo (' SELECTED'); echo('>Family Obligation</option>');
-        echo ('<option value="School"');
-        if ($person->get_reason_left() == 'School')
-            echo (' SELECTED'); echo('>School</option>');
-        echo ('<option value="Other (see notes)"');
-        if ($person->get_reason_left() == 'Other (see notes)')
-            echo (' SELECTED'); echo('>Other (see notes)</option>');            
-        echo('</select>');
- */       
+<?PHP  
 echo('</fieldset>');
 
 echo ('<p>Status:');
@@ -172,7 +131,7 @@ else {
 }
 echo('</select>');
 // $st = implode(',', $person->get_type());
-$types = array('volunteer' => 'House Volunteer', 'weekendmgr' => 'Weekend Manager', 'sub' => 'Sub', 'mealprep' => 'Guest Chef', 'other' => 'Other', 'manager' => 'Manager');
+$types = array('volunteer' => 'House Volunteer', 'weekendmgr' => 'Weekend Manager', 'mealprep' => 'Guest Chef', 'other' => 'Other', 'manager' => 'Manager');
 echo('<p>Position type(s):');
 // $ts = $types;
 echo('<span style="font-size:x-small;color:FF0000">*</span>');
@@ -184,6 +143,62 @@ foreach ($types as $key => $value) {
     echo ('>' . $value );
 }
 ?>
+    <fieldset id='availability'>
+        <legend>Availability:<span style="font-size:x-small;color:FF0000">*</span>(House Volunteers/Weekend Managers should check at least one Shift and Frequency)  </legend>
+        <span class="bigTable">
+            <table>
+                <?PHP
+                $shifts = array('9-12' => '9am-12pm', '12-3' => '12pm-3pm', '3-6' => '3pm-6pm',
+                    '6-9' => '6pm-9pm', 'night' => "Overnight");
+                $wkndshifts = array('9-12' => 'morning', '12-3' => 'afternoon', '3-6' => 'evening',
+                    '6-9' => '', 'night' => "Overnight");
+                $days = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
+                $frequencies = array("weekly"=>"weekly","odd,even"=>"bi-weekly","1st,2nd,3rd,4th,5th"=>"monthly","sub"=>"flex shift");
+                $freq2 = array("","","(weekend shifts)","(sub when needed)");
+                $person_availability = implode(',', $person->get_availability());
+    			echo "<table>";
+    			echo "<tr><td>Shift</td></tr>";
+				echo "<tr><td>Monday&nbsp;&nbsp;</td><td>Tuesday&nbsp;&nbsp;</td><td>Wednesday&nbsp;&nbsp;</td>".
+					"<td>Thursday&nbsp;&nbsp;</td><td>Friday&nbsp;&nbsp;</td><td>Saturday&nbsp;&nbsp;</td><td>Sunday</td></tr>";
+    			foreach ($shifts as $shift => $shiftvalue) {
+       				echo ('<tr>');
+       				foreach ($days as $day) {
+       			      if ($day=="Sat" || $day=="Sun")
+    	  					$shiftdisplay=$wkndshifts[$shift];
+    	  			  else $shiftdisplay=$shiftvalue;
+    	  			  if (($shift!="night" || $day=="Fri" || $day=="Sat") && $shiftdisplay!="") {
+       					$realkey = $day . ":". $shift;
+       	  				echo ('<td><input type="checkbox" name="availability[]" value=' . $realkey);
+    	  				if (in_array($realkey, $person->get_availability())) echo(' CHECKED');
+    	  				echo ('>');
+    	  				echo " ".$shiftdisplay.'</td>';
+       			      }
+       				  else echo "<td></td>";
+       				}
+       				echo ('</tr>');
+    			}
+    			echo "<tr><td>Frequency</td></tr>";
+    			echo "<tr>";
+    			foreach ($frequencies as $freq=>$freqname) {
+    				echo "<td>";
+    				echo ('<input type="checkbox" name="frequency[]" value=' . $freq);
+    	  			if (in_array($realkey, $person->get_availability())) echo(' CHECKED');
+    	  			echo ('>');
+    	  			echo " ".$freqname.'</td>';
+    			}
+    			echo "</tr>";
+    			echo "<tr>";
+    			foreach ($freq2 as $subtitle) {
+    				echo "<td>";
+    				echo " ".$subtitle.'</td>';
+    			}
+    			echo "</tr>";
+   		 		echo "</table><p>";
+    			?>
+            </table>
+        </span></p>
+    </fieldset>
+    
     <fieldset id='availability'>
         <legend><b>Availability</b>:<span style="font-size:x-small;color:FF0000">*</span> (House Volunteers/Weekend Managers should check at least one Shift) </legend>
         <span class="bigTable">

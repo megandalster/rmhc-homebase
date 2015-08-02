@@ -8,7 +8,7 @@
 <script src="lib/jquery.timepicker.js"></script>
 <script>
 $(function() {
-	$( "#date" ).datepicker({dateFormat: 'mm-dd-y',changeMonth:true,changeYear:true});
+	$( "#date" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true});
 	$( "#start_time" ).timepicker({'minTime': '9:00am', 'maxTime': '9:00pm'});
 	$( "#end_time" ).timepicker({'minTime': '9:00am', 'maxTime': '9:00pm'});
 	$( "#target" ).scroll();

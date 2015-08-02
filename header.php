@@ -1,9 +1,7 @@
 <?php
 /*
- * Copyright 2013 by Jerrick Hoang, Ivy Xing, Sam Roberts, James Cook, 
- * Johnny Coster, Judy Yang, Jackson Moniaga, Oliver Radwan, 
- * Maxwell Palmer, Nolan McNair, Taylor Talmage, and Allen Tucker. 
- * This program is part of RMH Homebase, which is free software.  It comes with 
+ * Copyright 2013 by Allen Tucker. 
+ * This program is part of RMHP-Homebase, which is free software.  It comes with 
  * absolutely no warranty. You can redistribute and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation
  * (see <http://www.gnu.org/licenses/ for more information).
@@ -26,6 +24,7 @@
     //Log-in security
     //If they aren't logged in, display our log-in form.
     if (!isset($_SESSION['logged_in'])) {
+    	
         include('login_form.php');
         die();
     } else if ($_SESSION['logged_in']) {
@@ -59,17 +58,6 @@
 
         //Check if they're at a valid page for their access level.
         $current_page = substr($_SERVER['PHP_SELF'], 1);
-
-      /*  echo "current page = ".$current_page;
-        if ($permission_array[$current_page] > $_SESSION['access_level']) {
-            //in this case, the user doesn't have permission to view this page.
-            //we redirect them to the index page.
-            echo "<script type=\"text/javascript\">window.location = \"index.php\";</script>";
-            //note: if javascript is disabled for a user's browser, it would still show the page.
-            //so we die().
-            die();
-        }
-*/
         //This line gives us the path to the html pages in question, useful if the server isn't installed @ root.
         $path = strrev(substr(strrev($_SERVER['SCRIPT_NAME']), strpos(strrev($_SERVER['SCRIPT_NAME']), '/')));
 
@@ -79,8 +67,8 @@
             echo('<a href="' . $path . 'about.php"><b>about</b></a>');
         }
         if ($_SESSION['access_level'] >= 1)
-        	if ($_GET['id'] == 'new' && $current_page == 'rmhp-homebase/personEdit.php')
-        		echo(' | <a href="' . $path . 'help.php?helpPage=' . 'rmhp-homebase/personAdd.php' . '" target="_BLANK"><b>help</b></a>');
+        	if ($_GET['id'] == 'new' && $current_page == 'rmhc-homebase/personEdit.php')
+        		echo(' | <a href="' . $path . 'help.php?helpPage=' . 'rmhc-homebase/personAdd.php' . '" target="_BLANK"><b>help</b></a>');
             else
             	echo(' | <a href="' . $path . 'help.php?helpPage=' . $current_page . '" target="_BLANK"><b>help</b></a>');
         if ($_SESSION['access_level'] == 0)

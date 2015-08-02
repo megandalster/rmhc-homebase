@@ -24,7 +24,7 @@ include_once('domain/Person.php');
 <script src="lib/jquery.timepicker.js"></script>
 <script>
 $(function() {
-	$( "#from" ).datepicker({dateFormat: 'mm-dd-y',changeMonth:true,changeYear:true});
+	$( "#from" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true});
 	$( "#start_time" ).timepicker({'minTime': '12:00am', 'maxTime': '11:30pm'});
 	$( "#end_time" ).timepicker({'minTime': '12:00am', 'maxTime': '11:30pm'});
 });

@@ -17,20 +17,6 @@
 include_once('dbinfo.php');
 include_once('domain/Person.php');
 
-function create_dbPersons() {
-    connect();
-    mysql_query("DROP TABLE IF EXISTS dbPersons");
-    $result = mysql_query("CREATE TABLE dbPersons(id TEXT NOT NULL, first_name TEXT NOT NULL, last_name TEXT, gender TEXT, " .
-            "    address TEXT, city TEXT, state VARCHAR(2), zip TEXT, phone1 VARCHAR(12) NOT NULL, phone2 VARCHAR(12), " .
-            "    work_phone VARCHAR(12), email TEXT, " .
-            "    type TEXT, screening_type TEXT, screening_status TEXT, status TEXT, refs TEXT, maywecontact TEXT," .
-            "    motivation TEXT, specialties TEXT, " .
-            "    availability TEXT, schedule TEXT, hours TEXT, " .
-            "    birthday TEXT, start_date TEXT, end_date TEXT, reason_left TEXT, notes TEXT, password TEXT)"); 
-    if (!$result)
-        echo mysql_error() . "Error creating dbPersons table<br>";
-}
-
 /*
  * add a person to dbPersons table: if already there, return false
  */
@@ -45,32 +31,35 @@ function add_person($person) {
     if ($result == null || mysql_num_rows($result) == 0) {
         mysql_query('INSERT INTO dbPersons VALUES("' .
                 $person->get_id() . '","' .
+                $person->get_start_date() . '","' .
+                $person->get_venue() . '","' .
                 $person->get_first_name() . '","' .
                 $person->get_last_name() . '","' .
-                $person->get_gender() . '","' .
                 $person->get_address() . '","' .
                 $person->get_city() . '","' .
                 $person->get_state() . '","' .
                 $person->get_zip() . '","' .
                 $person->get_phone1() . '","' .
+                $person->get_phone1type() . '","' .
                 $person->get_phone2() . '","' .
-                $person->get_work_phone() . '","' . 
+                $person->get_phone2type() . '","' .
+                $person->get_birthday() . '","' .
                 $person->get_email() . '","' .
+                $person->get_employer() . '","' . 
+                $person->get_position() . '","' . 
+                $person->get_credithours() . '","' . 
+                $person->get_howdidyouhear() . '","' . 
+                $person->get_commitment() . '","' . 
+                $person->get_motivation() . '","' . 
+                $person->get_specialties() . '","' . 
+                $person->get_convictions() . '","' . 
                 implode(',', $person->get_type()) . '","' .
                 $person->get_screening_type() . '","' .
                 implode(',', $person->get_screening_status()) . '","' .
                 $person->get_status() . '","' .
-                implode(',', $person->get_references()) . '","' .
-                $person->get_maywecontact() . '","' . 
-                $person->get_motivation() . '","' . 
-                $person->get_specialties() . '","' . 
                 implode(',', $person->get_availability()) . '","' .
                 implode(',', $person->get_schedule()) . '","' .
                 implode(',', $person->get_hours()) . '","' .
-                $person->get_birthday() . '","' .
-                $person->get_start_date() . '","' .
-                $person->get_end_date() . '","' . 
-                $person->get_reason_left() . '","' .
                 $person->get_notes() . '","' .
                 $person->get_password() .
                 '");');							
@@ -211,33 +200,41 @@ function getall_volunteer_names() {
 }
 
 function make_a_person($result_row) {
+	/*
+	 ($f, $l, $v, $a, $c, $s, $z, $p1, $p1t, $p2, $p2t, $e, $t, 
+    		$screening_type, $screening_status, $st, $emp, $pos, $hours, $comm, $mot, $spe, 
+    		$convictions, $av, $sch, $hrs, $bd, $sd, $hdyh, $notes, $pass)
+	 */
     $thePerson = new Person(
                     $result_row['first_name'],
                     $result_row['last_name'],
-                    $result_row['gender'],
+                    $result_row['vewnue'],
                     $result_row['address'],
                     $result_row['city'],
                     $result_row['state'],
                     $result_row['zip'],
                     $result_row['phone1'],
+                    $result_row['phone1type'],
                     $result_row['phone2'],
-                    $result_row['work_phone'],
+                    $result_row['phone2type'],
                     $result_row['email'],
                     $result_row['type'],
                     $result_row['screening_type'],
                     $result_row['screening_status'],
                     $result_row['status'],
-                    $result_row['refs'],  
-                    $result_row['maywecontact'],
+                    $result_row['employer'],  
+                    $result_row['position'],
+                    $result_row['hours'],
+                    $result_row['commitment'],
                     $result_row['motivation'],
                     $result_row['specialties'],
+                    $result_row['convictions'],
                     $result_row['availability'],
                     $result_row['schedule'],
                     $result_row['hours'],
                     $result_row['birthday'],
                     $result_row['start_date'],
-                    $result_row['end_date'],
-                    $result_row['reason_left'],
+                    $result_row['howdidyouhear'],
                     $result_row['notes'],
                     $result_row['password']);   
     return $thePerson;
@@ -275,7 +272,7 @@ function getall_available($type, $day, $shift, $venue) {
     connect();
     $query = "SELECT * FROM dbPersons WHERE (type LIKE '%" . $type . "%' OR type LIKE '%sub%')" .
             " AND availability LIKE '%" . $day .":". $shift .
-            "%' AND status = 'active' AND availability LIKE '%" . $venue . "%' ORDER BY last_name,first_name";
+            "%' AND status = 'active' AND venue = '" . $venue . "' ORDER BY last_name,first_name";
     $result = mysql_query($query);
     mysql_close();
     return $result;
@@ -290,7 +287,7 @@ function getonlythose_dbPersons($type, $status, $name, $day, $shift, $venue) {
            " AND (first_name LIKE '%" . $name . "%' OR last_name LIKE'%" . $name . "%')" .
            " AND availability LIKE '%" . $day . "%'" . 
            " AND availability LIKE '%" . $shift . "%'" . 
-           " AND availability LIKE '%" . $venue . "%'" . 
+           " AND venue = '" . $venue . "'" . 
            " ORDER BY last_name,first_name";
    $result = mysql_query($query);
    $thePersons = array();
@@ -308,10 +305,9 @@ function phone_edit($phone) {
 	else return "";
 }
 
-function get_people_for_export($attr, $first_name, $last_name, $gender, $type, $status, $start_date, $city, $zip, $phone, $email) {
+function get_people_for_export($attr, $first_name, $last_name, $type, $status, $start_date, $city, $zip, $phone, $email) {
 	$first_name = "'".$first_name."'";
 	$last_name = "'".$last_name."'";
-	$gender = "'".$gender."'";
 	$status = "'".$status."'";
 	$start_date = "'".$start_date."'";
 	$city = "'".$city."'";
@@ -319,7 +315,6 @@ function get_people_for_export($attr, $first_name, $last_name, $gender, $type, $
 	$phone = "'".$phone."'";
 	$email = "'".$email."'";
 	$select_all_query = "'.'";
-	if ($gender == $select_all_query) $gender = $gender." or gender=''";	
 	if ($start_date == $select_all_query) $start_date = $start_date." or start_date=''";
 	if ($email == $select_all_query) $email = $email." or email=''";
     
@@ -331,14 +326,12 @@ function get_people_for_export($attr, $first_name, $last_name, $gender, $type, $
     }
     
     error_log("query for start date is ". $start_date);
-    error_log("query for gender is ". $gender);
     error_log("query for type is ". $type_query);
     
    	connect();
     $query = "SELECT ". $attr ." FROM dbPersons WHERE 
     			first_name REGEXP ". $first_name . 
     			" and last_name REGEXP ". $last_name . 
-    			" and (gender REGEXP ". $gender . ")" .
     			" and (type REGEXP ". $type_query .")". 
     			" and status REGEXP ". $status . 
     			" and (start_date REGEXP ". $start_date . ")" .
@@ -396,7 +389,7 @@ function get_logged_hours($from, $to, $name_from, $name_to, $venue) {
    	mysql_close();
    	return $thePersons;
 }
-
+/*
 function fix_all_birthdays () {
 	$persons = getall_dbPersons("A","Z");
 	foreach ($persons as $p) {
@@ -422,5 +415,5 @@ function fix_all_birthdays () {
 		}
 	}
 }
-
+*/
 ?>
