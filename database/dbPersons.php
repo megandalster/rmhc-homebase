@@ -208,7 +208,7 @@ function make_a_person($result_row) {
     $thePerson = new Person(
                     $result_row['first_name'],
                     $result_row['last_name'],
-                    $result_row['vewnue'],
+                    $result_row['venue'],
                     $result_row['address'],
                     $result_row['city'],
                     $result_row['state'],
@@ -390,6 +390,7 @@ function get_logged_hours($from, $to, $name_from, $name_to, $venue) {
    	return $thePersons;
 }
 /*
+ * This was a one-time function to correct the date format from mm-dd-yy to yy-mm-dd--- don't use it again.
 function fix_all_birthdays () {
 	$persons = getall_dbPersons("A","Z");
 	foreach ($persons as $p) {

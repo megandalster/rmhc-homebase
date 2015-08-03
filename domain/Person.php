@@ -49,7 +49,7 @@
 
 
 	function __construct($f, $l, $v, $a, $c, $s, $z, $p1, $p1t, $p2, $p2t, $e, $t,
-			$screening_type, $screening_status, $st, $emp, $pos, $hours, $comm, $mot, $spe,
+			$screening_type, $screening_status, $st, $emp, $pos, $credithours, $comm, $mot, $spe,
 			$convictions, $av, $sch, $hrs, $bd, $sd, $hdyh, $notes, $pass) {
 		$this->id = $f . $p1;
 		$this->start_date = $sd;
@@ -68,7 +68,7 @@
 		$this->email = $e;
 		$this->employer = $emp;
 		$this->position = $pos;
-		$this->credithours = $hours;
+		$this->credithours = $credithours;
 		$this->howdidyouhear = $hdyh;
 		$this->commitment = $comm;
 		$this->motivation = $mot;

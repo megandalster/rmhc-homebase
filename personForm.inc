@@ -198,52 +198,6 @@ foreach ($types as $key => $value) {
             </table>
         </span></p>
     </fieldset>
-    
-    <fieldset id='availability'>
-        <legend><b>Availability</b>:<span style="font-size:x-small;color:FF0000">*</span> (House Volunteers/Weekend Managers should check at least one Shift) </legend>
-        <span class="bigTable">
-            <table>
-                <?PHP
-                $shifts = array('9-1' => 'Morning (9-1)', '1-5' => 'Afternoon (1-5)', '5-9' => 'Evening (5-9)',
-                    'night' => "Overnight");
-                $days = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
-                $shifts = array('9-12','12-3','3-6','6-9','night');
-                $weeks = array('Week of Year', 'odd', 'even', 'Week of Month', '1st', '2nd', '3rd', '4th', '5th');
-                $person_availability = implode(',', $person->get_availability());
-    		
-   		 		echo "<table><tr>";  
-   		 	      
-   		 		  echo "<td valign='top'><table><tr><td>&nbsp;&nbsp;<b>Shifts</b></td>";
-   		 			foreach ($days as $day)
-   		 				echo "<td><b>".$day."</b></td>";	
-   		 		    echo "</tr>";
-   		 		    foreach ($weeks as $week_no) {
-   		 		    	echo "<tr><td align='center'><b>".$week_no."</b></td>";
-   		 		    	if ($week_no == "Week of Year") 
-   		 		    		echo "<td colspan='7'>(check both 'odd' and 'even' for every-week availability)";
-   		 		    	else if ($week_no == "Week of Month")
-   		 		    	    echo "<td colspan='7'>(use only for alternating weeks of the month)";
-   		 		    	else foreach ($days as $day) {
-   		 		    	  	echo "<td><select multiple name='availdays[]'>";
-   		 		    	  	foreach ($shifts as $shift) {
-   		 		    	  		if ($shift=='night')
-   		 		    	  			if ($day!='Fri' && $day!='Sat')
-   		 		    	  				continue;
-	  		                    echo ('<option value=' . $week_no . ":". $day.":".$shift);
-							    if (in_array($week_no.":".$day.":".$shift, $person->get_availdays())) 
-							        echo(' SELECTED'); 
-							    echo ('>'.$shift.'</option>'); }		
-							echo "</select></td>";
-   		 		    	}	
-   		 		    	echo "</tr>";
-   		 		    }
-   		 		  echo "</tr></table></td>";
-   		 		
-   		 		echo "</tr></table>";
-    			?>
-            </table>
-        </span></p>
-    </fieldset>
     <p>
         <?PHP
         if ($id == 'new' || $person->get_status() == "applicant") {

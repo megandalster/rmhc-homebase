@@ -18,29 +18,23 @@
  class testPerson extends UnitTestCase {
       function testPersonModule() {
 
- $myPerson = new Person("Susan","L","female","928 SU","Providence", "RI",04011,
-      2074415902,2072654046,2072654333, "susanl@aol.com", "volunteer",
-      "","","active", "Steve_2071234567,John_1234567890","yes","I like helping out","cooking",
-      "1st:Mon:9-1:house,3rd:Sun:5-9:fam", "", "", "89-02-19", "08-03-14", "12-03-14", "New Employment",
-      "this is a note","Taylor2074415902");
-
+ $myPerson = new Person("Susan","L","portland","928 SU","Portland", "ME",04011,
+      2074415902,"home",2072654046,"cell", "susanl@aol.com", "volunteer",
+      "","","active", "USM","student",3,"semester","I like helping out","cooking","",
+      "Mon:9-12:portland,Sun:evening:portland", "", "", "89-02-19", "08-03-14", "internet",
+      "this is a note","");
+ 
  //first assertion - check that a getter is working from the superconstructor's initialized data
  $this->assertTrue($myPerson->get_first_name()=="Susan");
  $this->assertTrue($myPerson->get_type()==array("volunteer"));
  $this->assertTrue($myPerson->get_status()=="active");
- $this->assertTrue($myPerson->get_city()=="Providence");
+ $this->assertTrue($myPerson->get_city()=="Portland");
  $this->assertTrue($myPerson->get_phone1()==2074415902);
- $this->assertTrue($myPerson->get_references()==array("Steve_2071234567","John_1234567890"));
- $this->assertEqual($myPerson->get_availability(),array("1st:Mon:9-1:house","3rd:Sun:5-9:fam"));
- 	$days = $myPerson->get_availdays();
- 	$hours = $myPerson->get_availhours();
- 	$venues = $myPerson->get_availvenues();
- 	$this->assertTrue(in_array("1st:Mon:9-1",$days));
- 	$this->assertTrue(in_array("9-1",$hours));
- 	$this->assertTrue(in_array("house",$venues));
+ $this->assertTrue($myPerson->get_employer()=="USM");
+ $this->assertEqual($myPerson->get_availability(),array("Mon:9-12:portland","Sun:evening:portland"));
  $this->assertTrue($myPerson->get_last_name() !== "notMyLastName");
- $this->assertTrue($myPerson->get_gender()=="female");
- $this->assertTrue($myPerson->get_reason_left()=="New Employment");
+ $this->assertTrue($myPerson->get_phone1type()!=="work");
+ $this->assertTrue($myPerson->get_howdidyouhear()=="internet");
  $this->assertTrue($myPerson->get_birthday()=="89-02-19");
  echo("testPerson complete");
       }
