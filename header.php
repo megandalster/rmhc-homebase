@@ -60,39 +60,33 @@
         $current_page = substr($_SERVER['PHP_SELF'], 1);
         //This line gives us the path to the html pages in question, useful if the server isn't installed @ root.
         $path = strrev(substr(strrev($_SERVER['SCRIPT_NAME']), strpos(strrev($_SERVER['SCRIPT_NAME']), '/')));
-
+		$venues = array("portland"=>"RMH Portland","bangor"=>"RMH Bangor");
+        
         //they're logged in and session variables are set.
-        if ($_SESSION['access_level'] >= 0) {
-            echo('<a href="' . $path . 'index.php"><b>home</b></a> | ');
-            echo('<a href="' . $path . 'about.php"><b>about</b></a>');
+        if ($_SESSION['venue'] =="") { 
+        	echo(' <a href="' . $path . 'personEdit.php?id=' . 'new' . '">apply</a>');
+        	echo(' | <a href="' . $path . 'logout.php">logout</a><br>');
         }
-        if ($_SESSION['access_level'] >= 1)
-        	if ($_GET['id'] == 'new' && $current_page == 'rmhc-homebase/personEdit.php')
-        		echo(' | <a href="' . $path . 'help.php?helpPage=' . 'rmhc-homebase/personAdd.php' . '" target="_BLANK"><b>help</b></a>');
-            else
-            	echo(' | <a href="' . $path . 'help.php?helpPage=' . $current_page . '" target="_BLANK"><b>help</b></a>');
-        if ($_SESSION['access_level'] == 0)
-            echo(' | <a href="' . $path . 'personEdit.php?id=' . 'new' . '"><b>apply</b></a>');
-        if ($_SESSION['access_level'] >= 1) {
-            echo(' | <strong>calendars:</strong> <a href="' . $path . 'calendar.php?venue=house">Portland House, </a>');
-            echo('<a href="' . $path . 'calendar.php?venue=fam">Bangor House, </a>');
-            echo('<a href="' . $path . 'calendar.php?venue=mealprep">guest chef, </a>');
-            echo('<a href="' . $path . 'calendar.php?venue=activities">activities, </a>');
-            echo('<a href="' . $path . 'calendar.php?venue=group">parking </a>');
+        else {
+        	echo " <br><b>".$venues[$_SESSION['venue']]."</b> ";
+	        if ($_SESSION['access_level'] >= 1) {
+	        	echo('<a href="' . $path . 'index.php">home</a>');
+	        	echo(' | <a href="' . $path . 'about.php">about</a>');
+	            echo(' | <a href="' . $path . 'help.php?helpPage=' . $current_page . '" target="_BLANK">help</a>');
+	            echo(' | calendars: <a href="' . $path . 'calendar.php?venue=."$_SESSION[\"venue\"]".">house, </a>');
+	            echo('<a href="' . $path . 'calendar.php?venue=mealprep">guest chef, </a>');
+	            echo('<a href="' . $path . 'calendar.php?venue=activities">activity </a>');
+	            echo(' | <a href="https://sites.google.com/site/rmhvolunteersite"  target="_BLANK">around the house </a>');
+	        }
+	        if ($_SESSION['access_level'] >= 2) {
+	            echo('<br><a href="' . $path . 'viewSchedule.php?venue=."$_SESSION[\"venue\"]".">master schedule</a>');
+	            echo(' | volunteers: <a href="' . $path . 'personSearch.php">search</a>, 
+				        <a href="personEdit.php?id=' . 'new' . '">add, </a> <a href="viewScreenings.php?type=new">screenings</a>');
+	            echo(' | <a href="' . $path . 'reports.php">reports</a>');
+	        }
+	        echo(' | <a href="' . $path . 'logout.php">logout</a><br>');
         }
-        if ($_SESSION['access_level'] == 1.5) {
-            echo('<br>');
-            echo('<strong>volunteers :</strong> <a href="' . $path . 'personSearch.php">search</a>');
-        }
-        if ($_SESSION['access_level'] >= 2) {
-            echo('<br><strong>master schedules : </strong><a href="' . $path . 'viewSchedule.php?venue=house">Portland House, </a>'.
-            		'<a href="' . $path . 'viewSchedule.php?venue=fam">Bangor House </a> | ');
-            echo('<strong>volunteers : </strong> <a href="' . $path . 'personSearch.php">search</a>, 
-			        <a href="personEdit.php?id=' . 'new' . '">add, </a> <a href="viewScreenings.php?type=new">screenings</a>');
-            echo(' | <strong><a href="' . $path . 'reports.php">reports</a> </strong>');
-        //    echo(' | <strong>data :</strong> <a href="' . $path . 'dataSearch.php">search and export</a> ');
-        }
-        echo(' | <a href="' . $path . 'logout.php"><b>logout</b></a>');
+        
     }
     ?>
 </div>

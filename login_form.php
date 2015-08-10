@@ -19,7 +19,6 @@
     <?PHP
     include_once('database/dbPersons.php');
     include_once('domain/Person.php');
-    echo "we are here";
     if (($_SERVER['PHP_SELF']) == "/logout.php") {
         //prevents infinite loop of logging in to the page which logs you out...
         echo "<script type=\"text/javascript\">window.location = \"index.php\";</script>";
@@ -31,10 +30,13 @@
         echo('<li>If you are applying for a volunteer position, enter the Username \'guest\' and a blank Password. ');
         echo('<li>If you are a volunteer logging in for the first time, your Username is your first name followed by your ten digit phone number. ' .
         'After you have logged in, you can change your password.  ');
-        echo('(If you are having difficulty logging in or if you have forgotten your Password, please contact the <a href="mailto:housemngr@rmhportland.org"><i>House Manager</i></a>.) ');
-        echo ('<li><i>If you need to cancel your volunteer shift, you may do so here (after logging in), or else you may call the House at 207-780-6282.</i>');
+        echo('<li>(If you are having difficulty logging in or have forgotten your Password, please contact either the 
+        		<a href="mailto:housemngr@rmhportland.org"><i>Portland House Manager</i></a>
+        		or the <a href="mailto:hmbangor@rmhbangor.org"><i>Bangor House Manager</i></a>.) ');
         echo '</ul>';
-        echo('<p><table><form method="post"><input type="hidden" name="_submit_check" value="true"><tr><td>Username:</td><td><input type="text" name="user" tabindex="1"></td></tr><tr><td>Password:</td><td><input type="password" name="pass" tabindex="2"></td></tr><tr><td colspan="2" align="center"><input type="submit" name="Login" value="Login"></td></tr></table>');
+        echo('<p><table><form method="post"><input type="hidden" name="_submit_check" value="true"><tr><td>Username:</td>
+        		<td><input type="text" name="user" tabindex="1"></td></tr>
+        		<tr><td>Password:</td><td><input type="password" name="pass" tabindex="2"></td></tr><tr><td colspan="2" align="center"><input type="submit" name="Login" value="Login"></td></tr></table>');
     } else {
         //check if they logged in as a guest:
         if ($_POST['user'] == "guest" && $_POST['pass'] == "") {

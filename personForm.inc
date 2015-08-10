@@ -15,9 +15,8 @@
 
 if ($_SESSION['access_level'] == 0) {
     echo('<p><strong>Volunteer Service Application</strong><br />');
-    echo('Please provide as much information as you can ' . 
-        ' (<span style="font-size:x-small;color:FF0000">*</span> denotes required information).' .
-        '<br>When finished, hit <b>Submit</b> at the bottom of this page.');
+    echo('Please provide as much information as you can. ' . 
+       '<br>When finished, hit <b>Submit</b> at the bottom of this page, and then <b>logout</b>.');
 } else if ($_SESSION['access_level'] == 1)
     if ($_SESSION['_id'] != $person->get_id()) {
         echo("<p id=\"error\">You do not have sufficient permissions to edit this user.</p>");
@@ -25,26 +24,28 @@ if ($_SESSION['access_level'] == 0) {
         echo('</div></div></body></html>');
         die();
     } else {
-        echo('<p><strong>Personnel Edit Form</strong><br />');
-        echo('Here you can edit a person\'s information in the database.' .
-        ' (<span style="font-size:x-small;color:FF0000">*</span> denotes required information).' .
+        echo '<p><strong>Personnel Edit Form</strong>'.
+        	'&nbsp;&nbsp;&nbsp;&nbsp;(View your <strong><a href="volunteerLog.php?id='.$person->get_id().'">Log Sheet</a></strong>)';
+        echo('Here you can edit your own information in the database.' .
         '<br>When finished, hit <b>Submit</b> at the bottom of this page.');
     } else if ($_SESSION['access_level'] == 2)
-    if ($id == 'new') {
-        echo('<p><strong>Volunteer Service Application</strong><br />');
-        echo('Adding a new volunteer into the database. </p>' .
-        ' (<span style="font-size:x-small;color:FF0000">*</span> denotes required information).' .
-        '<br>When finished, hit <b>Submit</b> at the bottom of this page.');
-    } else {
-        echo('<p><strong>Personnel Edit Form</strong><br />');
-        echo('Here you can edit, delete, or reset the password for a person in the database.</p><p>' .
-        '<br>When finished, hit <b>Submit</b> at the bottom of this page.');
-    } else {
-    echo("<p id=\"error\">You do not have sufficient permissions to add a new person to the database.</p>");
-    include('footer.inc');
-    echo('</div></div></body></html>');
-    die();
-}
+	    if ($id == 'new') {
+	        echo('<p><strong>Volunteer Service Application</strong><br />');
+	        echo('Adding a new volunteer to the database. ' .
+	        '<br>When finished, hit <b>Submit</b> at the bottom of this page.');
+	    } else {
+	        echo '<p><strong>Personnel Edit Form</strong>'.
+	        		'&nbsp;&nbsp;&nbsp;&nbsp;(View <strong><a href="volunteerLog.php?id='.$person->get_id().'">Log Sheet</a></strong>)<br>';
+	        echo('Here you can edit, delete, or reset the password for a person in the database.' .
+	        '<br>When finished, hit <b>Submit</b> at the bottom of this page.');
+	    } 
+	    else {
+		    echo("<p id=\"error\">You do not have sufficient permissions to add a new person to the database.</p>");
+		    include('footer.inc');
+		    echo('</div></div></body></html>');
+		    die();
+	    }
+    echo '<br> (<span style="font-size:x-small;color:FF0000">*</span> denotes required information).';
 ?>
 <form method="POST">
     <input type="hidden" name="old_id" value=<?PHP echo("\"" . $id . "\""); ?>>
@@ -59,17 +60,17 @@ if ($_SESSION['access_level'] == 0) {
 			})
 	</script>
     <?PHP 
-        if ($id!="new") 
-             echo '&nbsp;&nbsp;&nbsp;&nbsp;View <strong><a href="volunteerLog.php?id='.$person->get_id().'">Log Sheet</a></strong>';
-        echo '<table><tr><td>Date<span style="font-size:x-small;color:FF0000">*</span>: '. 
-             '</td><td colspan=2><input name="start_date" type="text" id="start_date" value="'.$person->get_start_date().'">';
-   		$venues = array('house'=>"Portland House", 'fam'=>"Bangor House");
-        echo "</td></tr><tr><td>Location<span style='font-size:x-small;color:FF0000'>*</span>: </td>";	
-   	    foreach ($venues as $venue=>$venuename) {
-   		     echo ('<td><input type="checkbox" name="availvenues[]" value=' . $venue);
-    	  	 echo "</td><td>".$venuename."</td>";
-   	    }
-   	    echo "</tr></table><br>";          
+    	$venues = array('portland'=>"Portland House", 'bangor'=>"Bangor House");       
+        if ($id=='new') { // creating a new person
+	        echo '<table><tr><td>Date<span style="font-size:x-small;color:FF0000">*</span>: '. 
+	             '</td><td colspan=2><input name="start_date" type="text" id="start_date" value="'.$person->get_start_date().'">';
+	   		echo "</td></tr><tr><td>Location<span style='font-size:x-small;color:FF0000'>*</span>: </td>";	
+	   	    foreach ($venues as $venue=>$venuename) {
+	   		     echo ('<td><input type="radio" name="location" value=' . $venue);
+	    	  	 echo "</td><td>".$venuename."</td>";
+	   	    }
+	   	    echo "</tr></table><br>"; 
+        }        
     ?>
     <fieldset>
         <legend>Personal information:</legend>
@@ -93,19 +94,83 @@ foreach ($states as $st) {
     echo ">" . $st . "</option>";
 }
 ?>
-            </select>,
-            <input type="text" name="zip" size="5" tabindex="6" value="<?PHP echo($person->get_zip()) ?>">
-            
-        <p>Primary Phone<span style="font-size:x-small;color:FF0000">*</span>: <input type="text" name="phone1" MAXLENGTH=12 tabindex="7" value="<?PHP echo(phone_edit($person->get_phone1())) ?>">
-            &nbsp;&nbsp;Secondary Phone:<input type="text" name="phone2" MAXLENGTH=12 tabindex="8" value="<?PHP echo(phone_edit($person->get_phone2())) ?>">
+</select>,
+<input type="text" name="zip" size="5" tabindex="6" value="<?PHP echo($person->get_zip()) ?>">
+<?php     
+        echo '<p>Primary Phone<span style="font-size:x-small;color:FF0000">*</span>: ';
+        $phonetypes = array("home", "cell", "work");
+        echo '<input type="text" name="phone1" MAXLENGTH=12 tabindex="7" value="'.phone_edit($person->get_phone1()).'">';
+        foreach ($phonetypes as $pvalue)
+        	echo '<input type="radio" name="phone1type" value="'.$person->get_phone1type().'">'.$pvalue.' ';
         
-<?PHP   echo '<p>Birth date: '. '<input name="birthday" type="text" id="birthday" value="'.$person->get_birthday().'">'; ?>
-        <p>Email address:<input type="text" name="email" tabindex="9" value="<?PHP echo($person->get_email()) ?>">
+        echo '<p>Secondary Phone: ';
+        echo '<input type="text" name="phone2" MAXLENGTH=12 tabindex="8" value="'.phone_edit($person->get_phone2()).'">';
+        foreach ($phonetypes as $pvalue)
+        	echo '<input type="radio" name="phone2type" value="'.$person->get_phone2type().'">'.$pvalue.' ';
+        
+        echo '<p>Birth date: '. '<input name="birthday" type="text" id="birthday" tabindex="9" value="'.$person->get_birthday().'">';
+        if ($id=='new')
+        	echo ' (Note: Applicants under 18 years of age, please contact RMH for a separate application)';
+        echo '<p>Email address: '. '<input type="text" name="email" tabindex="10" value="'.$person->get_email().'">';
+?>
 <script src="lib/jquery-1.9.1.js"></script>
-		<script src="lib/jquery-ui.js"></script>
-		
-<?PHP  
+<script src="lib/jquery-ui.js"></script>
+<?php 		  
 echo('</fieldset>');
+
+if ($_SESSION['access_level']==2) {
+	echo('<p>Manager Notes:<br />');
+	echo('<textarea name="notes" rows="2" cols="75">');
+	echo($person->get_notes().'</textarea>');
+}
+
+echo '<fieldset> <legend>Employment:</legend>';
+echo '<p>Current Employer: <input type="text" name="employer" tabindex="1" size=30 value="'.$person->get_employer().'"> '.
+'Position: <input type="text" name="position" tabindex="2" size=30 value="'.$person->get_position().'">';
+
+
+echo '</fieldset>';
+
+echo '<fieldset> <legend>Students (18+ only):</legend>';
+echo '<p>Are you currently attending school? <input type="radio" name="isstudent" '.($person->get_position()=="student"?"checked":"").'>yes'.
+ 		'&nbsp;&nbsp;<input type="radio" name="isstudent" '.($person->get_position()!="student"?"checked":"").'>no';
+echo '&nbsp;&nbsp;&nbsp;&nbsp;Name of school: '.'<input type="text" name="employer" size=30 value="'.($person->get_position()=="student"?$person->get_employer():"").'"> ';
+echo '<p>Will you be receiving academic credit for your volunteer work? ';
+echo '<input type="radio" name="academiccredit" '.($person->get_credithours()!=""?"checked":"").'>yes'.
+ 		'&nbsp;&nbsp;<input type="radio" name="academiccredit" '.($person->get_credithours()==""?"checked":"").'>no';
+echo '&nbsp;&nbsp;&nbsp;&nbsp;If yes, number of hours required: '.'<select name="credithours" > ';
+echo '<option value=""></option>';
+for ($i=1; $i<=10; $i++) {
+    echo "<option value='" . $i . "' ";
+    if ($person->get_credithours() == $i)
+        echo("SELECTED");
+    echo ">" . $i . "</option>";
+}
+echo '</select>';
+echo '</fieldset>';
+
+echo '<fieldset> <legend>Volunteer Information:</legend>';
+
+echo '<p>How did you hear about RMHC volunteer opportunities?';
+echo '<p>Can you make a commitment to volunteer at RMH for at least one year? <br>(one semester for college students): ';
+echo '<input type="radio" name="commitment" '.($person->get_commitment()=="yes"?"checked":"").'>yes'.
+ 		'&nbsp;&nbsp;<input type="radio" name="commitment" '.($person->get_commitment()!="yes"?"checked":"").'>no';
+echo('<p>Why are you interested in volunteering at the Ronald McDonald House?<br />');
+echo('<textarea name="motivation" rows="3" cols="75">');
+echo($person->get_motivation());
+echo('</textarea>');
+
+echo('<p>Please list special skills, hobbies, or training you would like us to know about:<br />');
+echo('<textarea name="specialties" rows="3" cols="75">');
+echo($person->get_specialties());
+echo('</textarea>');
+
+echo '<p>Have you ever been convicted of a felony? ';
+echo '<input type="radio" name="convictions" '.($person->get_convictions()=="yes"?"checked":"").'>yes'.
+ 		'&nbsp;&nbsp;<input type="radio" name="convictions" '.($person->get_position()!="yes"?"checked":"").'>no';
+echo '<p>All volunteer positions require a background check (separate form).'.
+	 ' Please note: our facility is unable to accommodate court-ordered community service or probation-based hours.';
+echo '</fieldset>';
 
 echo ('<p>Status:');
 echo('<span style="font-size:x-small;color:FF0000">*</span>&nbsp;&nbsp;');
@@ -131,7 +196,7 @@ else {
 }
 echo('</select>');
 // $st = implode(',', $person->get_type());
-$types = array('volunteer' => 'House Volunteer', 'weekendmgr' => 'Weekend Manager', 'mealprep' => 'Guest Chef', 'other' => 'Other', 'manager' => 'Manager');
+$types = array('volunteer' => 'House Volunteer', 'weekendmgr' => 'Weekend Manager', 'mealprep' => 'Guest Chef', 'events' => 'Events/Special projects', 'manager' => 'Manager');
 echo('<p>Position type(s):');
 // $ts = $types;
 echo('<span style="font-size:x-small;color:FF0000">*</span>');
@@ -154,7 +219,7 @@ foreach ($types as $key => $value) {
                     '6-9' => '', 'night' => "Overnight");
                 $days = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
                 $frequencies = array("weekly"=>"weekly","odd,even"=>"bi-weekly","1st,2nd,3rd,4th,5th"=>"monthly","sub"=>"flex shift");
-                $freq2 = array("","","(weekend shifts)","(sub when needed)");
+                $freq2 = array("","","(weekend shifts)","(sub as needed)");
                 $person_availability = implode(',', $person->get_availability());
     			echo "<table>";
     			echo "<tr><td>Shift</td></tr>";
@@ -200,7 +265,7 @@ foreach ($types as $key => $value) {
     </fieldset>
     <p>
         <?PHP
-        if ($id == 'new' || $person->get_status() == "applicant") {
+        if ($_SESSION['access_level']==2 && $person->get_status() == "applicant") {
             echo "<fieldset>";
             echo "<legend>Applicants only: </legend>";
 			if ($_SESSION['access_level'] == 2) {
@@ -240,34 +305,16 @@ foreach ($types as $key => $value) {
                 }
                 echo('</table>');
                 }
-			}
-
-                echo('<p>Why are you interested in volunteering at the Ronald McDonald House?<br />');
-                echo('<textarea name="motivation" rows="3" cols="75">');
-                echo($person->get_motivation());
-                if ($person->get_specialties() != "")
-                    echo " / " . $person->get_specialties();
-                echo('</textarea>');
-
-                echo('<p>Please list special skills, hobbies, or training you would like us to know about:<br />');
-                echo('<textarea name="references" rows="3" cols="75">');
-                foreach ($person->get_references() as $reference) {
-                    $i = strpos($reference, "_");
-                    echo substr($reference, 0, $i) . " " . phone_edit(substr($reference, $i + 1)) . "     ";
-                }
-                echo('</textarea>');
+			}    
             echo "</fieldset>";
         }
-        echo('<p>Notes:<br />');
-        echo('<textarea name="notes" rows="2" cols="75">');
-        echo($person->get_notes().'</textarea>');
         
         echo('<input type="hidden" name="schedule" value="' . implode(',', $person->get_schedule()) . '">');
         echo('<input type="hidden" name="hours" value="' . implode(',', $person->get_hours()) . '">');
         echo('<input type="hidden" name="password" value="' . $person->get_password() . ')">');
         echo('<input type="hidden" name="_submit_check" value="1"><p>');
         if ($_SESSION['access_level'] == 0)
-            echo('Hit <input type="submit" value="Submit" name="Submit Edits"> to complete this application.<br /><br />');
+            echo('Hit <input type="submit" value="Submit" name="Submit Edits"> to submit this application.<br /><br />');
         else
             echo('Hit <input type="submit" value="Submit" name="Submit Edits"> to submit these edits.<br /><br />');
         if ($id != 'new' && $_SESSION['access_level'] >= 2) {
@@ -278,4 +325,3 @@ foreach ($types as $key => $value) {
         }
         ?>
 </form>
-
