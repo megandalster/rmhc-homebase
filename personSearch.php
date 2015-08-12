@@ -1,7 +1,6 @@
 <?php
 /*
- * Copyright 2015 by Adrienne Beebe, Connor Hargus, Phuong Le, 
- * Xun Wang, and Allen Tucker. This program is part of RMHP-Homebase, which is free 
+ * Copyright 2015 by Allen Tucker. This program is part of RMHP-Homebase, which is free 
  * software.  It comes with absolutely no warranty. You can redistribute and/or 
  * modify it under the terms of the GNU General Public License as published by the 
  * Free Software Foundation (see <http://www.gnu.org/licenses/ for more information).
@@ -31,13 +30,14 @@ session_cache_expire(30);
                 $area = $_GET['area'];
                 echo('<form method="post">');
                 echo('<p><strong>Search for volunteers:</strong>');
-                echo('<p>Type:<select name="s_type">' .
-                '<option value="" SELECTED></option>' .
-                '<option value="volunteer">Volunteer</option>' . '<option value="sub">Sub</option>' .
-                '<option value="mealprep">Meal Prep</option>' .
-              	'<option value="activities">Activities</option>' .
-                '<option value="other">Other</option>' . '<option value="manager">Manager</option>' .
-                '</select>');
+                $types = array('volunteer' => 'House Volunteer', 'weekendmgr' => 'Weekend Manager', 
+                		'mealprep' => 'Guest Chef', 'events' => 'Events/Special projects', 'manager' => 'Manager');
+                echo '<p>Type:<select name="s_type">' ;
+                echo '<option value="" SELECTED></option>' ;
+                foreach ($types as $type => $typename)
+                	echo '<option value="'.$type.'">'.$typename.'</option>';
+                
+                echo '</select>';
                 echo('&nbsp;&nbsp;Status:<select name="s_status">' .
                 '<option value="" SELECTED></option>' . '<option value="applicant">Applicant</option>' . '<option value="active">Active</option>' .
                 '<option value="LOA">On Leave</option>' . '<option value="former">Former</option>' .
@@ -50,7 +50,6 @@ session_cache_expire(30);
 							<table><tr>
 								<td>Day (of week)</td>
 								<td>Shift</td>
-								<td>Venue</td>
 								</tr>';
                 echo "<tr>";
                 echo "<td>";
@@ -61,19 +60,13 @@ session_cache_expire(30);
                 }
                 echo '</select>';
                 echo "</td><td>";
-                $shifts = array('9-1' => 'Morning (9-1)', '1-5' => 'Early Afternoon (1-5)',
-                    '5-9' => 'Evening (5-9)', 'night' => 'Overnight');
+                $shifts = array('9-12' => '9am-12pm', '12-3' => '12pm-3pm', '3-6' => '3pm-6pm',
+                    '6-9' => '6pm-9pm', 'night' => "Overnight");
                 echo '<select name="s_shift">' . '<option value=""></option>';
                 foreach ($shifts as $shiftno => $shiftname) {
                     echo '<option value="' . $shiftno . '">' . $shiftname . '</option>';
                 }
                 echo '</select>';
-                $venues = array('house' => "House", 'fam' => "Family Room");
-                echo '<td><select name="s_venue">' . '<option value=""></option>';
-                foreach ($venues as $venue => $venuename) {
-                    echo '<option value="' . $venue . '">' . $venuename . '</option>';
-                }
-                echo "</td>";
                 echo "</tr>";
                 echo '</table></fieldset>';
 
@@ -88,7 +81,7 @@ session_cache_expire(30);
                     // now go after the volunteers that fit the search criteria
                     include_once('database/dbPersons.php');
                     include_once('domain/Person.php');
-                    $result = getonlythose_dbPersons($type, $status, $name, $_POST['s_day'], $_POST['s_shift'], $_POST['s_venue']); //added s_venue
+                    $result = getonlythose_dbPersons($type, $status, $name, $_POST['s_day'], $_POST['s_shift'], $_SESSION['venue']); //added s_venue
                     //$result = getall_dbPersons();
                     echo '<p><strong>Search Results:</strong> <p>Found ' . sizeof($result) . ' ' . $status . ' ';
                     if ($type != "")
@@ -97,7 +90,7 @@ session_cache_expire(30);
                         echo "persons";
                     if ($name != "")
                         echo ' with name like "' . $name . '"';
-                    $availability = $_POST['s_day'] ." ". $_POST['s_shift'] ." ". $_POST['s_venue']; //added s_venue 
+                    $availability = $_POST['s_day'] ." ". $_POST['s_shift'] ; //added s_venue 
                     if ($availability != " ") {
                         echo " with availability " . $availability;
                     }
