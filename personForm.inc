@@ -110,7 +110,7 @@ foreach ($states as $st) {
         
         echo '<p>Birth date: '. '<input name="birthday" type="text" id="birthday" tabindex="9" value="'.$person->get_birthday().'">';
         if ($id=='new')
-        	echo ' (Note: Applicants under 18 years of age, please contact RMH for a separate application)';
+        	echo ' (Applicants younger than 18 should contact RMH for a separate application)';
         echo '<p>Email address: '. '<input type="text" name="email" tabindex="10" value="'.$person->get_email().'">';
 ?>
 <script src="lib/jquery-1.9.1.js"></script>
@@ -138,20 +138,17 @@ echo '&nbsp;&nbsp;&nbsp;&nbsp;Name of school: '.'<input type="text" name="employ
 echo '<p>Will you be receiving academic credit for your volunteer work? ';
 echo '<input type="radio" name="academiccredit" '.($person->get_credithours()!=""?"checked":"").'>yes'.
  		'&nbsp;&nbsp;<input type="radio" name="academiccredit" '.($person->get_credithours()==""?"checked":"").'>no';
-echo '&nbsp;&nbsp;&nbsp;&nbsp;If yes, number of hours required: '.'<select name="credithours" > ';
-echo '<option value=""></option>';
-for ($i=1; $i<=10; $i++) {
-    echo "<option value='" . $i . "' ";
-    if ($person->get_credithours() == $i)
-        echo("SELECTED");
-    echo ">" . $i . "</option>";
-}
-echo '</select>';
+echo '<br>If yes, number of hours required: ';
+echo '<input type="text" name="credithours" tabindex="2" size=5 value="'.$person->get_credithours().'">';
 echo '</fieldset>';
 
 echo '<fieldset> <legend>Volunteer Information:</legend>';
 
-echo '<p>How did you hear about RMHC volunteer opportunities?';
+echo '<p>How did you hear about RMHC volunteer opportunities? ';
+echo '<p><input type="radio" name="howdidyouhear" '.($person->get_howdidyouhear()=="internet"?"checked":"").'>Internet search or website'.
+		'&nbsp;&nbsp;<input type="radio" name="howdidyouhear" '.($person->get_howdidyouhear()=="family"?"checked":"").'>Family or friend'.
+		'&nbsp;&nbsp;<input type="radio" name="howdidyouhear" '.($person->get_howdidyouhear()=="volunteer"?"checked":"").'>Current volunteer'.
+		'&nbsp;&nbsp;<input type="radio" name="howdidyouhear" '.($person->get_howdidyouhear()=="other"?"checked":"").'>other';
 echo '<p>Can you make a commitment to volunteer at RMH for at least one year? <br>(one semester for college students): ';
 echo '<input type="radio" name="commitment" '.($person->get_commitment()=="yes"?"checked":"").'>yes'.
  		'&nbsp;&nbsp;<input type="radio" name="commitment" '.($person->get_commitment()!="yes"?"checked":"").'>no';
@@ -169,7 +166,7 @@ echo '<p>Have you ever been convicted of a felony? ';
 echo '<input type="radio" name="convictions" '.($person->get_convictions()=="yes"?"checked":"").'>yes'.
  		'&nbsp;&nbsp;<input type="radio" name="convictions" '.($person->get_position()!="yes"?"checked":"").'>no';
 echo '<p>All volunteer positions require a background check (separate form).'.
-	 ' Please note: our facility is unable to accommodate court-ordered community service or probation-based hours.';
+	 '<br> Please note: our facility is unable to accommodate court-ordered community service or probation-based hours.';
 echo '</fieldset>';
 
 echo ('<p>Status:');
@@ -197,19 +194,35 @@ else {
 echo('</select>');
 // $st = implode(',', $person->get_type());
 $types = array('volunteer' => 'House Volunteer', 'weekendmgr' => 'Weekend Manager', 'mealprep' => 'Guest Chef', 'events' => 'Events/Special projects', 'manager' => 'Manager');
+$descriptions = array('volunteer' => ' -- Assists with the day-to-day opera􏰀ons of the House, such as
+				answering phones, assisting familiesm giving tours, cleaning rooms and common areas, and washing linens', 
+		'weekendmgr' => ' -- Serves as main point of contact during day and overnight hours. Shifts are 
+						generally Friday 5pm to Saturday 5pm and/or Saturday 5pm to Sunday noon (Bangor) or 2pm (Portland). Duties include
+						preparing rooms for guests, assisting families, responding to emergencies, and coordinating shift volunteers.', 
+		'mealprep' => ' -- Individual or group provides ingredients and prepares evening meal for families (approx. 15-20 people Bangor and 
+						20-25 people Portland). Groups should be limited to 6-8 people.', 
+		'events' => ' -- Helps with special projects and fundraising events that take place occasionally during the year.', 
+		'manager' => ' -- This is a restricted level of Homebase access for House staff and experienced volunteers.');
 echo('<p>Position type(s):');
 // $ts = $types;
 echo('<span style="font-size:x-small;color:FF0000">*</span>');
 
 foreach ($types as $key => $value) {
-    echo ('&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="type[]" value=' . $key);
+    echo ('<p>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="type[]" value=' . $key);
     if (in_array($key,$person->get_type()) !== false)
         echo(' CHECKED');
     echo ('>' . $value );
+    if ($_SESSION['access_level']==0)
+    	echo $descriptions[$key];
 }
+
+if ($_SESSION['access_level']==0)
+	echo '<p>House volunteer shifts are three hours and regularly-scheduled shifts can occur weekly, every two weeks, 
+        or once per month (weekend shifts). Volunteers may also work flex shifts, filling in as their schedule allows.';
 ?>
+
     <fieldset id='availability'>
-        <legend>Availability:<span style="font-size:x-small;color:FF0000">*</span>(House Volunteers/Weekend Managers should check at least one Shift and Frequency)  </legend>
+        <legend>Availability:<span style="font-size:x-small;color:FF0000">*</span>  </legend>
         <span class="bigTable">
             <table>
                 <?PHP
@@ -314,7 +327,8 @@ foreach ($types as $key => $value) {
         echo('<input type="hidden" name="password" value="' . $person->get_password() . ')">');
         echo('<input type="hidden" name="_submit_check" value="1"><p>');
         if ($_SESSION['access_level'] == 0)
-            echo('Hit <input type="submit" value="Submit" name="Submit Edits"> to submit this application.<br /><br />');
+            echo('By hitting <input type="submit" value="Submit" name="Submit Edits">, I understand the importance of this volunteer 
+            		commitment and have answered the application questions honestly and to the best of my knowledge.<br /><br />');
         else
             echo('Hit <input type="submit" value="Submit" name="Submit Edits"> to submit these edits.<br /><br />');
         if ($id != 'new' && $_SESSION['access_level'] >= 2) {
