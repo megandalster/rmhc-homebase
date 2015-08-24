@@ -162,11 +162,13 @@ echo('<textarea name="specialties" rows="3" cols="75">');
 echo($person->get_specialties());
 echo('</textarea>');
 
-echo '<p>Have you ever been convicted of a felony? ';
-echo '<input type="radio" name="convictions" '.($person->get_convictions()=="yes"?"checked":"").'>yes'.
- 		'&nbsp;&nbsp;<input type="radio" name="convictions" '.($person->get_position()!="yes"?"checked":"").'>no';
-echo '<p>All volunteer positions require a background check (separate form).'.
-	 '<br> Please note: our facility is unable to accommodate court-ordered community service or probation-based hours.';
+	echo '<p>Have you ever been convicted of a felony? ';
+	echo '<input type="radio" name="convictions" '.($person->get_convictions()=="yes"?"checked":"").'>yes'.
+	 		'&nbsp;&nbsp;<input type="radio" name="convictions" '.($person->get_position()!="yes"?"checked":"").'>no';
+if ($_SESSION['access_level']==0) {
+	echo '<p>All volunteer positions require a background check (separate form).'.
+		 '<br> Please note: our facility is unable to accommodate court-ordered community service or probation-based hours.';
+}
 echo '</fieldset>';
 
 echo ('<p>Status:');
@@ -194,8 +196,8 @@ else {
 echo('</select>');
 // $st = implode(',', $person->get_type());
 $types = array('volunteer' => 'House Volunteer', 'weekendmgr' => 'Weekend Manager', 'mealprep' => 'Guest Chef', 'events' => 'Events/Special projects', 'manager' => 'Manager');
-$descriptions = array('volunteer' => ' -- Assists with the day-to-day opera􏰀ons of the House, such as
-				answering phones, assisting familiesm giving tours, cleaning rooms and common areas, and washing linens', 
+$descriptions = array('volunteer' => ' -- Assists with the day-to-day operations of the House, such as
+				answering phones, assisting families, giving tours, cleaning rooms and common areas, and washing linens.<p>', 
 		'weekendmgr' => ' -- Serves as main point of contact during day and overnight hours. Shifts are 
 						generally Friday 5pm to Saturday 5pm and/or Saturday 5pm to Sunday noon (Bangor) or 2pm (Portland). Duties include
 						preparing rooms for guests, assisting families, responding to emergencies, and coordinating shift volunteers.', 
@@ -203,22 +205,22 @@ $descriptions = array('volunteer' => ' -- Assists with the day-to-day opera􏰀o
 						20-25 people Portland). Groups should be limited to 6-8 people.', 
 		'events' => ' -- Helps with special projects and fundraising events that take place occasionally during the year.', 
 		'manager' => ' -- This is a restricted level of Homebase access for House staff and experienced volunteers.');
-echo('<p>Position type(s):');
+echo('<p>Position types:');
 // $ts = $types;
-echo('<span style="font-size:x-small;color:FF0000">*</span>');
+echo('<span style="font-size:x-small;color:FF0000">*</span> (check one or more)<p>');
 
 foreach ($types as $key => $value) {
-    echo ('<p>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="type[]" value=' . $key);
+    echo ('&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="type[]" value=' . $key);
     if (in_array($key,$person->get_type()) !== false)
         echo(' CHECKED');
     echo ('>' . $value );
     if ($_SESSION['access_level']==0)
-    	echo $descriptions[$key];
+    	echo $descriptions[$key].'<p>';
 }
 
 if ($_SESSION['access_level']==0)
-	echo '<p>House volunteer shifts are three hours and regularly-scheduled shifts can occur weekly, every two weeks, 
-        or once per month (weekend shifts). Volunteers may also work flex shifts, filling in as their schedule allows.';
+	echo '<p>House volunteer shifts are three hours and regularly-scheduled shifts can occur weekly, bi-weekly, 
+        or monthly (for weekend shifts). Volunteers may also work flex shifts, filling in as their schedule allows.';
 ?>
 
     <fieldset id='availability'>
@@ -228,8 +230,8 @@ if ($_SESSION['access_level']==0)
                 <?PHP
                 $shifts = array('9-12' => '9am-12pm', '12-3' => '12pm-3pm', '3-6' => '3pm-6pm',
                     '6-9' => '6pm-9pm', 'night' => "Overnight");
-                $wkndshifts = array('9-12' => 'morning', '12-3' => 'afternoon', '3-6' => 'evening',
-                    '6-9' => '', 'night' => "Overnight");
+                $wkndshifts = array('9-12' => 'morning', '12-3' => 'afternoon', '3-6' => '',
+                    '6-9' => 'evening', 'night' => "Overnight");
                 $days = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
                 $frequencies = array("weekly"=>"weekly","odd,even"=>"bi-weekly","1st,2nd,3rd,4th,5th"=>"monthly","sub"=>"flex shift");
                 $freq2 = array("","","(weekend shifts)","(sub as needed)");
