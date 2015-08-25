@@ -78,11 +78,20 @@ if ($id == 'new') {
                             	$postavail[] = $postday.":".$postvenue;
                           $availability = implode(',', $postavail);
                         }
+                        if ($_POST['isstudent']=="yes")  {
+                        	$position="student";
+                        	$employer = $_POST['nameofschool'];
+                        }
+                        else {
+                        	$position = $_POST['position'];
+                        	$employer = $_POST['employer'];
+                        }
                         $person = new Person($_POST['first_name'], $_POST['last_name'], $_POST['location'], 
                         				$_POST['address'], $_POST['city'], $_POST['state'], $_POST['zip'],
                                         $_POST['phone1'], $_POST['phone1type'], $_POST['phone2'],$_POST['phone2type'], 
-                        		        $_POST['email'], implode(',', $_POST['type']), $_POST['screening_type'], implode(',', $_POST['screening_status']),
-                                        $_POST['status'], $_POST['employer'], $_POST['position'], $_POST['credithours'], 
+                        		        $_POST['email'], implode(',', $_POST['type']), 
+                        				$_POST['screening_type'], implode(',', $_POST['screening_status']),
+                                        $_POST['status'], $employer, $position, $_POST['credithours'], 
                                         $_POST['commitment'], $_POST['motivation'], $_POST['specialties'], $_POST['convictions'], 
                                         $availability, $_POST['schedule'], $_POST['hours'], 
                                         $_POST['birthday'], $_POST['start_date'], $_POST['howdidyouhear'],
@@ -132,24 +141,26 @@ if ($id == 'new') {
                                 	echo('<p>Date of completion for step: "' . $step_array[$i] . '" is in error, please select month, day <i>and</i> year.<br>');
                             	$date_array[$i] = null;
                         	}
-                    }
-                    $screening_status = implode(',', $date_array);
+                    	}
+                    	$screening_status = implode(',', $date_array);
                     }
                     $status = $_POST['status'];
-                    $employer = $_POST['employer'];
-                    $position = $_POST['position'];
+                	if ($_POST['isstudent']=="yes")  {
+                        $position="student";
+                        $employer = $_POST['nameofschool'];
+                    }
+                    else {
+                        $position = $_POST['position'];
+                        $employer = $_POST['employer'];
+                    }
                     $credithours = $_POST['credithours'];
                     $motivation = trim(str_replace('\\\'', '\'', htmlentities($_POST['motivation'])));
                     $specialties = trim(str_replace('\\\'', '\'', htmlentities($_POST['specialties'])));
                     $convictions = $_POST['convictions'];
-                    if (!$_POST['availdays'] || !$_POST['availvenues'])
+                    if (!$_POST['availability'])
                           $availability = null;
                     else {
-                          $postavail = array();
-                          foreach ($_POST['availdays'] as $postday) 
-                        	  foreach($_POST['availvenues'] as $postvenue)
-                            	$postavail[] = $postday.":".$postvenue;
-                          $availability = implode(',', $postavail);
+                          $availability = implode(',', $_POST['availability']);
                     }
                     // these two are not visible for editing, so they go in and out unchanged
                     $schedule = $_POST['schedule'];

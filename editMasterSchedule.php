@@ -30,9 +30,9 @@ session_cache_expire(30);
                     die("<p>Only managers can edit the master schedule.</p>");
                 }
                 $group = $_GET['group'];         // 1st
-                $venue = $_GET['venue'];         // house
+                $venue = $_GET['venue'];         // portland
                 $day = $_GET['day'];             // Mon
-                $shiftname = $_GET['shift'];     // 9-1
+                $shiftname = $_GET['shift'];     // 9-12
                 $id = $group.":".$day.":".$shiftname.":".$venue;
     
                 $msentry = retrieve_dbMasterSchedule($id);
@@ -178,7 +178,7 @@ session_cache_expire(30);
                 }
 
                 function process_fill_vacancy($post, $msentry) {
-                	$venues = array("house"=>"House", "fam"=>"Family Room");
+                	$venues = array("portland"=>"RMH Portland", "bangor"=>"RMH Bangor");
                 	if (!array_key_exists('_submit_fill_vacancy', $post))
                         return false;
                     echo "<table align=\"center\"><tr><td align=\"center\" width=\"450\"><b>
@@ -241,7 +241,7 @@ session_cache_expire(30);
                     if (!$persons[0])
                         array_shift($persons);
                     connect();
-                    $chrtime =  $msentry->get_week_no().":" . $msentry ->get_day() . ":" . $msentry->get_hours().":".$msentry->get_venue();
+                    $chrtime =  $msentry ->get_day() . ":" . $msentry->get_hours().":".$msentry->get_venue();
 
                     $query = "SELECT * FROM dbPersons WHERE status = 'active' " .
                             "AND availability LIKE '%" . $chrtime . "%' ORDER BY last_name,first_name";
@@ -251,7 +251,7 @@ session_cache_expire(30);
                     for ($i = 0; $i < mysql_num_rows($result); ++$i) {
                         $row = mysql_fetch_row($result);
                         $value = $row[0];
-                        $label = $row[2] . ", " . $row[1];
+                        $label = $row[4] . ", " . $row[3];
                         $match = false;
                         for ($j = 0; $j < count($persons); ++$j) {
                             if ($value == $persons[$j]['id']) {
@@ -277,7 +277,7 @@ session_cache_expire(30);
                     for ($i = 0; $i < mysql_num_rows($result); ++$i) {
                         $row = mysql_fetch_row($result);
                         $value = $row[0];
-                        $label = $row[2] . ", " . $row[1];
+                        $label = $row[4] . ", " . $row[3];
                         $match = false;
                         for ($j = 0; $j < count($persons); ++$j) {
                             if ($value == $persons[$j]['id']) {

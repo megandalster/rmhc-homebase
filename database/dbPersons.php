@@ -284,7 +284,7 @@ function getonlythose_dbPersons($type, $status, $name, $day, $shift, $venue) {
    Connect();
    $query = "SELECT * FROM dbPersons WHERE type LIKE '%" . $type . "%'" .
            " AND status LIKE '%" . $status . "%'" .
-           " AND (first_name LIKE '%" . $name . "%' OR last_name LIKE'%" . $name . "%')" .
+           " AND (first_name LIKE '%" . $name . "%' OR last_name LIKE '%" . $name . "%')" .
            " AND availability LIKE '%" . $day . "%'" . 
            " AND availability LIKE '%" . $shift . "%'" . 
            " AND venue = '" . $venue . "'" . 

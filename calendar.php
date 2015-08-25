@@ -29,7 +29,7 @@ session_cache_expire(30);
             <div id="content">
                 <?PHP
                 if (in_array('manager', $_SESSION['type']) || in_array('volunteer', $_SESSION['type'])) {
-                	if ($_GET['venue'] == 'house' || $_GET['venue']=="fam") {
+                	if ($_GET['venue'] == 'portland' || $_GET['venue']=='bangor') {
                         include_once('database/dbWeeks.php');
                         include_once('database/dbPersons.php');
                         include_once('database/dbLog.php');

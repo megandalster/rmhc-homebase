@@ -55,22 +55,19 @@ if ($_SESSION['access_level'] == 0) {
 			$(function(){
 				$( "#birthday" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
 				$( "#start_date" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
-				$( "#end_date" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
 				$( "#screening_status[]" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
 			})
 	</script>
     <?PHP 
     	$venues = array('portland'=>"Portland House", 'bangor'=>"Bangor House");       
-        if ($id=='new') { // creating a new person
-	        echo '<table><tr><td>Date<span style="font-size:x-small;color:FF0000">*</span>: '. 
+        echo '<table><tr><td>Date<span style="font-size:x-small;color:FF0000">*</span>: '. 
 	             '</td><td colspan=2><input name="start_date" type="text" id="start_date" value="'.$person->get_start_date().'">';
-	   		echo "</td></tr><tr><td>Location<span style='font-size:x-small;color:FF0000'>*</span>: </td>";	
-	   	    foreach ($venues as $venue=>$venuename) {
-	   		     echo ('<td><input type="radio" name="location" value=' . $venue);
-	    	  	 echo "</td><td>".$venuename."</td>";
-	   	    }
-	   	    echo "</tr></table><br>"; 
-        }        
+	   	echo "</td></tr><tr><td>Location<span style='font-size:x-small;color:FF0000'>*</span>: </td>";	
+	   	foreach ($venues as $venue=>$venuename) {
+	   		echo ('<td><input type="radio" name="location" value="' .$venue.'"'. ($person->get_venue()==$venue?' checked':'').'>');
+	    	echo "</td><td>".$venuename."</td>";
+	   	}
+	   	echo "</tr></table><br>"; 
     ?>
     <fieldset>
         <legend>Personal information:</legend>
@@ -101,12 +98,12 @@ foreach ($states as $st) {
         $phonetypes = array("home", "cell", "work");
         echo '<input type="text" name="phone1" MAXLENGTH=12 tabindex="7" value="'.phone_edit($person->get_phone1()).'">';
         foreach ($phonetypes as $pvalue)
-        	echo '<input type="radio" name="phone1type" value="'.$person->get_phone1type().'">'.$pvalue.' ';
+        	echo '<input type="radio" name="phone1type" value="'.$pvalue.'" '.($person->get_phone1type()==$pvalue?"checked":"").'">'.$pvalue.' ';
         
         echo '<p>Secondary Phone: ';
         echo '<input type="text" name="phone2" MAXLENGTH=12 tabindex="8" value="'.phone_edit($person->get_phone2()).'">';
         foreach ($phonetypes as $pvalue)
-        	echo '<input type="radio" name="phone2type" value="'.$person->get_phone2type().'">'.$pvalue.' ';
+        	echo '<input type="radio" name="phone2type" value="'.$pvalue.'" '.($person->get_phone2type()==$pvalue?"checked":"").'">'.$pvalue.' ';
         
         echo '<p>Birth date: '. '<input name="birthday" type="text" id="birthday" tabindex="9" value="'.$person->get_birthday().'">';
         if ($id=='new')
@@ -115,9 +112,9 @@ foreach ($states as $st) {
 ?>
 <script src="lib/jquery-1.9.1.js"></script>
 <script src="lib/jquery-ui.js"></script>
-<?php 		  
-echo('</fieldset>');
+</fieldset>
 
+<?php 		  
 if ($_SESSION['access_level']==2) {
 	echo('<p>Manager Notes:<br />');
 	echo('<textarea name="notes" rows="2" cols="75">');
@@ -132,26 +129,26 @@ echo '<p>Current Employer: <input type="text" name="employer" tabindex="1" size=
 echo '</fieldset>';
 
 echo '<fieldset> <legend>Students (18+ only):</legend>';
-echo '<p>Are you currently attending school? <input type="radio" name="isstudent" '.($person->get_position()=="student"?"checked":"").'>yes'.
- 		'&nbsp;&nbsp;<input type="radio" name="isstudent" '.($person->get_position()!="student"?"checked":"").'>no';
-echo '&nbsp;&nbsp;&nbsp;&nbsp;Name of school: '.'<input type="text" name="employer" size=30 value="'.($person->get_position()=="student"?$person->get_employer():"").'"> ';
+echo '<p>Are you currently attending school? <input type="radio" name="isstudent" value="yes" '.($person->get_position()=="student"?"checked":"").'>yes'.
+ 		'&nbsp;&nbsp;<input type="radio" name="isstudent" value="no" '.($person->get_position()!="student"?"checked":"").'>no';
+echo '&nbsp;&nbsp;&nbsp;&nbsp;Name of school: '.'<input type="text" name="nameofschool" size=30 value="'.($person->get_position()=="student"?$person->get_employer():"").'"> ';
 echo '<p>Will you be receiving academic credit for your volunteer work? ';
-echo '<input type="radio" name="academiccredit" '.($person->get_credithours()!=""?"checked":"").'>yes'.
- 		'&nbsp;&nbsp;<input type="radio" name="academiccredit" '.($person->get_credithours()==""?"checked":"").'>no';
+echo '<input type="radio" name="academiccredit" value="yes" '.($person->get_credithours()!=""?"checked":"").'>yes'.
+ 		'&nbsp;&nbsp;<input type="radio" name="academiccredit" value="no" '.($person->get_credithours()==""?"checked":"").'>no';
 echo '<br>If yes, number of hours required: ';
-echo '<input type="text" name="credithours" tabindex="2" size=5 value="'.$person->get_credithours().'">';
+echo '<input type="text" name="credithours" size=5 value="'.$person->get_credithours().'">';
 echo '</fieldset>';
 
 echo '<fieldset> <legend>Volunteer Information:</legend>';
 
 echo '<p>How did you hear about RMHC volunteer opportunities? ';
-echo '<p><input type="radio" name="howdidyouhear" '.($person->get_howdidyouhear()=="internet"?"checked":"").'>Internet search or website'.
-		'&nbsp;&nbsp;<input type="radio" name="howdidyouhear" '.($person->get_howdidyouhear()=="family"?"checked":"").'>Family or friend'.
-		'&nbsp;&nbsp;<input type="radio" name="howdidyouhear" '.($person->get_howdidyouhear()=="volunteer"?"checked":"").'>Current volunteer'.
-		'&nbsp;&nbsp;<input type="radio" name="howdidyouhear" '.($person->get_howdidyouhear()=="other"?"checked":"").'>other';
+echo '<p><input type="radio" name="howdidyouhear" value="internet" '.($person->get_howdidyouhear()=="internet"?"checked":"").'>Internet search or website'.
+		'&nbsp;&nbsp;<input type="radio" name="howdidyouhear" value="family" '.($person->get_howdidyouhear()=="family"?"checked":"").'>Family or friend'.
+		'&nbsp;&nbsp;<input type="radio" name="howdidyouhear" value="volunteer" '.($person->get_howdidyouhear()=="volunteer"?"checked":"").'>Current volunteer'.
+		'&nbsp;&nbsp;<input type="radio" name="howdidyouhear" value="other" '.($person->get_howdidyouhear()=="other"?"checked":"").'>other';
 echo '<p>Can you make a commitment to volunteer at RMH for at least one year? <br>(one semester for college students): ';
-echo '<input type="radio" name="commitment" '.($person->get_commitment()=="yes"?"checked":"").'>yes'.
- 		'&nbsp;&nbsp;<input type="radio" name="commitment" '.($person->get_commitment()!="yes"?"checked":"").'>no';
+echo '<input type="radio" name="commitment" value="yes" '.($person->get_commitment()=="yes"?"checked":"").'>yes'.
+ 		'&nbsp;&nbsp;<input type="radio" name="commitment" value="no" '.($person->get_commitment()!="yes"?"checked":"").'>no';
 echo('<p>Why are you interested in volunteering at the Ronald McDonald House?<br />');
 echo('<textarea name="motivation" rows="3" cols="75">');
 echo($person->get_motivation());
@@ -163,8 +160,8 @@ echo($person->get_specialties());
 echo('</textarea>');
 
 	echo '<p>Have you ever been convicted of a felony? ';
-	echo '<input type="radio" name="convictions" '.($person->get_convictions()=="yes"?"checked":"").'>yes'.
-	 		'&nbsp;&nbsp;<input type="radio" name="convictions" '.($person->get_position()!="yes"?"checked":"").'>no';
+	echo '<input type="radio" name="convictions" value="yes" '.($person->get_convictions()=="yes"?"checked":"").'>yes'.
+	 		'&nbsp;&nbsp;<input type="radio" name="convictions" value="no" '.($person->get_position()!="yes"?"checked":"").'>no';
 if ($_SESSION['access_level']==0) {
 	echo '<p>All volunteer positions require a background check (separate form).'.
 		 '<br> Please note: our facility is unable to accommodate court-ordered community service or probation-based hours.';
@@ -195,17 +192,18 @@ else {
 }
 echo('</select>');
 // $st = implode(',', $person->get_type());
-$types = array('volunteer' => 'House Volunteer', 'weekendmgr' => 'Weekend Manager', 'mealprep' => 'Guest Chef', 'events' => 'Events/Special projects', 'manager' => 'Manager');
+$types = array('volunteer' => 'House Volunteer', 'weekendmgr' => 'Weekend Manager', 'sub' => 'Flex shift', 'mealprep' => 'Guest Chef', 'events' => 'Events/Special projects', 'manager' => 'Manager');
 $descriptions = array('volunteer' => ' -- Assists with the day-to-day operations of the House, such as
 				answering phones, assisting families, giving tours, cleaning rooms and common areas, and washing linens.<p>', 
 		'weekendmgr' => ' -- Serves as main point of contact during day and overnight hours. Shifts are 
 						generally Friday 5pm to Saturday 5pm and/or Saturday 5pm to Sunday noon (Bangor) or 2pm (Portland). Duties include
 						preparing rooms for guests, assisting families, responding to emergencies, and coordinating shift volunteers.', 
+		'sub' => ' -- available on an as-needed basis to fill in (sub) for an open House Volunteer or Weekend Manager shift.',
 		'mealprep' => ' -- Individual or group provides ingredients and prepares evening meal for families (approx. 15-20 people Bangor and 
 						20-25 people Portland). Groups should be limited to 6-8 people.', 
 		'events' => ' -- Helps with special projects and fundraising events that take place occasionally during the year.', 
 		'manager' => ' -- This is a restricted level of Homebase access for House staff and experienced volunteers.');
-echo('<p>Position types:');
+echo('<p>Position type:');
 // $ts = $types;
 echo('<span style="font-size:x-small;color:FF0000">*</span> (check one or more)<p>');
 
@@ -226,19 +224,15 @@ if ($_SESSION['access_level']==0)
     <fieldset id='availability'>
         <legend>Availability:<span style="font-size:x-small;color:FF0000">*</span>  </legend>
         <span class="bigTable">
-            <table>
                 <?PHP
                 $shifts = array('9-12' => '9am-12pm', '12-3' => '12pm-3pm', '3-6' => '3pm-6pm',
                     '6-9' => '6pm-9pm', 'night' => "Overnight");
                 $wkndshifts = array('9-12' => 'morning', '12-3' => 'afternoon', '3-6' => '',
                     '6-9' => 'evening', 'night' => "Overnight");
                 $days = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
-                $frequencies = array("weekly"=>"weekly","odd,even"=>"bi-weekly","1st,2nd,3rd,4th,5th"=>"monthly","sub"=>"flex shift");
-                $freq2 = array("","","(weekend shifts)","(sub as needed)");
                 $person_availability = implode(',', $person->get_availability());
     			echo "<table>";
-    			echo "<tr><td>Shift</td></tr>";
-				echo "<tr><td>Monday&nbsp;&nbsp;</td><td>Tuesday&nbsp;&nbsp;</td><td>Wednesday&nbsp;&nbsp;</td>".
+    			echo "<tr><td>Monday&nbsp;&nbsp;</td><td>Tuesday&nbsp;&nbsp;</td><td>Wednesday&nbsp;&nbsp;</td>".
 					"<td>Thursday&nbsp;&nbsp;</td><td>Friday&nbsp;&nbsp;</td><td>Saturday&nbsp;&nbsp;</td><td>Sunday</td></tr>";
     			foreach ($shifts as $shift => $shiftvalue) {
        				echo ('<tr>');
@@ -247,8 +241,8 @@ if ($_SESSION['access_level']==0)
     	  					$shiftdisplay=$wkndshifts[$shift];
     	  			  else $shiftdisplay=$shiftvalue;
     	  			  if (($shift!="night" || $day=="Fri" || $day=="Sat") && $shiftdisplay!="") {
-       					$realkey = $day . ":". $shift;
-       	  				echo ('<td><input type="checkbox" name="availability[]" value=' . $realkey);
+       					$realkey = $day . ":". $shift. ":". $person->get_venue();
+       	  				echo ('<td><input type="checkbox" name="availability[]" value="' . $realkey . '"');
     	  				if (in_array($realkey, $person->get_availability())) echo(' CHECKED');
     	  				echo ('>');
     	  				echo " ".$shiftdisplay.'</td>';
@@ -257,26 +251,9 @@ if ($_SESSION['access_level']==0)
        				}
        				echo ('</tr>');
     			}
-    			echo "<tr><td>Frequency</td></tr>";
-    			echo "<tr>";
-    			foreach ($frequencies as $freq=>$freqname) {
-    				echo "<td>";
-    				echo ('<input type="checkbox" name="frequency[]" value=' . $freq);
-    	  			if (in_array($realkey, $person->get_availability())) echo(' CHECKED');
-    	  			echo ('>');
-    	  			echo " ".$freqname.'</td>';
-    			}
-    			echo "</tr>";
-    			echo "<tr>";
-    			foreach ($freq2 as $subtitle) {
-    				echo "<td>";
-    				echo " ".$subtitle.'</td>';
-    			}
-    			echo "</tr>";
    		 		echo "</table><p>";
     			?>
-            </table>
-        </span></p>
+        </span>
     </fieldset>
     <p>
         <?PHP

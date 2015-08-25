@@ -17,6 +17,10 @@
  * this array is null (aka false) if there are no errors
  */
 function validate_form() {
+    if ($_POST['start_date'] == "" || strlen($_POST['start_date']) != 8) 
+        $errors[] = 'Please select a valid start date';
+    if ($_POST['location'] == null)
+        $errors[] = 'Please select a location (Portland or Bangor)';
     if ($_POST['first_name'] == null || $_POST['first_name'] == 'new')
         $errors[] = 'Please enter a first name';
     if ($_POST['last_name'] == null)
@@ -33,25 +37,17 @@ function validate_form() {
         $errors[] = 'Please select a Position type';
     if ($_POST['type'] != null && $_SESSION['access_level'] <= 1 && in_array('manager', $_POST['type']))
         $errors[] = "Sorry, you can't promote yourself to manager.";
-    if ($_POST['status']=='active')
-        if ($_POST['availdays'] == null || $_POST['availvenues'] == null)
-        	$errors[] = 'Please enter Availability: at least one Venue and Shift';
+    if (in_array('volunteer',$_POST['type']) || in_array('weekendmgr',$_POST['type']))
+        if ($_POST['availability'] == null)
+        	$errors[] = 'Please enter Availability for at least one shift.';
     if (!valid_phone($_POST['phone1']))
         $errors[] = 'Enter a valid primary phone number (10 digits: ### ### ####)';
     if ($_POST['phone2'] != "" && !valid_phone($_POST['phone2']))
         $errors[] = 'Enter a valid alternate phone number (10 digits: ### ### ####)';
-    if ($_POST['work_phone'] != "" && !valid_phone($_POST['work_phone']))
-        $errors[] = 'Enter a valid work phone number (10 digits: ### ### ####)';
- //   if (!valid_phone($_POST['emergency_phone']))
- //       $errors[] = 'Enter a valid emergency phone number (10 digits: ### ### ####)';
     if (!valid_email($_POST['email']) && $_POST['email'] != null)
         $errors[] = "Please enter a valid email";
     if ($_POST['birthday'] !== "" && strlen($_POST['birthday']) != 8) 
         $errors[] = 'Please select a valid birthday';
-    if ($_POST['start_date'] !== "" && strlen($_POST['start_date']) != 8) 
-        $errors[] = 'Please select a valid start date';
-    if ($_POST['end_date'] !== "" && strlen($_POST['end_date']) != 8) 
-        $errors[] = 'Please select a valid end date';
     return $errors;
 }
 
