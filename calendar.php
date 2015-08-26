@@ -45,10 +45,10 @@ session_cache_expire(30);
                         $venue = $_GET['venue'];
                         $weekid = $_GET['id'];
                         if (!$weekid)
-                            $weekid = date("y-m-d", time()). ":" .$venue;
+                            $weekid = date('y-m-d',strtotime("last Monday")). ":" .$venue;
                         $week = get_dbWeeks($weekid); // get the week
                         // if invalid week or unpublished week and not a manager
-                        if (!$week instanceof Week || $week->get_status() == "unpublished" && $_SESSION['access_level'] < 1.5) {
+                        if (!$week instanceof Week || $week->get_status() == "unpublished" && $_SESSION['access_level'] == 1) {
                             echo 'This week\'s calendar is not available for viewing. ';
                             if ($_SESSION['access_level'] >= 2)
                                 echo ('<a href="addWeek.php?archive=false&venue='.$venue.'"> <br> Manage weeks</a>');
@@ -74,13 +74,15 @@ session_cache_expire(30);
                                 echo "<p align=\"center\"><input type=\"submit\" value=\"Save changes to all notes\" name=\"submit\">";
                             echo '</form>';
                         }
-                    }
-                    if ($_GET['venue'] == 'mealprep')
-                        echo('<iframe src="https://www.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=u2jo8uhlh87cmklhcuhjkpkp54%40group.calendar.google.com&amp;color=%23711616&amp;ctz=America%2FNew_York" style=" border-width:0 " width="800" height="600" frameborder="0" scrolling="no"></iframe>');
-                    if ($_GET['venue'] == 'activities')
-                        echo('<iframe src="https://www.google.com/calendar/embed?src=3dpjvib1nb87rvjlutsguq2ah8%40group.calendar.google.com&ctz=America/New_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>');
-                    if ($_GET['venue'] == 'group')
-                        echo('<iframe src="https://www.google.com/calendar/embed?src=efdi3jqfr19t65jqn35mljkmi0%40group.calendar.google.com&ctz=America/New_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>');
+                	}
+	                    if ($_GET['venue'] == 'portlandguestchef')
+	                    	echo('<iframe src="https://www.google.com/calendar/embed?src=loveserveddaily%40gmail.com&ctz=America/New_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>');
+                        if ($_GET['venue'] == 'portlandactivities')
+	                        echo('<iframe src="https://www.google.com/calendar/embed?src=s9ot8kn5qmevkqqn596jqqgkig%40group.calendar.google.com&ctz=America/New_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>');
+                    	if ($_GET['venue'] == 'bangorguestchef')
+	                    	echo('<iframe src="https://www.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=u2jo8uhlh87cmklhcuhjkpkp54%40group.calendar.google.com&amp;color=%23711616&amp;ctz=America%2FNew_York" style=" border-width:0 " width="800" height="600" frameborder="0" scrolling="no"></iframe>');
+	                    if ($_GET['venue'] == 'bangoractivities')
+	                    	echo('<iframe src="https://www.google.com/calendar/embed?src=3dpjvib1nb87rvjlutsguq2ah8%40group.calendar.google.com&ctz=America/New_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>');
                 }
                 echo " </div>";
                 include('footer.inc');

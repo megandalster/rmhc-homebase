@@ -66,7 +66,7 @@ function do_week_nav($week, $edit, $venue) {
 function show_week($days, $week, $edit, $year, $doy, $venue) {
     // gets all of the dates for this week
     // sets up the table, with title, and then day of month
-    $venues = array("house" => "Portland House", "fam" => "Bangor House");
+    $venues = array("portland" => "Portland House", "bangor" => "Bangor House");
 	$free_hour = array();
     for ($i = 0; $i < 91; $i++)
         $free_hour[] = true;

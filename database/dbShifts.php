@@ -173,15 +173,15 @@ function selectScheduled_dbShifts($person_id) {
  * Returns the month, day, year, start, end, or venue of a shift from its id
  */
 function get_shift_month($id) {
-    return substr($id, 0, 2);
-}
-
-function get_shift_day($id) {
     return substr($id, 3, 2);
 }
 
-function get_shift_year($id) {
+function get_shift_day($id) {
     return substr($id, 6, 2);
+}
+
+function get_shift_year($id) {
+    return substr($id, 0, 2);
 }
 
 function get_shift_start($id) {
@@ -219,8 +219,8 @@ function get_shift_venue($id) {
  */
 
 function get_shift_name_from_id($id) {
-	if (strpos($id,"house")>0) $shift_name = "House Shift: ";
-	else $shift_name = "Family Room Shift: <br>";
+	if (strpos($id,"portland")>0) $shift_name = "Portland House Shift: ";
+	else $shift_name = "Bangor House Shift: <br>";
     $shift_name .= date("l F j, Y", mktime(0, 0, 0, get_shift_month($id), get_shift_day($id), get_shift_year($id)));
     $shift_name = $shift_name . " ";
     $st = get_shift_start($id);

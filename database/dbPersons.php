@@ -162,10 +162,11 @@ function update_start_date($id, $new_start_date) {
  * if none there, return false
  */
 
-function getall_dbPersons($name_from, $name_to) {
+function getall_dbPersons($name_from, $name_to, $venue) {
     connect();
     $query = "SELECT * FROM dbPersons";
-    $query.= " WHERE last_name BETWEEN '" .$name_from. "' AND '" .$name_to. "'"; 
+    $query.= " WHERE venue = '" .$venue. "'"; 
+    $query.= " AND last_name BETWEEN '" .$name_from. "' AND '" .$name_to. "'"; 
     $query.= " ORDER BY last_name,first_name";
     $result = mysql_query($query);
     if ($result == null || mysql_num_rows($result) == 0) {
@@ -366,8 +367,8 @@ function get_birthdays($name_from, $name_to, $venue) {
 // and sorted alphabetically
 function get_logged_hours($from, $to, $name_from, $name_to, $venue) {
 	connect();
-   	$query = "SELECT first_name,last_name,hours FROM dbPersons "; 
-   	$query.= " WHERE hours LIKE '%" .$venue . "%'";
+   	$query = "SELECT first_name,last_name,hours,venue FROM dbPersons "; 
+   	$query.= " WHERE venue = '" .$venue. "'";
    	$query.= " AND last_name BETWEEN '" .$name_from. "' AND '" .$name_to. "'";
    	$query.= " ORDER BY last_name,first_name";
 	$result = mysql_query($query);
@@ -377,8 +378,7 @@ function get_logged_hours($from, $to, $name_from, $name_to, $venue) {
 			$shifts = explode(',',$result_row['hours']);
 			$goodshifts = array();
 			foreach ($shifts as $shift) 
-			    if (($from == "" || substr($shift,0,8) >= $from) && ($to =="" || substr($shift,0,8) <= $to)
-			    		&& ($venue=="" || strpos($shift,$venue)>0))
+			    if (($from == "" || substr($shift,0,8) >= $from) && ($to =="" || substr($shift,0,8) <= $to))
 			    	$goodshifts[] = $shift;
 			if (count($goodshifts)>0) {
 				$newshifts = implode(",",$goodshifts);
@@ -389,32 +389,4 @@ function get_logged_hours($from, $to, $name_from, $name_to, $venue) {
    	mysql_close();
    	return $thePersons;
 }
-/*
- * This was a one-time function to correct the date format from mm-dd-yy to yy-mm-dd--- don't use it again.
-function fix_all_birthdays () {
-	$persons = getall_dbPersons("A","Z");
-	foreach ($persons as $p) {
-		$b = $p->get_birthday();
-		$s = $p->get_start_date();
-		if ($b!=""){
-			$a = explode("-",$b);
-			if (strlen($a[1])>2)
-				$a[1] = substr($a[1],0,2);
-			if (strlen($a[2])>2)
-				$a[2] = substr($a[2],0,2);
-			$b = $a[2]."-".$a[0]."-".$a[1];
-			update_birthday($p->get_id(), $b);
-		}
-		if ($s!=""){
-			$a = explode("-",$s);
-			if (strlen($a[1])>2)
-				$a[1] = substr($a[1],0,2);
-			if (strlen($a[2])>2)
-				$a[2] = substr($a[2],0,2);
-			$s = $a[2]."-".$a[0]."-".$a[1];
-			update_start_date($p->get_id(), $s);
-		}
-	}
-}
-*/
 ?>

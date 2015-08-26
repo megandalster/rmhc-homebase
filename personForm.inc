@@ -98,12 +98,12 @@ foreach ($states as $st) {
         $phonetypes = array("home", "cell", "work");
         echo '<input type="text" name="phone1" MAXLENGTH=12 tabindex="7" value="'.phone_edit($person->get_phone1()).'">';
         foreach ($phonetypes as $pvalue)
-        	echo '<input type="radio" name="phone1type" value="'.$pvalue.'" '.($person->get_phone1type()==$pvalue?"checked":"").'">'.$pvalue.' ';
+        	echo '<input type="radio" name="phone1type" value="'.$pvalue.'"'.($person->get_phone1type()==$pvalue?' checked':'').'>'.$pvalue.' ';
         
         echo '<p>Secondary Phone: ';
         echo '<input type="text" name="phone2" MAXLENGTH=12 tabindex="8" value="'.phone_edit($person->get_phone2()).'">';
         foreach ($phonetypes as $pvalue)
-        	echo '<input type="radio" name="phone2type" value="'.$pvalue.'" '.($person->get_phone2type()==$pvalue?"checked":"").'">'.$pvalue.' ';
+        	echo '<input type="radio" name="phone2type" value="'.$pvalue.'"'.($person->get_phone2type()==$pvalue?" checked":"").'>'.$pvalue.' ';
         
         echo '<p>Birth date: '. '<input name="birthday" type="text" id="birthday" tabindex="9" value="'.$person->get_birthday().'">';
         if ($id=='new')

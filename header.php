@@ -74,15 +74,15 @@
 	        	echo(' | <a href="' . $path . 'about.php">about</a>');
 	            echo(' | <a href="' . $path . 'help.php?helpPage=' . $current_page . '" target="_BLANK">help</a>');
 	            echo(' | calendars: <a href="' . $path . 'calendar.php?venue='.$_SESSION['venue'].'">house, </a>');
-	            echo('<a href="' . $path . 'calendar.php?venue=mealprep">guest chef, </a>');
-	            echo('<a href="' . $path . 'calendar.php?venue=activities">activity </a>');
+	            echo('<a href="' . $path . 'calendar.php?venue='.$_SESSION['venue'].'guestchef">guest chef, </a>');
+	            echo('<a href="' . $path . 'calendar.php?venue='.$_SESSION['venue'].'activities">activity </a>');
 	            echo(' | <a href="https://sites.google.com/site/rmhvolunteersite"  target="_BLANK">around the house </a>');
 	        }
 	        if ($_SESSION['access_level'] >= 2) {
 	            echo('<br><a href="' . $path . 'viewSchedule.php?venue='.$_SESSION['venue'].'">master schedule</a>');
 	            echo(' | volunteers: <a href="' . $path . 'personSearch.php">search</a>, 
 				        <a href="personEdit.php?id=' . 'new' . '">add, </a> <a href="viewScreenings.php?type=new">screenings</a>');
-	            echo(' | <a href="' . $path . 'reports.php">reports</a>');
+	            echo(' | <a href="' . $path . 'reports.php?venue='.$_SESSION['venue'].'">reports</a>');
 	        }
 	        echo(' | <a href="' . $path . 'logout.php">logout</a><br>');
         }

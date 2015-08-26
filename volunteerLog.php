@@ -37,21 +37,21 @@ $(function() {
     <form method="POST">
 	<?php 
 	    $person = retrieve_person($_GET['id']);
-		$venues = array('house' => 'House', 'fam' => 'Family Room', 'mealprep' => 'Meal Prep', 'activities' => 'Activities', 'other' => 'Other');
+		$venues = array('portland' => 'RMH Portland', 'bangor' => 'RMH Bangor');
 		if ($_POST['Submit']) {
-			$hours = gather_hours($_POST['from'], $_POST['start_time'], $_POST['end_time'], $_POST['venue'], $_POST['hours_worked']);
+			$hours = gather_hours($_POST['from'], $_POST['start_time'], $_POST['end_time'], $_SESSION['venue'], $_POST['hours_worked']);
 			update_hours($person->get_id(), $hours);
-	    	echo "Volunteer Log Updated; please remember to log out if finished.<p>";
+	    	echo "Volunteer Log Updated; please remember to log out when finished.<p>";
 	    }
 	//    else {
 		
 	    	$person = retrieve_person($_GET['id']);
 		    $hours = $person->get_hours();
-		    echo '<p> <b>Volunteer Log Sheet </b> for '.$person->get_first_name()." ".$person->get_last_name();
+		    echo '<p><b> '.$venues[$_SESSION['venue']].' Volunteer Log Sheet </b> for '.$person->get_first_name()." ".$person->get_last_name();
 			echo "<br> Today is ".date('l F j, Y')."</p>"; 
 			$total = 0;
 			echo '<p><table name="log_entries" id="spacedRowTable" style="width:40%">';
-			echo '<th align="left">Date</th><th align="left">Start time</th><th align="left">End time</th><th align="left">Hours worked</th><th align="left">Venue</th><th align="left">Total</th><p></p>';
+			echo '<th align="left">Date</th><th align="left">Start time</th><th align="left">End time</th><th align="left">Hours worked</th><th align="left">Total</th><p></p>';
 			
 			/*foreach ($hours as $log_entry) {
 				$log_details = explode(":",$log_entry);	
@@ -64,92 +64,34 @@ $(function() {
 				echo '<tr><td><input type="text" name="from[]" class="date" value='.$log_details[0].'></td>
 					<td><input type="text" name="start_time[]" class="start_time" size=10 value='.substr($log_details[1],0,4).'></td>
 					<td><input type="text" name="end_time[]" class="end_time" size=10 value='.substr($log_details[1],5,4).'></td>
-					<td><input type="text" name="hours_worked[]" class="hours_worked" size=10 align=right value='.$log_details[3].'></td>
-					<td><select name="venue[]" class="venue">';
-			   		foreach ($venues as $v_name => $v_display) {
-						echo "<option value='" . $v_name . "' ";
-						if ($log_details[2]==$v_name) echo "SELECTED ";
-	            		echo ">" . $v_display . "</option>";
-					}
-					$total += $log_details[3];
-					echo '</select></td>';
-					echo '<td>'.$total.'</td></tr>';
+					<td><input type="text" name="hours_worked[]" class="hours_worked" size=10 align=right value='.$log_details[2].'></td>';
+				$total += $log_details[2];
+				echo '<td>'.$total.'</td></tr>';
+					
 			}
 			echo '<tr><td><input type="text" id = "from" name="from[]" class="date" ></td>
 				<td><input type="text" id="start_time" name="start_time[]" class="start_time" size=10></td>
 				<td><input type="text" id="end_time" name="end_time[]" class="end_time"  size=10></td>
-				<td><input type="text" name="hours-worked[]" class="hours-worked" size=10></td>
-				<td><select name="venue[]" class="venue" tabindex=5>';
-				foreach ($venues as $v_name => $v_display) {
-						echo "<option value='" . $v_name . "' ";
-	            		if ("house"==$v_name) echo "SELECTED ";
-	            		echo ">" . $v_display . "</option>";
-					}
-				echo '</select></td></tr>';
-			echo '</table></p>';
+				<td><input type="text" name="hours-worked[]" class="hours-worked" size=10></td>';
+			echo '</tr></table></p>';
 	        
-			/*
-			$person = retrieve_person($_GET['id']);
-	    	$hours = $person->get_hours();
-
-			echo '<p><table name="log_entries"><tr><td width="180px">Date</td><td width="102px">Start time</td><td width="102px">End time</td><td width="102px">Hours worked</td>
-			      <td width="140px">Venue</td><td>Total</td></tr>';
-		    echo '</table></p>';
-		    $person = retrieve_person($_GET['id']);
-		    $hours = $person->get_hours();
-			$total = 0;
-			foreach ($hours as $log_entry) {
-			   $log_details = explode(":",$log_entry);	
-			   echo '<p class=ui-widget id=log-rows>
-		    	    <input type="text" name="from[]" class="date" value='.$log_details[0].'>
-					<input type="text" name="start_time[]" class="start_time" size=10 value='.substr($log_details[1],0,4).'>
-					<input type="text" name="end_time[]" class="end_time" size=10 value='.substr($log_details[1],5,4).'>
-					<input type="text" name="hours_worked[]" class="hours_worked" size=10 align=right value='.$log_details[3].'>
-					<select name="venue[]" class="venue">';
-			   		foreach ($venues as $v_name => $v_display) {
-						echo "<option value='" . $v_name . "' ";
-						if ($log_details[2]==$v_name) echo "SELECTED ";
-	            		echo ">" . $v_display . "</option>";
-					}
-					$total += $log_details[3];
-					echo '</select>';
-			   		echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$total;
-			   echo "</p>";
-			}
-			
-			// now throw a blank row so that volunteer can make a new entry
-		    echo '<p class=ui-widget id=log-rows>
-		    	    <input type="text" id="from" name="from[]" class="date" tabindex=1 >
-					<input type="text" id="start_time" name="start_time[]" class="start_time" tabindex=2 size=10>
-					<input type="text" id="end_time" name="end_time[]" class="end_time" tabindex=3 size=10>
-					<input type="text" id="hours_worked" name="hours_worked[]" class="hours_worked" tabindex=4 size=10>
-					<select name="venue[]" class="venue" tabindex=5>';
-					foreach ($venues as $v_name => $v_display) {
-						echo "<option value='" . $v_name . "' ";
-	            		if ("house"==$v_name) echo "SELECTED ";
-	            		echo ">" . $v_display . "</option>";
-					}
-					echo '</select>';
-			echo "</p>";
-			*/
 		    echo('<p>Hit <input type="submit" value="Submit" name="Submit" tabindex=5> to save these changes.<br /><br />');
-	 //   }
+
 	    // rebuilds the hours array from the form, taking in edits to previous entries and a new entry 
 	    function gather_hours($dates, $start_times, $end_times, $venues, $hours_worked) {
 			for ($i=0;$i<count($dates);$i++) {
 				$start_times[$i] = fix_time($start_times[$i]);
 				$end_times[$i] = fix_time($end_times[$i]);
 				
-	    		if (valid_entry($dates[$i],$start_times[$i],$end_times[$i],$venues[$i],$hours_worked[$i])) 
-	    			$hours .= ",".$dates[$i].":".$start_times[$i]."-".$end_times[$i].":".$venues[$i].":".$hours_worked[$i];
+	    		if (valid_entry($dates[$i],$start_times[$i],$end_times[$i],$hours_worked[$i])) 
+	    			$hours .= ",".$dates[$i].":".$start_times[$i]."-".$end_times[$i].":".$hours_worked[$i];
 	    		}
 			return substr($hours,1);
 		}
 		// minimal validation function -- assumes 30-minute intervals
-		function valid_entry($date,$start,$end,$venue,&$hours) {
+		function valid_entry($date,$start,$end,&$hours) {
 			if ($date=="") return false;
 			if ($start=="" || $end=="") return false;
-			if ($venue=="") return false;
 			if ($hours=='') {
 				if ($end < $start){
 				    $end+=2400;

@@ -4,7 +4,7 @@
  * Xun Wang, and Allen Tucker. This program is part of RMHP-Homebase, which is free 
  * software.  It comes with absolutely no warranty. You can redistribute and/or 
  * modify it under the terms of the GNU General Public License as published by the 
- * Free Software Foundation (see <http://www.gnu.org/licenses/ for more information).
+ * Free Software Foundation (see <http://www.gnu.org/licenses/ for more information).new SCL
  * 
  * Modifications February 2015, Adrienne Beebe
  */
@@ -47,7 +47,7 @@
 					if($id) {
 						$id=view_scl($id,$venue);
 					}
-					if(!$id) {
+					else {
 						// The first 8 characters of the shift id shows the dates for the week. 
 						$yy_mm_dd = substr($_GET['shift'], 0, 8);
 						// Displays the option of going back to the Calendar.
@@ -57,7 +57,7 @@
 					}
 				?>
 			</div>
-				<?PHP include('footer.inc');?>
+			<?PHP include('footer.inc');?>
 		</div>
 	</body>
 </html>
@@ -82,15 +82,9 @@
 		mysql_close(); 
 		for($i=0;$i<mysql_num_rows($persons_result);++$i) {
 			$row=mysql_fetch_row($persons_result);
-			$id_and_name=$row[0]."+".$row[1]."+".$row[2];	
-			$match=false;
-//			for($j=0;$j<count($shift_persons);++$j) {
-//				if($id_and_name==$shift_persons[$j] || in_array($id_and_name, )) {
-//					$match=true;
-//				}
-//			}
+			$id_and_name=$row[0]."+".$row[3]."+".$row[4];	
 			if (!in_array($id_and_name, $shift_persons) && !in_array($id_and_name, $shift->get_removed_persons())) {
-				$persons[]=array($row[0], $row[1], $row[2], $row[9], $row[10], "", "", "?");
+				$persons[]=array($row[0], $row[3], $row[4], $row[9]." ".$row[10], $row[11]." ".$row[12], "", "", "?");
 			}	
 		}
 		$new_scl=new SCL($id, $persons, "open", $vacancies, get_sub_call_list_timestamp($id));   
@@ -104,8 +98,6 @@
 		add_log_entry('<a href=\"personEdit.php?id='.$_SESSION['_id'].'\">'.$_SESSION['f_name'].' '.
 		    $_SESSION['l_name'].'</a> generated a <a href=\"subCallList.php?shift='.$shift->get_id().'\">sub call list</a> for the shift: <a href=\"editShift.php?shift='.
 		    $shift->get_id().'&venue='.$venue.'\">'.get_shift_name_from_id($shift->get_id()).'</a>.');
-		//$_POST['_shiftid']=$id;
-		//echo "<p>SCL ".$id." added successfully.</p>";
 	}
 
 	function do_scl_index($id,$venue) {
@@ -149,7 +141,7 @@
 		$venue = substr(strrchr($id,":"),1);
 			if(array_key_exists('_shiftid',$_POST))
 			  show_back_navigation($_POST['_shiftid'],692,$venue); // show_back_navigation($id,692);
-			echo "<table width=\"700\" align=\"center\" border=\"1px\">
+			echo "<table width=\"700\" align=\"center\" border=\"0px\">
 				<tr><td colspan=\"5\" align=\"center\"><b>Sub Call List for ".get_shift_name_from_id($id)."</b></td></tr>" ;
 			echo "<tr><td colspan=\"5\"><br>";
 				$v=$shift->num_vacancies();
@@ -292,13 +284,13 @@
 
 	function show_back_navigation($id,$width,$venue) {
 		echo "<br><table align=\"center\"><tr><td align=\"center\" width=\"".$width."\">
-		<a href=\"editShift.php?shift=".substr($id, 0, strrpos($id, ":")) ."&venue=".$venue."\">Back to Shift</a><br>" ;
+		<a href=\"editShift.php?shift=".substr($id, 0, strrpos($id, ":")) ."&venue=".$venue."\">Back to Shift</a></td></tr></table>" ;
 		return true;
 	}
 	
  	function back_to_calendar($date,$width,$venue) {
 		echo "<br><table align=\"center\"><tr><td align=\"center\" width=\"".$width."\">
-		<a href=\"calendar.php?id=".$date.":".$venue."&venue=".$venue."\">Back to Calendar</a><br>" ;
+		<a href=\"calendar.php?id=".$date.":".$venue."&venue=".$venue."\">Back to Calendar</a></td></tr></table>" ;
 		return true;
 	}
 

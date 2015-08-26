@@ -83,9 +83,13 @@ $(function() {
 <div>
 	<p id="search-fields-container">
 	<form id = "search-fields" method="post">
-		<input type="hidden" name="_form_submit" value="report" />
-		<p class = "search-description" id="today"> <b>RMH Providence Volunteer Reports</b><br> Today's date: 
-		<?php date_default_timezone_set ("America/New_York"); echo Date("F d, Y");?></p>
+		<p class = "search-description" id="today">
+		<?php date_default_timezone_set ("America/New_York");
+		$venue = $_GET['venue'];
+		$venues = array('portland'=>"RMH Portland",'bangor'=>"RMH Bangor");
+		echo '<b>'.$venues[$venue]." Volunteer Reports</b><br>Today's date: ".date("F d, Y");
+		echo '</p>';
+		echo '<input type="hidden" name="_form_submit" value="report'.$venue.'" />';?>
 	<table>	<tr>
 		<td class = "search-description" valign="top"> &nbsp;&nbsp;&nbsp;&nbsp;Select Report Type: 
 		<p>	<select multiple name="report-types[]" id = "report-type" size="5">
@@ -104,12 +108,6 @@ $(function() {
 			<p id="name_fromto"> from : <input name = "name_from" type="text" size="10" id="name_from"><br>
 							&nbsp;&nbsp;&nbsp;&nbsp;to : <input name = "name_to" type="text" size="10" id="name_to"></p>
 		</td>
-		<td class = "search-description" valign="top"> &nbsp;&nbsp;&nbsp;&nbsp;Venue:
-		    <p id="venue-input"> <select name="venue" id = "report-venue">
-	  		<option value="">--any--</option>
-	  		<option value="house">House</option>
-	  		<option value="fam">Family Room</option></select></p>
-		</td>
 		
 	</tr>
 	<tr>
@@ -117,7 +115,7 @@ $(function() {
 	<p>To view report, hit <input type="submit" value="Submit" id ="report-submit" class ="btn">.</p>
 	</td>
 	<td colspan=3 valign="top">
-	<p>* To save report, check here <input type="checkbox" name="export" value="export">, hit 'Submit' again, and browse to 'export.csv'.</p>
+	<p>* To save the report, check here <input type="checkbox" name="export" value="export">, hit 'Submit' again, and browse to 'export.csv'.</p>
 	</td>
 	</tr>
 	</table>

@@ -293,8 +293,8 @@ include_once('database/dbLog.php');
 		$s="";
 		for($i=0;$i<mysql_num_rows($result);++$i) {
 			$row=mysql_fetch_row($result);
-			$value=$row[0]."+".$row[1]."+".$row[2];
-			$label=$row[2].", ".$row[1];
+			$value=$row[0]."+".$row[3]."+".$row[4];
+			$label=$row[4].", ".$row[3];
 			$match=false;
 			for($j=0;$j<count($persons);++$j) {
 				if($value==$persons[$j]) {
@@ -317,8 +317,8 @@ include_once('database/dbLog.php');
 		for($i=0;$i<mysql_num_rows($result);$i++) {
 		  $row=mysql_fetch_row($result);
 		//  if (!strpos($row[15],"manager")) {
-			$value=$row[0]."+".$row[1]."+".$row[2];
-			$label=$row[2].", ".$row[1];
+			$value=$row[0]."+".$row[3]."+".$row[4];
+			$label=$row[4].", ".$row[3];
 			$match=false;
 			for($j=0;$j<count($persons);++$j) {
 				if($value==$persons[$j]) {

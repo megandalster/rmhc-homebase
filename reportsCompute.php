@@ -12,17 +12,17 @@ include_once('database/dbShifts.php');
 include_once('domain/Shift.php');
 
 if (isset($_POST['_form_submit'])) {
-	if  ($_POST['_form_submit'] == 'report')
-		show_report();
+	if  ($_POST['_form_submit'] == 'reportportland')
+		show_report('portland');
+	else show_report('bangor');
 }
 
-function show_report() {
+function show_report($venue) {
 
 	$from = $_POST["from"];
 	$to   = $_POST["to"];
 	$name_from = $_POST["name_from"];
 	$name_to = $_POST["name_to"];
-	$venue   = $_POST["venue"];
 	if ($_POST['export'])	
 		$export = "yes";
 	else $export = "no";
@@ -41,7 +41,7 @@ function show_report() {
 				report_volunteer_history($from, $to, $name_from,$name_to, $venue, $export);
 	    }
 		if (in_array('volunteers', $_POST['report-types'])) {
-				report_all_volunteers($name_from, $name_to, $export);	
+				report_all_volunteers($name_from, $name_to, $venue, $export);	
 		}
 	}
 }
@@ -50,7 +50,7 @@ function report_volunteer_hours_by_day($from, $to, $venue) {
 	if($from == ""){$from ="00-00-00";}
 	if($to == ""){$to = date("y-m-d");}
 		
-	echo "<br><b>Total Volunteer Hours Report</b><br>"; 
+	echo "<br><b>".pretty_venue($venue)." Total Volunteer Hours Report</b><br>"; 
 	if ($from!="00-00-00")
 		echo " from " .pretty_date($from);
 	if ($to!="")
@@ -60,14 +60,14 @@ function report_volunteer_hours_by_day($from, $to, $venue) {
 	$report = get_volunteer_hours($from, $to, $venue);
 	$row_labels = array("9-12","12-3","3-6","6-9","night","Total");
 	$col_labels = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun","Total");
-	display_totals_table($col_labels, $row_labels, $report, $export);	
+	display_totals_table($col_labels, $row_labels, $report, $export, $venue);	
 }
 
 function report_shifts_staffed_vacant_by_day($from, $to, $venue) {
 	if($from == ""){$from ="00-00-00";}
 	if($to == ""){$to = date("y-m-d");}
 		
-	echo "<br><b>Shifts/Vacancies Report</b><br>"; 
+	echo "<br><b>".pretty_venue($venue)." Shifts/Vacancies Report</b><br>"; 
 	if ($from!="00-00-00")
 		echo " from " .pretty_date($from);
 	if ($to!="")
@@ -77,18 +77,18 @@ function report_shifts_staffed_vacant_by_day($from, $to, $venue) {
 	$report = get_shifts_staffed($from, $to, $venue);
 	$row_labels = array("9-12","12-3","3-6","6-9","night","Total");
 	$col_labels = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun","Total");
-	display_vacancies_table($col_labels, $row_labels, $report, $export);
+	display_vacancies_table($col_labels, $row_labels, $report, $export, $venue);
 }
 
 function report_volunteer_birthdays($name_from, $name_to, $venue, $export) {
-	echo ("<br><b>Volunteer Birthdays Report</b> (ordered by month) <br> Report date: ");
+	echo ("<br><b>".pretty_venue($venue)." Volunteer Birthdays Report</b> (ordered by age) <br> Report date: ");
 	echo date("F d, Y")."<br><br>";
 	if($name_from == ""){$name_from="A";}
 	if($name_to == ""){$name_to = "Z";}
 	
 	$report = get_birthdays($name_from, $name_to,$venue);
 	//display_birthdays($col_labels,$report);
-	display_birthdays($report, $export);
+	display_birthdays($report, $export, $venue);
 }
 
 function report_volunteer_history($from, $to, $name_from, $name_to, $venue, $export) {
@@ -97,24 +97,24 @@ function report_volunteer_history($from, $to, $name_from, $name_to, $venue, $exp
 	if($name_from == ""){$name_from="A";}
 	if($name_to == ""){$name_to = "Z";}
 	
-	echo ("<br><b>Volunteer History Report</b><br> Report date: ");
+	echo ("<br><b>".pretty_venue($venue)." Volunteer History Report</b><br> Report date: ");
 	echo date("F d, Y")."<br><br>";
 	
 	$report = get_logged_hours($from, $to, $name_from,$name_to, $venue);
-    display_logged_hours($report, $export);
+	display_logged_hours($report, $export, $venue);
 }
 
-function report_all_volunteers($name_from, $name_to, $export) {
-	echo ("<br><b>Volunteer Contact Info</b><br> Report date: ");
+function report_all_volunteers($name_from, $name_to, $venue, $export) {
+	echo ("<br><b>".pretty_venue($venue)." Volunteer Contact Info</b><br> Report date: ");
 	echo date("F d, Y")."<br><br>";
 	if($name_from == ""){$name_from="A";}
 	if($name_to == ""){$name_to = "Z";}
 	
-	$report = getall_dbPersons($name_from, $name_to);
-	display_volunteers($report, $export);
+	$report = getall_dbPersons($name_from, $name_to, $venue);
+	display_volunteers($report, $export, $venue);
 }
 
-function display_birthdays($report, $export) { //Create a table to display birthdays
+function display_birthdays($report, $export, $venue) { //Create a table to display birthdays
 	$col_labels = array("Volunteer Name ","Address", "City", "State", "Zip", "Birth Date ","Age ");
 	$res = "
 		<table id = 'report'> 
@@ -174,7 +174,7 @@ function display_birthdays($report, $export) { //Create a table to display birth
 	echo $res;
 	echo "</div>";
 	if ($export=="yes") 
-		export_report ("Volunteer Birthdays Report", $col_labels, $export_data);
+		export_report ("Volunteer Birthdays Report", $col_labels, $export_data, $venue);
 }
 
 function pretty_date($date){
@@ -199,7 +199,7 @@ function pretty_date($date){
 
 
 
-function display_totals_table($col_lab, $row_lab, $report){  //Creates a table for the Total Hours report
+function display_totals_table($col_lab, $row_lab, $report, $venue){  //Creates a table for the Total Hours report
 	$res = "
 		<table id = 'areport'> 
 			<thead>
@@ -263,7 +263,7 @@ function display_totals_table($col_lab, $row_lab, $report){  //Creates a table f
 	echo $res;
 }
 
-function display_vacancies_table($col_lab, $row_lab, $report){
+function display_vacancies_table($col_lab, $row_lab, $report, $venue){
 	$res = "
 		<table id = 'areport'> 
 			<thead>
@@ -371,14 +371,13 @@ function civil_time($army_time){
 
 // Improve venue display by using associative array, i.e, turning fam --> "Family Room" 
 function pretty_venue($v){
-	$venue = array('house' => 'House', 'fam' => 'Family Room', 'mealprep' => 'Meal Prep', 
-	            'activities' => 'Activities', 'other' => 'Other', ""=>"House and Family Room");
+	$venue = array('portland' => 'RMH Portland', 'bangor' => 'RMH Bangor');
 		return $venue["$v"];
 }
 
 //Create a table to display volunteer history report
-function display_logged_hours ($report, $export) { 
-	$col_labels = array("Name","Date","Start time","End time","Venue","Hours");
+function display_logged_hours ($report, $export, $venue) { 
+	$col_labels = array("Name","Date","Start time","End time","Hours");
 	$res = "
 		<table id = 'report'> 
 			<thead>
@@ -412,33 +411,32 @@ function display_logged_hours ($report, $export) {
 		$total_hours=0;
 		foreach ($dates as $date) {
 			$d = explode(":",$date);
-			$total_hours += $d[3];
+			$total_hours += $d[2];
 			$times = explode(",",$d[1]);
 			foreach ($times as $time) {
 				$t = explode("-",$time);
 				$start_time = civil_time($t[0]);
 				$end_time = civil_time($t[1]);
 				$res .= "<td align=right>".pretty_date($d[0])."</td><td align=right>".$start_time.
-				        "</td><td align=right>".$end_time."</td><td>".
-				        pretty_venue($d[2])."</td><td align=right>".$d[3]."</td></tr><tr><td></td>";
+				        "</td><td align=right>".$end_time."</td><td align=right>".$d[2]."</td></tr><tr><td></td>";
 				$p = array($last_name . ", ". $first_name,
-							pretty_date($d[0]),$start_time,$end_time,pretty_venue($d[2]),$d[3]);
+							pretty_date($d[0]),$start_time,$end_time,$d[2]);
 				$export_data[] = $p; 
 			}
 		}
-		$res .= "<td></td><td></td><td></td><td><b>Total hours</b></td><td align=right>".$total_hours."</td></tr>";
+		$res .= "<td></td><td></td><td><b>Total hours</b></td><td align=right>".$total_hours."</td></tr>";
 	}
 	
 	$res .= "</tbody></table>";
 	echo $res;
 	echo "</div>";
 	if ($export=="yes") 
-		export_report ("Volunteer History Report", $col_labels, $export_data);
+		export_report ("Volunteer History Report", $col_labels, $export_data, $venue);
 }
 
 //Create a table to display volunteer contact info
-function display_volunteers ($report, $export) { 
-	$col_labels = array("Name","Address","City","State","Zip","Phone 1", "Phone 2", "Work Phone", "Email","Start Date", "End Date", "Reason Left", "Notes");
+function display_volunteers ($report, $export, $venue) { 
+	$col_labels = array("Name","Address","City","State","Zip","Phone 1", "Phone 2", "Email","Start Date", "Notes");
 	$res = "
 		<table id = 'report'> 
 			<thead>
@@ -459,9 +457,8 @@ function display_volunteers ($report, $export) {
 	foreach($report as $person){
 		$p = array($person->get_last_name() . ", ". $person->get_first_name(), 
 				$person->get_address(), $person->get_city(), $person->get_state(), $person->get_zip(),
-			    $person->get_phone1(), $person->get_phone2(), $person->get_work_phone(), $person->get_email(),
-			    $person->get_start_date(), $person->get_end_date(), $person->get_reason_left(),
-				$person->get_notes());
+			    $person->get_phone1(), $person->get_phone2(), $person->get_email(),
+			    $person->get_start_date(), $person->get_notes());
 		$export_data[] = $p;
 		$res .= "<tr>";
 		foreach ($p as $info)
@@ -472,13 +469,13 @@ function display_volunteers ($report, $export) {
 	echo $res;
 	echo "</div>";
 	if ($export=="yes") 
-		export_report ("Volunteer Contact Info", $col_labels, $export_data);
+		export_report ("Volunteer Contact Info", $col_labels, $export_data, $venue);
 }
 
-function export_report($heading, $col_labels, $data) {
+function export_report($heading, $col_labels, $data, $venue) {
 	$filename = "export.csv";
 	$handle = fopen($filename, "w");
-	fputcsv($handle, array($heading,"","Report date: ".date("F d, Y")));
+	fputcsv($handle, array(pretty_venue($venue)." ".$heading,"Report date: ".date("F d, Y")));
 	fputcsv($handle, array());
 	fputcsv($handle, $col_labels);
 	foreach ($data as $aline) {

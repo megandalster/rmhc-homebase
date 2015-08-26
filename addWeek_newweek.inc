@@ -13,7 +13,7 @@
 
 <p>
 	<?php 
-	$venues = array("house" => "House", "fam" => "Family Room");
+	$venues = array("portland" => "RMH Portland", "bangor" => "RMH Bangor");
 	echo("<strong>" . $venues[$venue] . " </strong>"); 
 	
 	?>
