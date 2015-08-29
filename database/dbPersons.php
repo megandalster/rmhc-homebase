@@ -241,10 +241,10 @@ function make_a_person($result_row) {
     return $thePerson;
 }
 
-function getall_names($status, $type) {
+function getall_names($status, $type, $venue) {
     connect();
     $result = mysql_query("SELECT id,first_name,last_name,type FROM dbPersons " .
-            "WHERE status = '" . $status . "' AND TYPE LIKE '%" . $type . "%' ORDER BY last_name,first_name");
+            "WHERE venue='".$venue."' AND status = '" . $status . "' AND TYPE LIKE '%" . $type . "%' ORDER BY last_name,first_name");
     mysql_close();
     return $result;
 }

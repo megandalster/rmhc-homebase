@@ -60,12 +60,11 @@ function show_master_schedule($venue) {
 	$wkndgroups = array("1st", "2nd", "3rd", "4th", "5th");
 	$groups = array("odd", "even");
     $shifts = array("9-12","12-3","3-6","6-9","night");
-	$wkndshifts = array("9-12"=>"morning","12-3"=>"afternoon","6-9"=>"evening","night"=>"night");
 	$venues = array("portland"=>"Portland House","bangor"=>"Bangor House");
     $days = array("Mon" => "Monday", "Tue" => "Tuesday", "Wed" => "Wednesday",
                     "Thu" => "Thursday", "Fri" => "Friday");
-    $wknddays = array("Sat" => "Saturday", "Sun" => "Sunday");
-    echo ('<br><table id="calendar" align="center" ><tr class="weekname"><td colspan="' . (sizeof($days) + 2) . '" ' .
+    
+    echo ('<p><table id="calendar" align="center" ><tr class="weekname"><td colspan="' . (sizeof($days) + 2) . '" ' .
         'bgcolor="ffdddd" align="center" >' .$venues[$venue]." Master Schedule -- weekday shifts");
     echo ('</td></tr><tr><td bgcolor="#ffdddd">  </td>');
     foreach ($days as $day => $dayname)
@@ -91,18 +90,19 @@ function show_master_schedule($venue) {
     }
     echo "</table>";
     
-    echo ('<br><table id="calendar" align="center" ><tr class="weekname"><td colspan="' . (sizeof($days) + 2) . '" ' .
-    'bgcolor="ffdddd" align="center" >' .$venues[$venue]." Master Schedule -- weekend shifts");
+    $satshifts = array("10-1","1-4","night");
+	$sunshifts = array("9-12","2-5","5-9");
+	echo "</p><p>&nbsp;<table align='center'><tr><td>";
+    echo ('<table id="calendar" align="left" ><tr class="weekname"><td colspan="2" ' .
+    'bgcolor="ffdddd" align="center" >weekend shifts');
     echo ('</td></tr><tr><td bgcolor="#ffdddd">  </td>');
-    foreach ($wknddays as $day => $dayname)
-        echo ('<td class="dow" align="center"> ' . $dayname . ' </td>');
-    echo('<td bgcolor="#ffdddd"></td></tr>');
-    $columns = sizeof($days);
+    echo ('<td class="dow" align="center"> Saturday </td>');
+    echo('<td bgcolor="#ffffff"></td></tr>');
     foreach ($wkndgroups as $group){
       $showgroup = $group;
-      foreach ($wkndshifts as $hour=>$hourname) {
-      	echo ("<tr><td class=\"masterhour\">   " . $showgroup . " " . $hourname . "</td>");
-        foreach ($wknddays as $day => $dayname) {
+      foreach ($satshifts as $hour) {
+      	echo ("<tr><td class=\"masterhour\">   " . $showgroup . " " . $hour . "</td>");
+        $day="Sat"; $dayname="Saturday";
         	$master_shift = retrieve_dbMasterSchedule($group .":". $day .":". $hour .":". $venue);
         	if ($master_shift) {
             	echo do_shift($master_shift,1);
@@ -110,12 +110,35 @@ function show_master_schedule($venue) {
                 $master_shift = new MasterScheduleEntry($venue, $day, $group, $hour, 0, "", "");
                 echo do_shift($master_shift, 0);
             }
-        }
-        echo ("<td class=\"masterhour\">" . $showgroup . " " . $hourname . "</td></tr>");
+        echo ("<td bgcolor='#ffffff'></td></tr>");
         $showgroup = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
       }
     }
     echo "</table>";
+    echo "</td><td>&nbsp;</td><td>";
+    echo ('<table id="calendar" align="left" ><tr class="weekname"><td colspan="2" ' .
+    'bgcolor="ffdddd" align="center" >');
+    echo ('</td></tr><tr><td bgcolor="#ffdddd">  </td>');
+    echo ('<td class="dow" align="center"> Sunday </td>');
+    echo('<td bgcolor="ffffff" ></td></tr>');
+    foreach ($wkndgroups as $group){
+      $showgroup = $group;
+      foreach ($sunshifts as $hour) {
+      	echo ("<tr><td class=\"masterhour\">   " . $showgroup . " " . $hour . "</td>");
+        $day="Sun"; $dayname="Sunday";
+        	$master_shift = retrieve_dbMasterSchedule($group .":". $day .":". $hour .":". $venue);
+        	if ($master_shift) {
+            	echo do_shift($master_shift,1);
+            } else {
+                $master_shift = new MasterScheduleEntry($venue, $day, $group, $hour, 0, "", "");
+                echo do_shift($master_shift, 0);
+            }
+        echo ("<td bgcolor='#ffffff'></td></tr>");
+        $showgroup = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+      }
+    }
+    echo "</table>";
+    echo "</td></tr></table>";
 }
 
 function do_shift($master_shift, $master_shift_length) {

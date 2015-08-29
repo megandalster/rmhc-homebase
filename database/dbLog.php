@@ -14,8 +14,8 @@
  * Functions to create, update, and retrieve information from the
  * dbLog table in the database.  dbLog is not linked to an object
  * class.
- * @version May 1, 2008
- * @author Maxwell Palmer
+ * @version May 1, 2008, August 30, 2015
+ * @author Maxwell Palmer, Allen Tucker
  */
 include_once('dbinfo.php');
 
@@ -24,6 +24,7 @@ include_once('dbinfo.php');
  * id - auto increment
  * time - timestamp time()
  * message - text
+ * venue - 'portland' or 'bangor
  */
 function create_dbLog() {
     connect();
@@ -41,7 +42,7 @@ function create_dbLog() {
 function add_log_entry($message) {
     $time = time();
     connect();
-    $query = "INSERT INTO dbLog (time, message) VALUES (\"" . $time . "\",\"" . $message . "\")";
+    $query = "INSERT INTO dbLog (time, message, venue) VALUES (\"" . $time . "\",\"" . $message . "\",\"" . $_SESSION['venue'] ."\")";
     $result = mysql_query($query);
     if (!$result) {
         echo mysql_error();
@@ -54,7 +55,7 @@ function add_log_entry($message) {
  */
 function delete_log_entry($id) {
     connect();
-    $query = "DELETE FROM dbLog WHERE id=\"" . $id . "\"";
+    $query = "DELETE FROM dbLog WHERE id=\"" . $id . "\" AND venue=\"" .$_SESSION["venue"]."\"";
     $result = mysql_query($query);
     if (!$result)
         echo mysql_error();
@@ -68,7 +69,7 @@ function delete_log_entry($id) {
 function delete_log_entries($ids) {
     connect();
     for ($i = 0; $i < count($ids); ++$i) {
-        $query = "DELETE FROM dbLog WHERE id=\"" . $ids[$i] . "\"";
+        $query = "DELETE FROM dbLog WHERE id=\"" . $ids[$i] . "\" AND venue=\"" .$_SESSION["venue"]."\"";
         $result = mysql_query($query);
         if (!$result)
             echo mysql_error();
@@ -82,7 +83,7 @@ function delete_log_entries($ids) {
  */
 function get_full_log() {
     connect();
-    $query = "SELECT * FROM dbLog ORDER BY time DESC";
+    $query = "SELECT * FROM dbLog WHERE venue=\"" .$_SESSION['venue']."\" ORDER BY time DESC";
     $result = mysql_query($query);
     mysql_close();
     if (!$result) {

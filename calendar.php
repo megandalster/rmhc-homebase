@@ -44,11 +44,12 @@ session_cache_expire(30);
                         // gets the week to show, if no week then defaults to current week
                         $venue = $_GET['venue'];
                         $weekid = $_GET['id'];
-                        if (!$weekid)
-                            $weekid = date('y-m-d',strtotime("last Monday")). ":" .$venue;
+                        if (!$weekid) 
+                            $weekid = date('y-m-d',strtotime("last monday")). ":" .$venue;
                         $week = get_dbWeeks($weekid); // get the week
                         // if invalid week or unpublished week and not a manager
                         if (!$week instanceof Week || $week->get_status() == "unpublished" && $_SESSION['access_level'] == 1) {
+                            echo "weekid=".$weekid;
                             echo 'This week\'s calendar is not available for viewing. ';
                             if ($_SESSION['access_level'] >= 2)
                                 echo ('<a href="addWeek.php?archive=false&venue='.$venue.'"> <br> Manage weeks</a>');

@@ -27,7 +27,7 @@ include_once('dbinfo.php');
  * 0 id: "yy-mm-dd:hours:venue" is a unique key for this shift
  * 1 start_time: Integer: e.g. 10 (meaning 10:00am)
  * 2 end_time: Integer: e.g. 13 (meaning 1:00pm)
- * 3 venue = "house" or "fam"
+ * 3 venue = "bangor" or "portland"
  * 4 vacancies: # of vacancies for this shift
  * 5 persons: list of people ids, followed by their name, ie "max1234567890+Max+Palmer"
  * 6 removed_persons: for sub call lists -- persons removed from this shift
@@ -188,8 +188,8 @@ function get_shift_start($id) {
 	if (substr($id,9,5)=="night") 
 		return 0;
 	else {
-		if (substr($id, 9, 2) == "12")
-			return "12";
+		if (substr($id, 9, 2) == "10"||substr($id, 9, 2) == "11"||substr($id, 9, 2) == "12")
+			return substr($id, 9, 2);
 	    else {
 	    	$st = substr($id,9,1);
 	    	if ($st<9)

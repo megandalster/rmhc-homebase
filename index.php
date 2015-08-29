@@ -115,7 +115,8 @@ session_cache_expire(30);
                             
                         	//active applicants box
                         	connect();
-                        	$app_query = "SELECT first_name,last_name,id,start_date FROM dbPersons WHERE status LIKE '%applicant%' order by start_date desc";
+                        	$app_query = "SELECT first_name,last_name,id,start_date FROM dbPersons WHERE status LIKE '%applicant%'  AND venue='".
+                        			$_SESSION['venue']."'order by start_date desc";
                         	$applicants_tab = mysql_query($app_query);
                         	$numLines = 0;
                         	//   if (mysql_num_rows($applicants_tab) > 0) {
@@ -147,7 +148,7 @@ session_cache_expire(30);
 
                             connect();
                             $vacancy_query = "SELECT id,vacancies FROM dbShifts " .
-                                    "WHERE vacancies > 0 ORDER BY id;";
+                                    "WHERE venue='".$_SESSION['venue']."' AND vacancies > 0 ORDER BY id;";
                             $vacancy_list = mysql_query($vacancy_query);
                             if (!$vacancy_list)
                                 echo mysql_error();
@@ -165,7 +166,7 @@ session_cache_expire(30);
                             }
                          
                         // active volunteers who haven't worked recently
-                            $everyone = getall_names("active", "volunteer");
+                            $everyone = getall_names("active", "volunteer",$_SESSION['venue']);
                             if ($everyone && mysql_num_rows($everyone) > 0) {
                                 //active volunteers who haven't worked for the last two months
                                 $two_months_ago = $today - 60 * 86400;

@@ -225,10 +225,12 @@ if ($_SESSION['access_level']==0)
         <legend>Availability:<span style="font-size:x-small;color:FF0000">*</span>  </legend>
         <span class="bigTable">
                 <?PHP
-                $shifts = array('9-12' => '9am-12pm', '12-3' => '12pm-3pm', '3-6' => '3pm-6pm',
-                    '6-9' => '6pm-9pm', 'night' => "Overnight");
-                $wkndshifts = array('9-12' => 'morning', '12-3' => 'afternoon', '3-6' => '',
-                    '6-9' => 'evening', 'night' => "Overnight");
+                $shifts = array('9-12' => '9-12', '12-3' => '12-3', '3-6' => '3-6',
+                    '6-9' => '6-9', 'night' => "night");
+                $satshifts = array('9-12'=>'10-1', '12-3' => '1-4', '3-6' => '',
+                    '6-9' => '', 'night' => "night");
+                $sunshifts = array('9-12' => '9-12', '12-3' => '2-5', '3-6' => '',
+                    '6-9' => '5-9', 'night' => "");
                 $days = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
                 $person_availability = implode(',', $person->get_availability());
     			echo "<table>";
@@ -237,11 +239,13 @@ if ($_SESSION['access_level']==0)
     			foreach ($shifts as $shift => $shiftvalue) {
        				echo ('<tr>');
        				foreach ($days as $day) {
-       			      if ($day=="Sat" || $day=="Sun")
-    	  					$shiftdisplay=$wkndshifts[$shift];
+       			      if ($day=="Sat") 
+    	  					$shiftdisplay=$satshifts[$shift];
+       			      else if ($day=="Sun")
+    	  					$shiftdisplay=$sunshifts[$shift];
     	  			  else $shiftdisplay=$shiftvalue;
     	  			  if (($shift!="night" || $day=="Fri" || $day=="Sat") && $shiftdisplay!="") {
-       					$realkey = $day . ":". $shift. ":". $person->get_venue();
+       					$realkey = $day . ":". $shiftdisplay. ":". $person->get_venue();
        	  				echo ('<td><input type="checkbox" name="availability[]" value="' . $realkey . '"');
     	  				if (in_array($realkey, $person->get_availability())) echo(' CHECKED');
     	  				echo ('>');
