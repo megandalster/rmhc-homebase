@@ -22,19 +22,28 @@ include_once('domain/Shift.php');
 include_once('dbinfo.php');
 
 /**
- * Drops dbDates table and creates a new one.
+ * reformats dbDates table from 2013 format to 2015 format 
  * Elements of dbDates:
  *  id: yy-mm-dd:venue
  *  shifts - * delimited list of shift ids
  *  manager notes
  */
-function create_dbDates() {
+function massage_dbDates() {
     connect();
-    mysql_query("DROP TABLE IF EXISTS dbDates");
-    $result = mysql_query("CREATE TABLE dbDates (id CHAR(8) NOT NULL, shifts TEXT,
-								mgr_notes TEXT, PRIMARY KEY (id))");
-    if (!$result)
-        echo mysql_error();
+    $query="select * from dbDates";
+    $result = mysql_query($query,MYSQL_ASSOC);
+    foreach ($result as $r) {
+    	
+    	$r['id']=substr($r['id'],6,2).'-'.substr($r['id'],0,5).':portland';
+    	$ss = explode('*',$r['shifts']);
+    	$ssnew = array();
+    	foreach ($ss as $s) {
+    		$s = substr($s,6,2).'-'.substr($s,0,5).":".substr($s,9).':portland';
+    		$ssnew[] = $s;
+    	}
+    	$r['shifts']=implode('*',$ss);
+    	insert_dbDates($r);
+    }
     mysql_close();
 }
 

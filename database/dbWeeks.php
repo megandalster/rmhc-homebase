@@ -28,7 +28,7 @@ include_once('domain/Shift.php');
  * Table fields:
  * [0] id: yy-mm-dd:venue
  * [1] dates: array of RMHDate ids
- * [2] venue: "house" or "fam"
+ * [2] venue: "portland" or "bangor"
  * [3] status: "unpublished", "published" or "archived"
  * [4] name: name of the week
  * [5] end: timestamp of the end of the week

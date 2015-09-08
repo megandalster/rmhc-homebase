@@ -37,7 +37,7 @@ include_once('dbinfo.php');
 function create_dbShifts() {
     connect();
     mysql_query("DROP TABLE IF EXISTS dbShifts");
-    $result = mysql_query("CREATE TABLE dbShifts (id CHAR(20) NOT NULL, " .
+    $result = mysql_query("CREATE TABLE dbShifts (id CHAR(25) NOT NULL, " .
             "start_time INT, end_time INT, venue TEXT, vacancies INT, " .
             "persons TEXT, removed_persons TEXT, sub_call_list TEXT, notes TEXT, PRIMARY KEY (id))");
     if (!$result) {

@@ -34,8 +34,7 @@ session_cache_expire(30);
                 $day = $_GET['day'];             // Mon
                 $shiftname = $_GET['shift'];     // 9-12
                 $id = $group.":".$day.":".$shiftname.":".$venue;
-    
-                $msentry = retrieve_dbMasterSchedule($id);
+    			$msentry = retrieve_dbMasterSchedule($id);
                 if (!$msentry) {
                     $result = process_add_shift($_POST, $group, $day, $shiftname, $venue);
                     if ($result) {

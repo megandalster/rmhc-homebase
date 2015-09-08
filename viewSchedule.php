@@ -115,8 +115,8 @@ function show_master_schedule($venue) {
       }
     }
     echo "</table>";
-    echo "</td><td>&nbsp;</td><td>";
-    echo ('<table id="calendar" align="left" ><tr class="weekname"><td colspan="2" ' .
+    echo "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>";
+    echo ('<table id="calendar" align="center"><tr class="weekname"><td colspan="2" ' .
     'bgcolor="ffdddd" align="center" >');
     echo ('</td></tr><tr><td bgcolor="#ffdddd">  </td>');
     echo ('<td class="dow" align="center"> Sunday </td>');
