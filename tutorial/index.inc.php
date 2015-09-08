@@ -17,16 +17,13 @@ session_cache_expire(30);
 	<p>
 		<strong>Homebase Help Pages</strong>
 	</p>
-	<p>
-	    <a href="?helpPage=rmhp-homebase/helpPageTemplate.php">Help Page Template</a>
-	</p>
 	<ol>
-		<li><a href="?helpPage=rmhp-homebase/login.php">Signing in and out of the System</a>
+		<li><a href="?helpPage=rmhc-homebase/login.php">Signing in and out of the System</a>
 		</li>
 		<br>
 		<ul>
-			<li><a href="?helpPage=rmhp-homebase/index.php">About your Personal Home Page</a></li>
-			<li><a href="?helpPage=rmhp-homebase/volunteerLog.php">Logging Your Hours (Volunteers Only)</a></li>
+			<li><a href="?helpPage=rmhc-homebase/index.php">About your Personal Home Page</a></li>
+			<li><a href="?helpPage=rmhc-homebase/volunteerLog.php">Logging Your Hours (Volunteers Only)</a></li>
 		
 		</ul>
 		<br>
@@ -34,16 +31,16 @@ session_cache_expire(30);
 			Only)</li>
 		<br>
 		<ul>
-			<li><a href="?helpPage=rmhp-homebase/personSearch.php">Searching for People (and
+			<li><a href="?helpPage=rmhc-homebase/personSearch.php">Searching for People (and
 					Phone Numbers)</a></li>
-			<li><a href="?helpPage=rmhp-homebase/personEdit.php">Editing People</a></li>
-			<li><a href="?helpPage=rmhp-homebase/personAdd.php">Adding People </a></li>
+			<li><a href="?helpPage=rmhc-homebase/personEdit.php">Editing People</a></li>
+			<li><a href="?helpPage=rmhc-homebase/personAdd.php">Adding People </a></li>
 		</ul>
 		<br>
-		<li><a href="?helpPage=rmhp-homebase/calendar.php">Working with the Calendar</a></li>
+		<li><a href="?helpPage=rmhc-homebase/calendar.php">Working with the Calendar</a></li>
 		<br>
 		<ul>
-			<li><a href="?helpPage=rmhp-homebase/addWeek.php">Generating and publishing
+			<li><a href="?helpPage=rmhc-homebase/addWeek.php">Generating and publishing
 					new calendar weeks (Managers Only)
 					</a></li>
 			<li><strong>Editing a Shift on the Calendar</strong></li>
@@ -51,33 +48,32 @@ session_cache_expire(30);
 			
 			
 			<ul>
-				<li><a href="?helpPage=rmhp-homebase/cancelShift.php">Canceling a Shift
+				<li><a href="?helpPage=rmhc-homebase/cancelShift.php">Canceling a Shift
 						</a></li>
-				<li><a href="help.php?helpPage=rmhp-homebase/addSlotToShift.php">Adding/removing a
+				<li><a href="help.php?helpPage=rmhc-homebase/addSlotToShift.php">Adding/removing a
 						slot (Managers Only)</a></li>
-				<li><a href="help.php?helpPage=rmhp-homebase/addPersonToShift.php">Adding/removing
+				<li><a href="help.php?helpPage=rmhc-homebase/addPersonToShift.php">Adding/removing
 						a person from a shift</a></li>
-				<li><a href="help.php?helpPage=rmhp-homebase/subCallList.php">Using a Sub Call
+				<li><a href="help.php?helpPage=rmhc-homebase/subCallList.php">Using a Sub Call
 						List (Managers Only)</a></li>
 			</ul>
 			<p>
-			<li><a href="?helpPage=rmhp-homebase/addNotes.php">Adding notes</a></li>
+			<li><a href="?helpPage=rmhc-homebase/addNotes.php">Adding notes</a></li>
 
 		</ul>
 		<br>
-		<li><a href="?helpPage=rmhp-homebase/viewSchedule.php">Working with the Master
+		<li><a href="?helpPage=rmhc-homebase/viewSchedule.php">Working with the Master
 				Schedule</a> (Managers Only)</li>
 		<br>
-		<li><a href="?helpPage=rmhp-homebase/reports.php">Generating Reports</a> (Managers
+		<li><a href="?helpPage=rmhc-homebase/reports.php">Generating Reports</a> (Managers
 			Only)</li>
 		<br>
-		<li><a href="?helpPage=rmhp-homebase/dataExport.inc.php">Exporting Reports as CSVs (spreadsheet files)</a> (Managers Only)</li>
+		<li><a href="?helpPage=rmhc-homebase/dataExport.inc.php">Exporting Reports as CSVs (spreadsheet files)</a> (Managers Only)</li>
 
 	</ol>
 	<p>
-		If these help pages don't answer your questions, please contact the <a
-			href="mailto:jpowers@rmhprovidence.org">Volunteer Coordinator</a> or call the
-		front desk (401-274-4447).
+		If these help pages don't answer your questions, please contact the <a href="mailto:housemngr@rmhportland.org"><i>Portland House Manager</i></a>
+        		or the <a href="mailto:hmbangor@rmhbangor.org"><i>Bangor House Manager</i></a>.
 	</p>
 </body>
 </html>

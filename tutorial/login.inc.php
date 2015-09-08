@@ -65,7 +65,8 @@ session_cache_expire(30);
 					(if you think you may have mistyped them).
 			
 			<li>If all else fails, or if you do not remember your password,
-				please contact the <a href="mailto:jpowers@rmhprovidence.org">Volunteer Coordinator</a>.
+				please contact the <a href="mailto:housemngr@rmhportland.org"><i>Portland House Manager</i></a>
+        		or the <a href="mailto:hmbangor@rmhbangor.org"><i>Bangor House Manager</i></a>.
 		
 		</ul>
 		<p>

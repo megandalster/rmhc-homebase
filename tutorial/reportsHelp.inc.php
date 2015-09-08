@@ -64,7 +64,7 @@
 	
 <p>
 	<B>Step 3:</B> If you wish to view the total number of volunteer shifts and vacancies, select "Shifts/Vacancies" and  
-	pick a specific date range or venue, like this: <BR>
+	pick a specific date range, like this: <BR>
 	<BR>
 	<a href="tutorial/screenshots/reportsstep3.png" class="image"
 		title="reportsstep3.png" horizontalalign="center"
@@ -82,8 +82,7 @@
 		align="center"> </a> <BR>
 		
 <p>
-	<B>Step 4:</B> If you wish to view the volunteer birthday report, select "Volunteer Birthdays" and pick
-	a venue, like this: <BR>
+	<B>Step 4:</B> If you wish to view the volunteer birthday report, select "Volunteer Birthdays,"  like this: <BR>
 	<BR>
 	<a href="tutorial/screenshots/reportsstep4.png" class="image"
 		title="reportsstep4.png" horizontalalign="center"
@@ -92,7 +91,7 @@
 		data-img="tutorial/screenshots/reportsstep4.png" border="1px"
 		align="center"> </a> <BR>
 
-	<BR> You will see a report like this (ordered by month): <BR>
+	<BR> You will see a report like this (ordered by age -- oldest first): <BR>
 	<BR>
 	<a href="tutorial/screenshots/reportsstep4-2.png" class="image"
 		title="reportsstep4-2.png" horizontalalign="center"

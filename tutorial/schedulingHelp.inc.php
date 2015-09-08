@@ -31,7 +31,7 @@
 	demonstrate by working with the house odd/even weeks table. The same steps, however, can be
 	followed when working on either master schedule and either table.
 <p>
-	<B>Step 1:</B> On the navigation bar, select either <B>house</B> or <B>family room</B> from <B>master schedules</B>
+	<B>Step 1:</B> On the navigation bar, select <B>master schedule</B>
 	and if you scroll down you will see two tables. The first shows the
 	persons scheduled for <strong>odd and even weeks</strong> of the year. Here is a sample <strong>odd/even</strong> table with persons already scheduled: <br> <br>
 	<a href="tutorial/screenshots/schedulingstep1.png" class="image"
@@ -40,18 +40,17 @@
 		<img src="tutorial/screenshots/schedulingstep1.png" width="10%"
 		rel="popover" data-img="tutorial/screenshots/schedulingstep1.png"
 		border="1px" align="middle"> </a> <br> <br>
-	The second table shows the persons scheduled for the the first through fifth weeks of the month. Here is a sample: <br> <br>
+	The second table shows the persons scheduled for the the first through fifth weekends of the month. Here is a sample: <br> <br>
 	<a href="tutorial/screenshots/schedulingstep1a.png" class="image"
 		title="schedulingstep1a.png" horizontalalign="center"
 		target="tutorial/screenshots/schedulingstep1a.png">&nbsp&nbsp&nbsp&nbsp
 		<img src="tutorial/screenshots/schedulingstep1a.png" width="10%"
 		rel="popover" data-img="tutorial/screenshots/schedulingstep1a.png"
 		border="1px" align="middle"> </a> <br> <br> A "shift" is shown as a
-	box for a particular day (e.g., Thursday) and time slot
-	(e.g., 1-5pm). If a shift has vacancies, the number of vacancies is
-	shown in <strong>boldface</strong>. For example, the odd Wednesday 1-5pm
-	shift has one vacancy in the <strong>odd/even</strong> schedule shown
-	above.
+	box for a particular day (e.g., Friday) and time slot
+	(e.g., 12-3pm). If a shift has vacancies, the number of vacancies is
+	shown in <strong>boldface</strong>. For example, the odd Friday 12-3pm
+	shift has one vacancy in the first schedule shown above.
 <p>
 	<B>Step 2:</B> If you want to fill a vacancy for a shift, you must
 	first select it. For example, suppose you want to add a person to fill
@@ -132,25 +131,6 @@
 			Slot</strong> on the worksheet shown in <B>Step 3</B>.
 
 </ul>
-<p>
-	Suppose that, instead of choosing Vol Unteer to fill the vacant slot in the odd Wednesday 1-5pm 
-	shift, you decide that this vacant slot is no longer needed.
-	You can remove the vacant slot by selecting <strong>Remove Vacant Slot</strong>,
-	which leaves this: <br> <br> <a
-		href="tutorial/screenshots/schedulingstep7.png" class="image"
-		title="schedulingstep7.png" horizontalalign="center"
-		target="tutorial/screenshots/schedulingstep7.png">&nbsp&nbsp&nbsp&nbsp
-		<img src="tutorial/screenshots/schedulingstep7.png" width="10%"
-		rel="popover" data-img="tutorial/screenshots/schedulingstep7.png"
-		border="1px" align="middle"> </a> <br>
-<p>
-	And on the master schedule we see the vacancy is gone: <br> <br> <a
-		href="tutorial/screenshots/schedulingstep7-2.png" class="image"
-		title="schedulingstep7-2.png" horizontalalign="center"
-		target="tutorial/screenshots/schedulingstep7-2.png">&nbsp&nbsp&nbsp&nbsp
-		<img src="tutorial/screenshots/schedulingstep7-2.png" width="10%"
-		rel="popover" data-img="tutorial/screenshots/schedulingstep7-2.png"
-		border="1px" align="middle"> </a>
 <p>
 	<B>Step 8:</B> When you finish, you can return to any other function by
 	selecting it on the navigation bar.
