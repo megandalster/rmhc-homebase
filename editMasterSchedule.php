@@ -25,6 +25,7 @@ session_cache_expire(30);
                 <?php
                 include_once('database/dbMasterSchedule.php');
                 include_once('domain/MasterScheduleEntry.php');
+                include_once('database/dbShifts.php');
                 include_once('database/dbLog.php');
                 if ($_SESSION['access_level'] < 2) {
                     die("<p>Only managers can edit the master schedule.</p>");
@@ -210,11 +211,15 @@ session_cache_expire(30);
                         array_shift($persons);
                     for ($i = 0; $i < count($persons); ++$i) {
                     	if (array_key_exists('_submit_filled_slot_' . $i, $post)) {
-                    		if (is_array($persons[$i]))
+                    		if (is_array($persons[$i])) {
                                 unschedule_person($msentry, $persons[$i]['id']);
-                            else
+                                remove_from_future_shifts($persons[$i]['id']);
+                    		}
+                            else {
                                 unschedule_person($msentry, $persons[$i]);
-                            return true;
+                            	remove_from_future_shifts($persons[$i]);
+                            }
+							return true;
                         }
                     }
                     return false;
