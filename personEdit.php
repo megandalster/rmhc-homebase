@@ -69,13 +69,12 @@ if ($id == 'new') {
                     if ($errors) {
                         // display the errors and the form to fix
                         show_errors($errors);
-                        if (!$_POST['availdays'] || !$_POST['availvenues'])
+                        if (!$_POST['availability'])
                           $availability = null;
                         else {
                           $postavail = array();
-                          foreach ($_POST['availdays'] as $postday) 
-                        	foreach($_POST['availvenues'] as $postvenue)
-                            	$postavail[] = $postday.":".$postvenue;
+                          foreach ($_POST['availability'] as $postday) 
+                        	  $postavail[] = $postday;
                           $availability = implode(',', $postavail);
                         }
                         if ($_POST['isstudent']=="yes")  {
@@ -135,11 +134,9 @@ if ($id == 'new') {
                     	$step_count = count($step_array);
                     	$date_array = array();
                     	for ($i = 0; $i < $step_count; $i++) {
-                        	$date_array[$i] = $_POST['ss_month'][$i] . '-' . $_POST['ss_day'][$i] . '-' . $_POST['ss_year'][$i];
-                        	if ($date_array[$i]!="--" && strlen($date_array[$i]) != 8) {
-                           	 	if (strlen($date_array[$i] != 2))
-                                	echo('<p>Date of completion for step: "' . $step_array[$i] . '" is in error, please select month, day <i>and</i> year.<br>');
-                            	$date_array[$i] = null;
+                        	$date_array[$i] = $_POST['screening_status'][$i];
+                        	if ($date_array[$i]!="" && $date_array[$i]!="--" && strlen($date_array[$i]) != 8) {
+                           	 	echo('<p>Completion Date for step: "' . $step_array[$i] . '" is in error, please enter mm-dd-yy.<br>');
                         	}
                     	}
                     	$screening_status = implode(',', $date_array);

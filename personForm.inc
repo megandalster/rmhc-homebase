@@ -55,7 +55,7 @@ if ($_SESSION['access_level'] == 0) {
 			$(function(){
 				$( "#birthday" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
 				$( "#start_date" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
-				$( "#screening_status[]" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
+				$( "#screening_status" ).datepicker({dateFormat: 'y-mm-dd',changeMonth:true,changeYear:true,yearRange: "1920:+nn"});
 			})
 	</script>
     <?PHP 
@@ -232,8 +232,7 @@ if ($_SESSION['access_level']==0)
                 $sunshifts = array('9-12' => '9-12', '12-3' => '2-5', '3-6' => '',
                     '6-9' => '5-9', 'night' => "");
                 $days = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
-                $person_availability = implode(',', $person->get_availability());
-    			echo "<table>";
+                echo "<table>";
     			echo "<tr><td>Monday&nbsp;&nbsp;</td><td>Tuesday&nbsp;&nbsp;</td><td>Wednesday&nbsp;&nbsp;</td>".
 					"<td>Thursday&nbsp;&nbsp;</td><td>Friday&nbsp;&nbsp;</td><td>Saturday&nbsp;&nbsp;</td><td>Sunday</td></tr>";
     			foreach ($shifts as $shift => $shiftvalue) {
@@ -296,7 +295,7 @@ if ($_SESSION['access_level']==0)
                 for ($i = 0; $i < $step_count; $i++) {
                     $j = $i + 1;
                     echo "<tr><td>";
-                    echo('<tr><td><input type="text" id="screening_status[]" name="screening_status[]" value="'.$date_array[$i]. '" size="8" /></td>');
+                    echo('<tr><td><input type="text" id="screening_status" name="screening_status[]" value="'.$date_array[$i]. '" size="8" /></td>');
                     echo('</td><td>' . $j . '. ' . $step_array[$i] . '</td></tr>');
                 }
                 echo('</table>');

@@ -24,7 +24,7 @@ include_once('dbinfo.php');
 /**
  * Drops the dbShifts table if it exists, and creates a new one
  * Table fields:
- * 0 id: "yy-mm-dd:hours:venue" is a unique key for this shift
+ * 0 id: "yy-mm-dd:hours:venue" is a unique key for this shift echo "venue="
  * 1 start_time: Integer: e.g. 10 (meaning 10:00am)
  * 2 end_time: Integer: e.g. 13 (meaning 1:00pm)
  * 3 venue = "bangor" or "portland"
@@ -403,7 +403,7 @@ function get_all_venue_shifts($from, $to, $venue) {
 		$all_shifts = get_all_shifts();
 	}else{
 		connect();
-    	$query = "SELECT * FROM dbShifts WHERE venue LIKE '%" . $venue . "%'";
+    	$query = "SELECT * FROM dbShifts WHERE venue = '" . $venue . "'";
     	$result = mysql_query($query);
     	if ($result == null || mysql_num_rows($result) == 0) {
         	mysql_close();
@@ -419,20 +419,18 @@ function get_all_venue_shifts($from, $to, $venue) {
 	return $all_shifts;
 }
 
-function get_volunteer_hours($from,$to,$venue){ //Used for Total Hours Report
+function get_volunteer_hours($from,$to,$venue){ //Used for Total Hours Report echo
 	$the_hours = array();
 	$all_shifts = get_all_venue_shifts($from,$to,$venue);
     foreach($all_shifts as $a_shift){
     	$the_date = $a_shift->get_date();	
     	if($the_date >= $from && $the_date <= $to){  
-       		$people = $a_shift->get_persons();       		
        		if($a_shift->get_hours() == "night"){	
-        		$length = 8;
+        		$length = 12;
        		}else{
         		$length = 3;
        		}
-       		$count = substr_count($people,"+");		
-       		$num_people = $count / 2;
+       		$num_people = count($a_shift->get_persons());
        		$num_hours = $num_people * $length;
        		$shift_info = $a_shift->get_day().":".$a_shift->get_hours().":".$num_hours;
        		$the_hours[] = $shift_info;
@@ -447,10 +445,8 @@ function get_shifts_staffed($from, $to, $venue) {
     foreach($all_shifts as $a_shift){
     	$the_date = $a_shift->get_date();	//date of this shift
     	if($the_date >= $from && $the_date <= $to){  //keeps dates within range, only looks @ relevant
-       		$people = $a_shift->get_persons();  
-       		$count = substr_count($people,"+");		//used to count #people on shift
-       		$num_people = $count / 2;
-       		$slots = $a_shift->num_vacancies() + $num_people;
+       		$num_people = count($a_shift->get_persons());
+       		$slots = $a_shift->get_vacancies() + $num_people;
     		$shift_info = $a_shift->get_day().":".$a_shift->get_hours().":".$a_shift->num_vacancies().":".$slots;
        		$the_hours[] = $shift_info;
     	}

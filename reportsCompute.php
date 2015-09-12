@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright 2015 by Adrienne Beebe, Connor Hargus, Phuong Le, 
- * Xun Wang, and Allen Tucker. This program is part of RMHP-Homebase, which is free 
+ * Xun Wang, and Allen Tucker. This program is part of RMHP-Homebase, which is frem
  * software.  It comes with absolutely no warranty. You can redistribute and/or 
  * modify it under the terms of the GNU General Public License as published by the 
  * Free Software Foundation (see <http://www.gnu.org/licenses/ for more information).
@@ -55,12 +55,9 @@ function report_volunteer_hours_by_day($from, $to, $venue) {
 		echo " from " .pretty_date($from);
 	if ($to!="")
 		echo " through ".pretty_date($to);
-	echo " for the ".pretty_venue($venue).".";
 
 	$report = get_volunteer_hours($from, $to, $venue);
-	$row_labels = array("9-12","12-3","3-6","6-9","night","Total");
-	$col_labels = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun","Total");
-	display_totals_table($col_labels, $row_labels, $report, $export, $venue);	
+	display_totals_table($report, $venue);	
 }
 
 function report_shifts_staffed_vacant_by_day($from, $to, $venue) {
@@ -72,12 +69,9 @@ function report_shifts_staffed_vacant_by_day($from, $to, $venue) {
 		echo " from " .pretty_date($from);
 	if ($to!="")
 		echo " through ".pretty_date($to);
-	echo " for the ".pretty_venue($venue).".";
 
 	$report = get_shifts_staffed($from, $to, $venue);
-	$row_labels = array("9-12","12-3","3-6","6-9","night","Total");
-	$col_labels = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun","Total");
-	display_vacancies_table($col_labels, $row_labels, $report, $export, $venue);
+	display_vacancies_table($report, $venue);
 }
 
 function report_volunteer_birthdays($name_from, $name_to, $venue, $export) {
@@ -191,7 +185,7 @@ function pretty_date($date){
 		$dob[0] = "19".$dob[0];
 	}
     if ( ((int) $dob[2] ) < 10)
-		$dob[2] = substr($dob[1],1);  		
+		$dob[2] = substr($dob[2],1);  		
 	$dateObj   = DateTime::createFromFormat('!m', $dob[1]);
 	$dob[1] = $dateObj->format('M'); 
 	return $dob[1]." ".$dob[2].", ".$dob[0];
@@ -199,7 +193,11 @@ function pretty_date($date){
 
 
 
-function display_totals_table($col_lab, $row_lab, $report, $venue){  //Creates a table for the Total Hours report
+function display_totals_table($report, $venue){  //Creates a table for the Total Hours report
+	$row_lab = array("9-12"=>"Morning","12-3"=>"Early PM","3-6"=>"Late PM","6-9"=>"Evening","night"=>"Night","Total"=>"Total");
+	$sat_labels = array("9-12"=>"10-1","12-3"=>"1-4","3-6"=>"","6-9"=>"","night"=>"night","Total"=>"Total");
+	$sun_labels = array("9-12"=>"9-12","12-3"=>"2-5","3-6"=>"","6-9"=>"5-9","night"=>"","Total"=>"Total");
+	$col_lab = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun","Total");
 	$res = "
 		<table id = 'areport'> 
 			<thead>
@@ -215,10 +213,10 @@ function display_totals_table($col_lab, $row_lab, $report, $venue){  //Creates a
 	$res .= "
 			</thead>
 			<tbody>";
-	foreach($row_lab as $row_name){
+	foreach($row_lab as $row_name=>$row_tag){
 		$row_total = 0;
 		$row = "<tr>";
-		$row .= "<td><b>".$row_name."</b></td>";
+		$row .= "<td><b>".$row_tag."</b></td>";
 		if($row_name == "Total"){
 			$grand_total = 0;
 			foreach($col_lab as $col_name){
@@ -229,7 +227,7 @@ function display_totals_table($col_lab, $row_lab, $report, $venue){  //Creates a
 					foreach($report as $entry){
 						$elements = explode(":",$entry); 
 						if ($col_name==$elements[0]){
-							$num = (int)$elements[3];
+							$num = (int)$elements[2];
 							$count = $count + $num;
 							$row_total = $row_total + $num;
 						}
@@ -240,14 +238,19 @@ function display_totals_table($col_lab, $row_lab, $report, $venue){  //Creates a
 			}
 		}else{
 			foreach($col_lab as $col_name){
+				if ($col_name=="Sat")
+					$rn=$sat_labels[$row_name];
+				else if ($col_name=="Sun")
+					$rn=$sun_labels[$row_name];
+				else $rn=$row_name;
 				$count = 0;
 				if($col_name =="Total"){
 					$row .= "<td>".$row_total."</td>";
 				}else {
 					foreach($report as $entry){
 						$elements = explode(":",$entry); 
-						if ($col_name==$elements[0] && $row_name==$elements[1]){
-							$num = (int)$elements[3];
+						if ($col_name==$elements[0] && $rn==$elements[1]){
+							$num = (int)$elements[2];
 							$count += $num;
 							$row_total += $num;
 						}
@@ -263,7 +266,11 @@ function display_totals_table($col_lab, $row_lab, $report, $venue){  //Creates a
 	echo $res;
 }
 
-function display_vacancies_table($col_lab, $row_lab, $report, $venue){
+function display_vacancies_table($report, $venue){
+	$row_lab = array("9-12"=>"Morning","12-3"=>"Early PM","3-6"=>"Late PM","6-9"=>"Evening","night"=>"Night","Total"=>"Total");
+	$sat_labels = array("9-12"=>"10-1","12-3"=>"1-4","3-6"=>"","6-9"=>"","night"=>"night","Total"=>"Total");
+	$sun_labels = array("9-12"=>"9-12","12-3"=>"2-5","3-6"=>"","6-9"=>"5-9","night"=>"","Total"=>"Total");
+	$col_lab = array("Mon","Tue","Wed","Thu","Fri","Sat","Sun","Total");
 	$res = "
 		<table id = 'areport'> 
 			<thead>
@@ -280,11 +287,11 @@ function display_vacancies_table($col_lab, $row_lab, $report, $venue){
 	$res .= "
 			</thead>
 			<tbody>";
-	foreach($row_lab as $row_name){
+	foreach($row_lab as $row_name=>$row_tag){
 		$row_total_vacs = 0;
 		$row_total_slots = 0;
 		$row = "<tr>";
-		$row .= "<td><b>".$row_name."</b></td>";
+		$row .= "<td><b>".$row_tag."</b></td>";
 		if($row_name == "Total"){
 			$grand_total_vacs = 0;
 			$grand_total_slots = 0;
@@ -297,8 +304,8 @@ function display_vacancies_table($col_lab, $row_lab, $report, $venue){
 					foreach($report as $entry){
 						$elements = explode(":",$entry); //turn each entry into an arry, hrs is final item in array
 						if ($col_name==$elements[0]){
-							$slots = $elements[4];
-							$vacs = $elements[3];
+							$slots = $elements[3];
+							$vacs = $elements[2];
 							$slotsint = (int)$slots;
 							$vacsint = (int)$vacs;
 							$col_total_slots += $slotsint;
@@ -312,6 +319,11 @@ function display_vacancies_table($col_lab, $row_lab, $report, $venue){
 			}
 		}else{
 			foreach($col_lab as $col_name){
+				if ($col_name=="Sat")
+					$rn=$sat_labels[$row_name];
+				else if ($col_name=="Sun")
+					$rn=$sun_labels[$row_name];
+				else $rn=$row_name;
 				$slots_count = 0;
 				$vacs_count = 0;
 				if($col_name =="Total"){
@@ -319,9 +331,9 @@ function display_vacancies_table($col_lab, $row_lab, $report, $venue){
 				}else {
 					foreach($report as $entry){
 						$elements = explode(":",$entry); //turn each entry into an arry, hrs is final item in array
-						if ($col_name==$elements[0] && $row_name==$elements[1]){
-							$slots = $elements[4];
-							$vacs = $elements[3];
+						if ($col_name==$elements[0] && $rn==$elements[1]){
+							$slots = $elements[3];
+							$vacs = $elements[2];
 							$slots_count += $slots;
 							$vacs_count += $vacs;
 							$slotsint = (int)$slots;
@@ -372,7 +384,7 @@ function civil_time($army_time){
 // Improve venue display by using associative array, i.e, turning fam --> "Family Room" 
 function pretty_venue($v){
 	$venue = array('portland' => 'RMH Portland', 'bangor' => 'RMH Bangor');
-		return $venue["$v"];
+		return $venue[$v];
 }
 
 //Create a table to display volunteer history report
