@@ -180,15 +180,15 @@ function pretty_date($date){
 	if ($dob[0]=="XX")
 	    $dob[0] = "19XX";
 	elseif ( ((int) $dob[0] ) <= date("y")){
-		$dob[0] = "20".$dob[0];  	
+		$year = "20".$dob[0];  	
 	} else{
-		$dob[0] = "19".$dob[0];
+		$year = "19".$dob[0];
 	}
     if ( ((int) $dob[2] ) < 10)
 		$dob[2] = substr($dob[2],1);  		
-	$dateObj   = DateTime::createFromFormat('!m', $dob[1]);
-	$dob[1] = $dateObj->format('M'); 
-	return $dob[1]." ".$dob[2].", ".$dob[0];
+	//$dateObj   = DateTime::createFromFormat('!m', $dob[1]);
+	//$dob[1] = $dateObj->format('M'); 
+	return date("F j", mktime(0,0,0,$dob[1],$dob[2],$dob[0])).", ".$year;
 }
 
 

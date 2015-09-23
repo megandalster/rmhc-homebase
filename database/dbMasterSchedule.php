@@ -367,7 +367,7 @@ function get_total_slots($id) {
     //    echo "Error: group-day-time not valid:see get_total_slots".$id;
         return 0;
     }
-    $result_row = mysql_fetch_assoc($result, MYSQL_ASSOC);
+    $result_row = mysql_fetch_assoc($result);
     return $result_row['slots'];
 }
 
