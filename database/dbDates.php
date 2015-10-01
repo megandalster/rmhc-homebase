@@ -120,7 +120,7 @@ function update_dbDates($d) {
 function replace_dbDates($old_s, $new_s) {
     if (!$old_s instanceof Shift || !$new_s instanceof Shift)
         die("Invalid argument for dbDates->replace_dbDates function call");
-    $d = select_dbDates(substr($old_s->get_id(), 0, 8));
+    $d = select_dbDates($old_s->get_yy_mm_dd().":".$old_s->get_venue());
     $d = $d->replace_shift($old_s, $new_s);
     update_dbDates($d);
     return true;

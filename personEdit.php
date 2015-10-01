@@ -248,7 +248,7 @@ if ($id == 'new') {
                             $newperson = new Person($first_name, $last_name, $location, $address, $city, $state, $zip, $clean_phone1, $phone1type, $clean_phone2,$phone2type,
                         				$email, $type, $screening_type, $screening_status, $status, $employer, $position, $credithours,
                                         $commitment, $motivation, $specialties, $convictions, $availability, $schedule, $hours, 
-                                        $birthday, $start_date, $howdidyouhear, $notes, "");
+                                        $birthday, $start_date, $howdidyouhear, $notes, $pass);
                             $result = add_person($newperson);
                             if (!$result)
                                 echo ('<p class="error">Unable to update ' . $first_name . ' ' . $last_name . '. <br>Please report this error to the House Manager.');

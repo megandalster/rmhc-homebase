@@ -82,7 +82,7 @@ class Shift {
             if ($et>12)
             	$et -=12;
             $this->id = $this->yy_mm_dd . ":" . $st
-                    . "-" . $et;
+                    . "-" . $et.":".$this->venue;
             $this->hours = substr($this->id, 9);
             return $this;
         }

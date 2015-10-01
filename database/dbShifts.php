@@ -275,11 +275,11 @@ function move_shift($s, $new_start, $new_end) {
  * @result == true if $s1's timeslot overlaps $s2's timeslot, and false otherwise.
  */
 function timeslots_overlap($s1_start, $s1_end, $s2_start, $s2_end) {
-	if ($s1_start == "overnight")
-		if ($s2_start == "overnight")
+	if ($s1_start == "0")
+		if ($s2_start == "0")
 			return true;
 		else return false;
-	else if ($s2_start == "overnight")
+	else if ($s2_start == "0")
 		return false;
     if ($s1_end > $s2_start) {
         if ($s1_start >= $s2_end)

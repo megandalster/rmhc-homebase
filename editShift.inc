@@ -252,12 +252,10 @@ include_once('database/dbLog.php');
 			$error = false;
 			$new_start = $post['new_start'];
 			$new_end = $post['new_end'];
-
 			if ($new_start=="0")
 			   $new_start = $shift->get_start_time();
 			if ($new_end=="0")
 			   $new_end = $shift->get_end_time();
-//			echo $new_start . ' ' . $new_end;
 			if (!move_shift($shift, $new_start, $new_end))
 			   $error = "Can't move the shift to an overlapping time.";
 		}
