@@ -24,9 +24,8 @@ if ($_SESSION['access_level'] == 0) {
         echo('</div></div></body></html>');
         die();
     } else {
-        echo '<p><strong>Personnel Edit Form</strong>'.
-        	'&nbsp;&nbsp;&nbsp;&nbsp;(View your <strong><a href="volunteerLog.php?id='.$person->get_id().'">Log Sheet</a></strong>)';
-        echo('Here you can edit your own information in the database.' .
+        echo '<p><strong>Personnel Edit Form</strong>';
+        echo(' Here you can edit your own information in the database.' .
         '<br>When finished, hit <b>Submit</b> at the bottom of this page.');
     } else if ($_SESSION['access_level'] == 2)
 	    if ($id == 'new') {
@@ -60,7 +59,7 @@ if ($_SESSION['access_level'] == 0) {
 	</script>
     <?PHP 
     	$venues = array('portland'=>"Portland House", 'bangor'=>"Bangor House");       
-        echo '<table><tr><td>Date<span style="font-size:x-small;color:FF0000">*</span>: '. 
+        echo '<table><tr><td>Date: '. 
 	             '</td><td colspan=2><input name="start_date" type="text" id="start_date" value="'.$person->get_start_date().'">';
 	   	echo "</td></tr><tr><td>Location<span style='font-size:x-small;color:FF0000'>*</span>: </td>";	
 	   	foreach ($venues as $venue=>$venuename) {

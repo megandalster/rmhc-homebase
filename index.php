@@ -99,12 +99,15 @@ session_cache_expire(30);
                                 foreach ($upcoming_shifts as $tableId) {
                                     echo('<li type="circle">' . get_shift_name_from_id($tableId)) . '</li>';
                                 }
-                                echo('</ul><p>If you need to cancel an upcoming shift, please contact the <a href="mailto:jpowers@rmhprovidence.org">Volunteer Coordinator</a>.</p></div>');
+                                echo('</ul><p>If you need to cancel an upcoming shift, please contact the <a href="mailto:hmportland@rmhcmaine.org">House Manager</a>.</p></div>');
                             }
                             
+                            // link to personal profile for editing
+                            echo('<br><div class="scheduleBox"><p><strong>Your Personal Profile:</strong><br /></p><ul>');  
+                                echo('</ul><p>Go <strong><a href="personEdit.php?id='.$person->get_id()
+                        	   .'">here</a></strong> to view or update your contact information.</p></div>');
                             // link to personal log sheet
-                            echo('<br><div class="scheduleBox"><p><strong>View/Update your Log Sheet:</strong><br /></p><ul>');
-                                
+                            echo('<br><div class="scheduleBox"><p><strong>Your Log Sheet:</strong><br /></p><ul>');
                                 echo('</ul><p>Go <strong><a href="volunteerLog.php?id='.$person->get_id()
                         	   .'">here</a></strong> to view or enter your recent volunteering hours.</p></div>');
               
