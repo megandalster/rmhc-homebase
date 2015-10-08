@@ -70,8 +70,12 @@ if ($_SESSION['access_level'] == 0) {
     ?>
     <fieldset>
         <legend>Personal information:</legend>
-        <p>First Name<span style="font-size:x-small;color:FF0000">*</span>: <input type="text" name="first_name" tabindex="1" value="<?PHP echo($person->get_first_name()) ?>">
-        Last Name<span style="font-size:x-small;color:FF0000">*</span>: <input type="text" name="last_name" tabindex="2" value="<?PHP echo($person->get_last_name()) ?>">
+    <?php
+        if ($person->get_first_name()=="new")
+        	echo '<p>First Name<span style="font-size:x-small;color:FF0000">*</span>: <input type="text" name="first_name" tabindex="1" value="'.$person->get_first_name().'">';
+        else 
+        	echo '<p>First Name: '.$person->get_first_name();
+    ?>  &nbsp;&nbsp;&nbsp;&nbsp;  Last Name<span style="font-size:x-small;color:FF0000">*</span>: <input type="text" name="last_name" tabindex="2" value="<?PHP echo($person->get_last_name()) ?>">
         <p>Address<span style="font-size:x-small;color:FF0000">*</span>: <input type="text" name="address" tabindex="3" size=40 value="<?PHP echo($person->get_address()) ?>">
         <p>City<span style="font-size:x-small;color:FF0000">*</span>: <input type="text" name="city" tabindex="4" value="<?PHP echo($person->get_city()) ?>">
         State, Zip<span style="font-size:x-small;color:FF0000">*</span>:
@@ -93,12 +97,14 @@ foreach ($states as $st) {
 </select>,
 <input type="text" name="zip" size="5" tabindex="6" value="<?PHP echo($person->get_zip()) ?>">
 <?php     
-        echo '<p>Primary Phone<span style="font-size:x-small;color:FF0000">*</span>: ';
         $phonetypes = array("home", "cell", "work");
-        echo '<input type="text" name="phone1" MAXLENGTH=12 tabindex="7" value="'.phone_edit($person->get_phone1()).'">';
-        foreach ($phonetypes as $pvalue)
-        	echo '<input type="radio" name="phone1type" value="'.$pvalue.'"'.($person->get_phone1type()==$pvalue?' checked':'').'>'.$pvalue.' ';
-        
+        if ($person->get_first_name()=="new") {
+        	echo '<p>Primary Phone<span style="font-size:x-small;color:FF0000">*</span>: ';
+        	echo '<input type="text" name="phone1" MAXLENGTH=12 tabindex="7" value="'.phone_edit($person->get_phone1()).'">';
+        	foreach ($phonetypes as $pvalue)
+        		echo '<input type="radio" name="phone1type" value="'.$pvalue.'"'.($person->get_phone1type()==$pvalue?' checked':'').'>'.$pvalue.' ';
+        }
+        else echo '<p>Primary Phone: '.phone_edit($person->get_phone1());
         echo '<p>Secondary Phone: ';
         echo '<input type="text" name="phone2" MAXLENGTH=12 tabindex="8" value="'.phone_edit($person->get_phone2()).'">';
         foreach ($phonetypes as $pvalue)
