@@ -64,7 +64,7 @@ if ($id == 'new') {
                     include('personForm.inc');
                 else {
                     //in this case, the form has been submitted, so validate it
-                    $errors = validate_form();  //step one is validation.
+                    $errors = validate_form($person);  //step one is validation.
                     // errors array lists problems on the form submitted
                     if ($errors) {
                         // display the errors and the form to fix
@@ -85,9 +85,9 @@ if ($id == 'new') {
                         	$position = $_POST['position'];
                         	$employer = $_POST['employer'];
                         }
-                        $person = new Person($_POST['first_name'], $_POST['last_name'], $_POST['location'], 
+                        $person = new Person($person->get_first_name(), $_POST['last_name'], $_POST['location'], 
                         				$_POST['address'], $_POST['city'], $_POST['state'], $_POST['zip'],
-                                        $_POST['phone1'], $_POST['phone1type'], $_POST['phone2'],$_POST['phone2type'], 
+                                        $person->get_phone1(), $_POST['phone1type'], $_POST['phone2'],$_POST['phone2type'], 
                         		        $_POST['email'], implode(',', $_POST['type']), 
                         				$_POST['screening_type'], implode(',', $_POST['screening_status']),
                                         $_POST['status'], $employer, $position, $_POST['credithours'], 
@@ -99,7 +99,7 @@ if ($id == 'new') {
                     }
                     // this was a successful form submission; update the database and exit
                     else
-                        process_form($id);
+                        process_form($id,$person);
                         echo "</div>";
                     include('footer.inc');
                     echo('</div></body></html>');
@@ -109,19 +109,28 @@ if ($id == 'new') {
                 /**
                  * process_form sanitizes data, concatenates needed data, and enters it all into a database
                  */
-                function process_form($id) {
+                function process_form($id,$person) {
                     //echo($_POST['first_name']);
                     //step one: sanitize data by replacing HTML entities and escaping the ' character
-                    $first_name = trim(str_replace('\\\'', '', htmlentities(str_replace('&', 'and', $_POST['first_name']))));
+                    if ($person->get_first_name()=="new")
+                   		$first_name = trim(str_replace('\\\'', '', htmlentities(str_replace('&', 'and', $_POST['first_name']))));
+                    else
+                    	$first_name = $person->get_first_name();
                     $last_name = trim(str_replace('\\\'', '\'', htmlentities($_POST['last_name'])));
                     $location = $_POST['location'];
                     $address = trim(str_replace('\\\'', '\'', htmlentities($_POST['address'])));
                     $city = trim(str_replace('\\\'', '\'', htmlentities($_POST['city'])));
                     $state = trim(htmlentities($_POST['state']));
                     $zip = trim(htmlentities($_POST['zip']));
-                    $phone1 = trim(str_replace(' ', '', htmlentities($_POST['phone1'])));
-                    $clean_phone1 = preg_replace("/[^0-9]/", "", $phone1);
-                    $phone1type = $_POST['phone1type'];
+                    if ($person->get_first_name()=="new") {
+                    	$phone1 = trim(str_replace(' ', '', htmlentities($_POST['phone1'])));
+                    	$clean_phone1 = preg_replace("/[^0-9]/", "", $phone1);
+                    	$phone1type = $_POST['phone1type'];
+                    }
+                    else {
+                    	$clean_phone1 = $person->get_phone1();
+                    	$phone1type = $person->get_phone1type();
+                    }
                     $phone2 = trim(str_replace(' ', '', htmlentities($_POST['phone2'])));
                     $clean_phone2 = preg_replace("/[^0-9]/", "", $phone2);
                     $phone2type = $_POST['phone2type'];
