@@ -74,9 +74,11 @@
 	        	echo(' | <a href="' . $path . 'about.php">about</a>');
 	            echo(' | <a href="' . $path . 'help.php?helpPage=' . $current_page . '" target="_BLANK">help</a>');
 	            echo(' | calendars: <a href="' . $path . 'calendar.php?venue='.$_SESSION['venue'].'">house, </a>');
-	            echo('<a href="' . $path . 'calendar.php?venue='.$_SESSION['venue'].'guestchef">guest chef, </a>');
-	            echo('<a href="' . $path . 'calendar.php?venue='.$_SESSION['venue'].'activities">activity </a>');
-	            echo(' | <a href="https://sites.google.com/site/rmhvolunteersite"  target="_BLANK">around the house </a>');
+	            echo('<a href="' . $path . 'calendar.php?venue='.$_SESSION['venue'].'guestchef">guest chef</a>');
+	            if ($_SESSION['venue']=="portland") {
+		            echo(', <a href="' . $path . 'calendar.php?venue='.$_SESSION['venue'].'activities">activity </a>');
+		            echo(' | <a href="https://sites.google.com/site/rmhvolunteersite"  target="_BLANK">around the house </a>');
+	            }
 	        }
 	        if ($_SESSION['access_level'] >= 2) {
 	            echo('<br><a href="' . $path . 'viewSchedule.php?venue='.$_SESSION['venue'].'">master schedule</a>');

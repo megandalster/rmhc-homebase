@@ -73,9 +73,10 @@ class MasterScheduleEntry {
 	function get_name() {
 		$daynames = array("Mon"=>"Monday","Tue"=>"Tuesday","Wed"=>"Wednesday","Thu"=>"Thursday",
 					"Fri"=>"Friday", "Sat"=>"Saturday", "Sun"=>"Sunday");
-		$venues = array("portland"=>"House", "bangor"=>"Family Room");
+		$venues = array("portland"=>"Portland House", "bangor"=>"Bangor House");
 		$hours = array("9-12"=>"9am to 12pm", "10-1"=>"10am to 1pm", "12-3"=>"12pm to 3pm", "1-4"=>"1pm to 4pm", 
-				"2-5"=>"2pm to 5pm", "3-6"=>"3pm to 6pm", "5-9"=>"5pm to 9pm", "6-9"=>"6pm to 9pm", "night"=>"night");
+				"2-5"=>"2pm to 5pm", "3-6"=>"3pm to 6pm", "5-9"=>"5pm to 9pm", "6-9"=>"6pm to 9pm", 
+				"9-5"=> "9am to 5pm", "night"=>"night");
 		return $venues[$this->venue]." Master Schedule, ".$this->week_no." ".$daynames[$this->day].
 					"s, ".$hours[$this->hours];
 		
