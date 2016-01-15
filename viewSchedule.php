@@ -92,14 +92,15 @@ function show_master_schedule($venue) {
     
     $satshiftsportland = array("10-1","1-4","night");
 	$sunshiftsportland = array("9-12","2-5","5-9");
-	$satsunshiftsbangor = array("9-5","5-9","night");
+	$satshiftsbangor = array("9-9","night");
+	$sunshiftsbangor = array("9-5","5-9");
 	if ($_SESSION['venue']=="portland") {
 		$satshifts = $satshiftsportland;
 		$sunshifts = $sunshiftsportland;
 	}
 	else {
-		$satshifts = $satsunshiftsbangor;
-		$sunshifts = $satsunshiftsbangor;
+		$satshifts = $satshiftsbangor;
+		$sunshifts = $sunshiftsbangor;
 	}
 	echo "</p><p>&nbsp;<table align='center'><tr><td>";
     echo ('<table id="calendar" align="left" ><tr class="weekname"><td colspan="2" ' .

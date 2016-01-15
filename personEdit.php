@@ -21,7 +21,7 @@ include_once('database/dbLog.php');
 $id = str_replace("_"," ",$_GET["id"]);
 
 if ($id == 'new') {
-    $person = new Person('new', 'applicant', null, null, null, null, null, null, null, null, null, null, "applicant", 
+    $person = new Person('new', 'applicant', $_SESSION['venue'], null, null, null, null, null, null, null, null, null, "applicant", 
                     null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, "");
 } else {
     $person = retrieve_person($id);
@@ -232,7 +232,7 @@ if ($id == 'new') {
                         if ($dup)
                             echo('<p class="error">Unable to add ' . $first_name . ' ' . $last_name . ' to the database. <br>Another person with the same name and phone is already there.');
                         else {
-                            $newperson = new Person($first_name, $last_name, $location, $address, $city, $state, $zip, $clean_phone1, $phone1type, $clean_phone2,$phone2type,
+                        	$newperson = new Person($first_name, $last_name, $location, $address, $city, $state, $zip, $clean_phone1, $phone1type, $clean_phone2,$phone2type,
                         				$email, $type, $screening_type, $screening_status, $status, $employer, $position, $credithours,
                                         $commitment, $motivation, $specialties, $convictions, $availability, $schedule, $hours, 
                                         $birthday, $start_date, $howdidyouhear, $notes, "");
@@ -242,7 +242,7 @@ if ($id == 'new') {
                             else if ($_SESSION['access_level'] == 0)
                                 echo("<p>Your application has been successfully submitted.<br>  The House Manager will contact you soon.  Thank you!");
                             else
-                                echo("<p>You have successfully added " . $first_name . " " . $last_name . " to the database.</p>");
+                                echo('<p>You have successfully added <a href="' . $path . 'personEdit.php?id=' . $id . '"><b>' . $first_name . ' ' . $last_name . ' </b></a> to the database.</p>');
                         }
                     }
 

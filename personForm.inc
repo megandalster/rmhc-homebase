@@ -232,10 +232,22 @@ if ($_SESSION['access_level']==0)
                 <?PHP
                 $shifts = array('9-12' => '9-12', '12-3' => '12-3', '3-6' => '3-6',
                     '6-9' => '6-9', 'night' => "night");
-                $satshifts = array('9-12'=>'10-1', '12-3' => '1-4', '3-6' => '',
+                $satshiftsportland = array('9-12'=>'10-1', '12-3' => '1-4', '3-6' => '',
                     '6-9' => '', 'night' => "night");
-                $sunshifts = array('9-12' => '9-12', '12-3' => '2-5', '3-6' => '',
+                $sunshiftsportland = array('9-12' => '9-12', '12-3' => '2-5', '3-6' => '',
                     '6-9' => '5-9', 'night' => "");
+                $satshiftsbangor = array('9-12'=>'9-9', '12-3' => '', '3-6' => '',
+                    '6-9' => '', 'night' => "night");
+                $sunshiftsbangor = array('9-12' => '9-5', '12-3' => '', '3-6' => '',
+                    '6-9' => '5-9', 'night' => "");
+                if ($_SESSION['venue']=="portland") {
+                	$satshifts = $satshiftsportland;
+                	$sunshifts = $sunshiftsportland;
+                }
+                else {
+                	$satshifts = $satshiftsbangor;
+                	$sunshifts = $sunshiftsbangor;
+                }
                 $days = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
                 echo "<table>";
     			echo "<tr><td>Monday&nbsp;&nbsp;</td><td>Tuesday&nbsp;&nbsp;</td><td>Wednesday&nbsp;&nbsp;</td>".
