@@ -117,15 +117,11 @@ session_cache_expire(30);
                     if (!array_key_exists('_submit_remove_shift', $post))
                         return false;
                     if ($msentry->get_id()) {
-                    	//I tried to fix the issue here by unfilling the shift before removing it but this did not seem to work. 
-                    	//Perhaps there is something wrong with the unschedule_person function in the dbPersons.
-                    	
-                    	//process_unfill_shift($post, $msentry);
-                    	//unschedule_person($msentry, 'Elinor4017261449');
                     	if (delete_dbMasterSchedule($msentry->get_id())) {
-                    		// the next 3 lines are a 1-time fix for the database and should be removed
-                    		if (substr($msentry->get_id(),4)=="Sat:9-9:bangor") {
-                    			delete_dbMasterSchedule(substr($msentry->get_id(),0,4)."Sat:9-5:bangor");
+       // the next 3 lines are a 1-time cleanup for the database and should be removed
+                    		if (substr($msentry->get_id(),4)=="Sat:9-5:bangor") {
+                    			delete_dbMasterSchedule(substr($msentry->get_id(),0,4)."Sat:9-9:bangor");
+                    			delete_dbMasterSchedule("1st:Sat:10-1:bangor");
                     		}
                         	echo "<br>Removed a master schedule shift <br><br>";
                         	$returnpoint = "viewSchedule.php?venue=" . $venue;

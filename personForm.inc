@@ -236,7 +236,7 @@ if ($_SESSION['access_level']==0)
                     '6-9' => '', 'night' => "night");
                 $sunshiftsportland = array('9-12' => '9-12', '12-3' => '2-5', '3-6' => '',
                     '6-9' => '5-9', 'night' => "");
-                $satshiftsbangor = array('9-12'=>'9-9', '12-3' => '', '3-6' => '',
+                $satshiftsbangor = array('9-12'=>'9-5', '12-3' => '', '3-6' => '',
                     '6-9' => '', 'night' => "night");
                 $sunshiftsbangor = array('9-12' => '9-5', '12-3' => '', '3-6' => '',
                     '6-9' => '5-9', 'night' => "");

@@ -92,7 +92,7 @@ function show_master_schedule($venue) {
     
     $satshiftsportland = array("10-1","1-4","night");
 	$sunshiftsportland = array("9-12","2-5","5-9");
-	$satshiftsbangor = array("9-9","night");
+	$satshiftsbangor = array("9-5","night");
 	$sunshiftsbangor = array("9-5","5-9");
 	if ($_SESSION['venue']=="portland") {
 		$satshifts = $satshiftsportland;
