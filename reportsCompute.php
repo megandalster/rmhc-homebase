@@ -303,7 +303,7 @@ function display_vacancies_table($report, $venue){
 				}else{
 					foreach($report as $entry){
 						$elements = explode(":",$entry); //turn each entry into an arry, hrs is final item in array
-						if ($col_name==$elements[0]){
+						if ($col_name==$elements[0] && $elements[1]!='9-5'){
 							$slots = $elements[3];
 							$vacs = $elements[2];
 							$slotsint = (int)$slots;

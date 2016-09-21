@@ -79,6 +79,9 @@
 		            echo(', <a href="' . $path . 'calendar.php?venue='.$_SESSION['venue'].'activities">activity </a>');
 		            echo(' | <a href="https://sites.google.com/site/rmhvolunteersite"  target="_BLANK">around the house </a>');
 	            }
+	            else {
+	            	echo(' | <a href="https://sites.google.com/site/aroundthehousebangor/home"  target="_BLANK">around the house </a>');
+	            }
 	        }
 	        if ($_SESSION['access_level'] >= 2) {
 	            echo('<br><a href="' . $path . 'viewSchedule.php?venue='.$_SESSION['venue'].'">master schedule</a>');
