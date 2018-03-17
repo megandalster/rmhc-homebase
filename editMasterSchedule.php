@@ -311,6 +311,7 @@ session_cache_expire(30);
                         return true;
                     } else {
                         schedule_person($msentry, $vol);
+                        add_to_future_shifts($msentry, $vol);
                         return false;
                     }
                 }

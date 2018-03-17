@@ -336,7 +336,7 @@ function remove_from_future_shifts($id) {
 			$p = explode('+',$persons_array[$i]); // id, first_name, last_name
 			if ($p[0]==$id) {
 				array_splice($persons_array,$i,1); // remove person from array
-				$result_row['vacancies']++;
+		//		$result_row['vacancies']++;
 				$result_row['persons'] = implode('*',$persons_array);
 				$s = make_a_shift($result_row);
 				update_dbShifts($s);
@@ -344,6 +344,59 @@ function remove_from_future_shifts($id) {
 			}
 		}
 	}
+}
+// add a person to all future shifts in this year and next
+function add_to_future_shifts($msentry, $vol) {
+	$today = date('y-m-d');
+	$this_year = substr($today,0,2);
+	//	echo("msentry, vol = ");
+	$person = retrieve_person($vol);
+	$person_entry = $vol . "+" . $person->get_first_name() . "+" . $person->get_last_name();
+	$hoursvenue = $msentry->get_hours().":".$msentry->get_venue();
+	//	echo ($vol." ".$person_entry . " " . $hoursvenue);
+	//	var_dump($msentry);
+	
+	connect();
+	$query = "select * from dbShifts where (substring(id,1,8) >= '".$today .
+	"' OR substring(id,1,2) > '".$this_year.
+	"') AND id LIKE '%".$hoursvenue."%' ";
+	$result = mysql_query($query);
+	mysql_close();
+	while ($result_row = mysql_fetch_assoc($result)) {
+		$dww = get_dowwomoddeven(substr($result_row['id'],0,8));
+//	echo 'dww='.$dww[0]." ".$dww[1]." ".$dww[2];
+		$persons_array = explode('*',$result_row['persons']); // individual persons
+		if ($dww[0]!=$msentry->get_day()  // different day of week or week of month or year
+			||	$dww[1]!=$msentry->get_week_no() && $dww[2]!=$msentry->get_week_no() 
+			||	in_array($person_entry,$persons_array)  // person already there
+				)
+		continue;
+		else {  //  add person to the shift
+			$persons_array[] = $person_entry;
+			if ($result_row['vacancies']>0)
+				$result_row['vacancies']--;
+			$result_row['persons'] = implode('*',$persons_array);
+			$s = make_a_shift($result_row);
+			update_dbShifts($s);
+			//		echo "person added: ". $person_entry;
+		}
+	}
+}
+function get_dowwomoddeven ($ymd) {
+	$woms = array(1=>"1st",2=>"2nd",3=>"3rd",4=>"4th",5=>"5th");
+	$stamp = mktime(0,0,0,substr($ymd,3,2),substr($ymd,6,2),substr($ymd,0,2));
+	$dow = date("D",$stamp);      // Mon, Tue, ...
+	$dom = substr($ymd,6,2);
+	$wom = $woms[floor(($dom-1)/7) + 1];   // 1st, 2nd, ...
+	$weekno = date("W",$stamp);   // week of year
+	if ($weekno==53)   // one in 7 years will have a 53rd week, so punt when that happens
+		$weekno==52;
+		$weekno--;         // all years start at week 0 so we can't get 2 odds in a row
+		if ($weekno%2==0)
+			$oddeven = "even";
+			else
+				$oddeven = "odd";
+				return array($dow,$wom,$oddeven);
 }
 // this function is for exporting volunteer data
 function get_all_people_in_past_shifts() {
