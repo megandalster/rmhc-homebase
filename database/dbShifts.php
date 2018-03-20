@@ -322,26 +322,40 @@ function get_all_shifts() {
 
     return $shifts;
 }
-// remove a person from all future shifts in the current year
-function remove_from_future_shifts($id) {
+// remove a person from all future shifts in this year and next
+function remove_from_future_shifts($msentry, $vol) {
 	$today = date('y-m-d');
+	$this_year = substr($today,0,2);
+	$person = retrieve_person($vol);
+	$person_entry = $vol . "+" . $person->get_first_name() . "+" . $person->get_last_name();
+	$hoursvenue = $msentry->get_hours().":".$msentry->get_venue();
+	$master_vacancies = $msentry->get_slots() - sizeof($msentry->get_persons());
+	
 	connect();
-	$query = "select * from dbShifts where substring(id,1,8) >= '".$today .
-			"' AND persons LIKE '%".$id."%' ";
+	$query = "select * from dbShifts where (substring(id,1,8) >= '".$today .
+				"' OR substring(id,1,2) > '".$this_year.
+				"') AND id LIKE '%".$hoursvenue."%' ";
 	$result = mysql_query($query);
 	mysql_close();
 	while ($result_row = mysql_fetch_assoc($result)) {
+		$dww = get_dowwomoddeven(substr($result_row['id'],0,8));
 		$persons_array = explode('*',$result_row['persons']); // individual persons
-		for ($i=0; $i<count($persons_array); $i++) {
-			$p = explode('+',$persons_array[$i]); // id, first_name, last_name
-			if ($p[0]==$id) {
-				array_splice($persons_array,$i,1); // remove person from array
-		//		$result_row['vacancies']++;
-				$result_row['persons'] = implode('*',$persons_array);
-				$s = make_a_shift($result_row);
-				update_dbShifts($s);
-				break;
-			}
+		if ($dww[0]!=$msentry->get_day()  // different day of week or week of month or year
+			||	$dww[1]!=$msentry->get_week_no() && $dww[2]!=$msentry->get_week_no() // different odd/even and weekno
+			||	!in_array($person_entry,$persons_array)  // person not there
+				)
+		continue;
+		else {  //  remove person from shift
+			if (!$persons_array[0])  // skip vacant shifts
+				array_shift($persons_array);
+			$i=array_search($person_entry, $persons_array);
+			unset($persons_array[$i]); // = array_splice($persons_array,$i,1); // remove person from array
+			if (sizeof($persons_array) == 0)
+				$result_row['vacancies'] = $master_vacancies;
+			else $result_row['vacancies']++;
+			$result_row['persons'] = implode('*',$persons_array);
+			$s = make_a_shift($result_row);
+			update_dbShifts($s);
 		}
 	}
 }
@@ -349,25 +363,21 @@ function remove_from_future_shifts($id) {
 function add_to_future_shifts($msentry, $vol) {
 	$today = date('y-m-d');
 	$this_year = substr($today,0,2);
-	//	echo("msentry, vol = ");
 	$person = retrieve_person($vol);
 	$person_entry = $vol . "+" . $person->get_first_name() . "+" . $person->get_last_name();
 	$hoursvenue = $msentry->get_hours().":".$msentry->get_venue();
-	//	echo ($vol." ".$person_entry . " " . $hoursvenue);
-	//	var_dump($msentry);
 	
 	connect();
 	$query = "select * from dbShifts where (substring(id,1,8) >= '".$today .
-	"' OR substring(id,1,2) > '".$this_year.
-	"') AND id LIKE '%".$hoursvenue."%' ";
+				"' OR substring(id,1,2) > '".$this_year.
+				"') AND id LIKE '%".$hoursvenue."%' ";
 	$result = mysql_query($query);
 	mysql_close();
 	while ($result_row = mysql_fetch_assoc($result)) {
 		$dww = get_dowwomoddeven(substr($result_row['id'],0,8));
-//	echo 'dww='.$dww[0]." ".$dww[1]." ".$dww[2];
 		$persons_array = explode('*',$result_row['persons']); // individual persons
 		if ($dww[0]!=$msentry->get_day()  // different day of week or week of month or year
-//			||	$dww[1]!=$msentry->get_week_no() && $dww[2]!=$msentry->get_week_no() 
+			||	$dww[1]!=$msentry->get_week_no() && $dww[2]!=$msentry->get_week_no() 
 			||	in_array($person_entry,$persons_array)  // person already there
 				)
 		continue;

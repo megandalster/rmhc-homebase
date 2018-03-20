@@ -119,10 +119,10 @@ session_cache_expire(30);
                     if ($msentry->get_id()) {
                     	if (delete_dbMasterSchedule($msentry->get_id())) {
        // the next 3 lines are a 1-time cleanup for the database and should be removed
-                    		if (substr($msentry->get_id(),4)=="Sat:9-5:bangor") {
-                    			delete_dbMasterSchedule(substr($msentry->get_id(),0,4)."Sat:9-9:bangor");
-                    			delete_dbMasterSchedule("1st:Sat:10-1:bangor");
-                    		}
+       //              		if (substr($msentry->get_id(),4)=="Sat:9-5:bangor") {
+       //           			delete_dbMasterSchedule(substr($msentry->get_id(),0,4)."Sat:9-9:bangor");
+       //           			delete_dbMasterSchedule("1st:Sat:10-1:bangor");
+       //           		}
                         	echo "<br>Removed a master schedule shift <br><br>";
                         	$returnpoint = "viewSchedule.php?venue=" . $venue;
                         	echo "<table align=\"center\"><tr><td align=\"center\" width=\"442\">
@@ -212,11 +212,11 @@ session_cache_expire(30);
                     	if (array_key_exists('_submit_filled_slot_' . $i, $post)) {
                     		if (is_array($persons[$i])) {
                                 unschedule_person($msentry, $persons[$i]['id']);
-                                remove_from_future_shifts($persons[$i]['id']);
+                                remove_from_future_shifts($msentry,$persons[$i]['id']);
                     		}
                             else {
                                 unschedule_person($msentry, $persons[$i]);
-                            	remove_from_future_shifts($persons[$i]);
+                                remove_from_future_shifts($msentry,$persons[$i]);
                             }
 							return true;
                         }
