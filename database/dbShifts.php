@@ -367,7 +367,7 @@ function add_to_future_shifts($msentry, $vol) {
 //	echo 'dww='.$dww[0]." ".$dww[1]." ".$dww[2];
 		$persons_array = explode('*',$result_row['persons']); // individual persons
 		if ($dww[0]!=$msentry->get_day()  // different day of week or week of month or year
-			||	$dww[1]!=$msentry->get_week_no() && $dww[2]!=$msentry->get_week_no() 
+//			||	$dww[1]!=$msentry->get_week_no() && $dww[2]!=$msentry->get_week_no() 
 			||	in_array($person_entry,$persons_array)  // person already there
 				)
 		continue;
