@@ -50,7 +50,7 @@ function create_dbShifts() {
 
 /**
  * Inserts a shift into the db
- * @param $s the shift to insert
+ * @param $s: shift to insert
  */
 function insert_dbShifts($s) {
     if (!$s instanceof Shift) {
@@ -80,7 +80,7 @@ function insert_dbShifts($s) {
 
 /**
  * Deletes a shift from the db
- * @param $s the shift to delete
+ * @param $s: shift to delete
  */
 function delete_dbShifts($s) {
     if (!$s instanceof Shift)
@@ -99,7 +99,7 @@ function delete_dbShifts($s) {
 
 /**
  * Updates a shift in the db by deleting it (if it exists) and then replacing it
- * @param $s the shift to update
+ * @param $s: shift to update
  */
 function update_dbShifts($s) {
 	error_log("updating shift in database");
@@ -112,7 +112,7 @@ function update_dbShifts($s) {
 
 /**
  * Selects a shift from the database
- * @param $id a shift id
+ * @param $id: shift id
  * @return Shift or null
  */
 function select_dbShifts($id) {
@@ -142,8 +142,8 @@ function select_dbShifts($id) {
 
 /**
  * Selects all shifts from the database for a given date and venue
- * @param $id is a shift id
- * @return a result set or false (if there are no shifts for that date and venue)
+ * @param $id: shift id
+ * @return: result set or false (if there are no shifts for that date and venue)
  */
 function selectDateVenue_dbShifts($date, $venue) {
     connect();
@@ -329,8 +329,12 @@ function remove_from_future_shifts($msentry, $vol) {
 	$person = retrieve_person($vol);
 	$person_entry = $vol . "+" . $person->get_first_name() . "+" . $person->get_last_name();
 	$hoursvenue = $msentry->get_hours().":".$msentry->get_venue();
-	$master_vacancies = $msentry->get_slots() - sizeof($msentry->get_persons());
-	
+	$mspersons = $msentry->get_persons();
+	if (sizeof($mspersons)>0) { // skip vacant shifts
+	    array_shift($mspersons);
+	    $master_vacancies = $msentry->get_slots() - sizeof($mspersons) + 1;
+	}
+	else $master_vacancies = $msentry->get_slots();
 	connect();
 	$query = "select * from dbShifts where (substring(id,1,8) >= '".$today .
 				"' OR substring(id,1,2) > '".$this_year.
@@ -346,7 +350,7 @@ function remove_from_future_shifts($msentry, $vol) {
 				)
 		continue;
 		else {  //  remove person from shift
-			if (!$persons_array[0])  // skip vacant shifts
+			if (!$persons_array[0])  // skip vacant slot
 				array_shift($persons_array);
 			$i=array_search($person_entry, $persons_array);
 			unset($persons_array[$i]); // = array_splice($persons_array,$i,1); // remove person from array
@@ -366,7 +370,12 @@ function add_to_future_shifts($msentry, $vol) {
 	$person = retrieve_person($vol);
 	$person_entry = $vol . "+" . $person->get_first_name() . "+" . $person->get_last_name();
 	$hoursvenue = $msentry->get_hours().":".$msentry->get_venue();
-	
+	$mspersons = $msentry->get_persons();
+	if (sizeof($mspersons)>0 && $mspersons[0]=="") { // skip vacant shifts
+	    array_shift($mspersons);
+	    $master_vacancies = $msentry->get_slots() - sizeof($mspersons) - 1;
+	}
+	else $master_vacancies = 0;
 	connect();
 	$query = "select * from dbShifts where (substring(id,1,8) >= '".$today .
 				"' OR substring(id,1,2) > '".$this_year.
@@ -377,15 +386,19 @@ function add_to_future_shifts($msentry, $vol) {
 		$dww = get_dowwomoddeven(substr($result_row['id'],0,8));
 		$persons_array = explode('*',$result_row['persons']); // individual persons
 		if ($dww[0]!=$msentry->get_day()  // different day of week or week of month or year
-			||	$dww[1]!=$msentry->get_week_no() && $dww[2]!=$msentry->get_week_no() 
-			||	in_array($person_entry,$persons_array)  // person already there
+			||	$dww[1]!=$msentry->get_week_no() && $dww[2]!=$msentry->get_week_no()
 				)
 		continue;
-		else {  //  add person to the shift
-			$persons_array[] = $person_entry;
-			if ($result_row['vacancies']>0)
-				$result_row['vacancies']--;
-			$result_row['persons'] = implode('*',$persons_array);
+		else {  
+		    if (!in_array($person_entry,$persons_array)) { // person not already there) 
+		                                                  //  add person to the shift
+		         $persons_array[] = $person_entry;
+			     if ($result_row['vacancies']>0)
+				    $result_row['vacancies']--;
+		    }
+		    if ($result_row['vacancies']>$master_vacancies)
+		        $result_row['vacancies'] = $master_vacancies;
+		    $result_row['persons'] = implode('*',$persons_array);
 			$s = make_a_shift($result_row);
 			update_dbShifts($s);
 			//		echo "person added: ". $person_entry;
@@ -417,12 +430,12 @@ function get_all_people_in_past_shifts() {
         if (substr($a_shift->get_id(),6,2)>=substr($today,6,2) && substr($a_shift->get_id(),0,5)>=substr($today,0,5))
             continue; // skip present and future shifts
         // okay, this is a past shift, so add person-shift pairs 
-       $persons = explode('*',$a_shift->get_persons());
-  //     if (!$persons[0])  // skip vacant shifts
-  //        array_shift($persons);
-       foreach ($persons as $a_person)
-         if (strpos($a_person,"+")>0)
-           $people_in_shifts[] = substr($a_person,0,strpos($a_person,"+")).",". $a_shift->get_id() ;
+        if (!$a_shift->get_persons()[0])  // skip vacant shifts
+            array_shift($a_shift->get_persons());
+        $persons = explode('*',$a_shift->get_persons());
+        foreach ($persons as $a_person)
+           if (strpos($a_person,"+")>0)
+               $people_in_shifts[] = substr($a_person,0,strpos($a_person,"+")).",". $a_shift->get_id() ;
     }
     sort($people_in_shifts);
     return $people_in_shifts;

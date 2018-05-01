@@ -167,11 +167,13 @@ function schedule_person($msentry, /*$venue, $group, $day, $time,*/ $person_id) 
     $resultp_row = mysql_fetch_array($resultp, MYSQL_ASSOC);
     $persons = explode(',', $result_row['persons']);    // get an array of scheduled person id's
     $schedule = explode(',', $resultp_row['schedule']); // get an array of person's scheduled times
+    if ($schedule[0]=="")
+        array_shift($schedule);
     $availability = explode(',', $resultp_row['availability']);     // and their availabiltiy
-    if (    !in_array($person_id, $persons) &&
-            !in_array($msentry->get_id(), $schedule)) {
+    if (    !in_array($person_id, $persons)) {
         $persons[] = $person_id;             // add the person to the array, and
-        $schedule[] = $msentry->get_id();    // add the time to the person's schedule
+        if (!in_array($msentry->get_id(), $schedule))
+            $schedule[] = $msentry->get_id();    // add the time to the person's schedule
         $result_row['persons'] = implode(',', $persons);     // and update one row in each table
         $resultp_row['schedule'] = implode(',', $schedule);  // in the database
         mysql_query("UPDATE dbMasterSchedule SET persons = '" . $result_row['persons'] .

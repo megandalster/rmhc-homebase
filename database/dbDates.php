@@ -166,7 +166,7 @@ function select_dbDates($id) {
 }
 
 /**
- * @return a * delimited list of the ids of the shifts for the specified day
+ * @return: * delimited list of the ids of the shifts for the specified day
  */
 function get_shifts_text($d) {
     $shifts = $d->get_shifts();
