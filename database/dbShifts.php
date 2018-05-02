@@ -430,7 +430,8 @@ function get_all_people_in_past_shifts() {
         if (substr($a_shift->get_id(),6,2)>=substr($today,6,2) && substr($a_shift->get_id(),0,5)>=substr($today,0,5))
             continue; // skip present and future shifts
         // okay, this is a past shift, so add person-shift pairs 
-        if (!$a_shift->get_persons()[0])  // skip vacant shifts
+        $p =  $a_shift->get_persons();
+        if (!p[0])  // skip vacant slot
             array_shift($a_shift->get_persons());
         $persons = explode('*',$a_shift->get_persons());
         foreach ($persons as $a_person)
