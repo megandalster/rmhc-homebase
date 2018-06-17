@@ -16,21 +16,22 @@
 include_once(dirname(__FILE__) . '/../domain/MasterScheduleEntry.php');
 include_once('dbinfo.php');
 
-function create_dbMasterSchedule() {
+/* remove from the master schedule all shifts that match $hoursvenue
+ * 
+ */
+function purge_dbMasterShifts($hoursvenue) {
     connect();
-    mysql_query("DROP TABLE IF EXISTS dbMasterSchedule");
-    $result = mysql_query("CREATE TABLE dbMasterSchedule (venue TEXT NOT NULL, day TEXT NOT NULL, week_no TEXT NOT NULL,
-							hours TEXT, slots INT, persons TEXT, notes TEXT, id TEXT)");
+    $result = mysql_query("DELETE FROM dbMasterSchedule WHERE id like '%".$hoursvenue."%'");
     // id is a unique string for each entry: id = week_no:day:time:venue and week_no == odd, even, 1st, 2nd, ... 5th
     if (!$result) {
-        echo mysql_error() . " - Error creating dbMasterSchedule table.\n";
+        echo mysql_error() . " - Error purging dbMasterSchedule.\n";
+        mysql_close();
         return false;
     }
-    $venues = array("portland","bangor");
-    $days = array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
-    $weeks = array("1st", "2nd", "3rd", "4th", "5th", "odd", "even");
-    mysql_close();
-    return true;
+    else {
+        mysql_close();
+        return true;
+    }
 }
 
 function insert_dbMasterSchedule($entry) {

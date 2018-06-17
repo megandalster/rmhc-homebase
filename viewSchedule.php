@@ -37,6 +37,9 @@ include_once("domain/MasterScheduleEntry.php");
                 if ($_SESSION['access_level'] < 2) {
                     die("<p>Only managers can view the master schedule.</p>");
                 }
+// next 2 lines are temporary dbMasterSchedule fixes -- they should be commented out after first use.
+                purge_dbMasterShifts("9-5:bangor");
+                purge_dbMasterShifts("5-9:bangor");
                 $venue = $_GET['venue'];
                 show_week_no ();
                 show_master_schedule($venue);
@@ -92,8 +95,8 @@ function show_master_schedule($venue) {
     
     $satshiftsportland = array("10-1","1-4","night");
 	$sunshiftsportland = array("9-12","2-5","5-9");
-	$satshiftsbangor = array("9-5","night");
-	$sunshiftsbangor = array("9-5","5-9");
+	$satshiftsbangor = array("9-12","12-5","night");
+	$sunshiftsbangor = array("9-12","12-5","night");
 	if ($_SESSION['venue']=="portland") {
 		$satshifts = $satshiftsportland;
 		$sunshifts = $sunshiftsportland;

@@ -118,11 +118,6 @@ session_cache_expire(30);
                         return false;
                     if ($msentry->get_id()) {
                     	if (delete_dbMasterSchedule($msentry->get_id())) {
-       // the next 3 lines are a 1-time cleanup for the database and should be removed
-       //              		if (substr($msentry->get_id(),4)=="Sat:9-5:bangor") {
-       //           			delete_dbMasterSchedule(substr($msentry->get_id(),0,4)."Sat:9-9:bangor");
-       //           			delete_dbMasterSchedule("1st:Sat:10-1:bangor");
-       //           		}
                         	echo "<br>Removed a master schedule shift <br><br>";
                         	$returnpoint = "viewSchedule.php?venue=" . $venue;
                         	echo "<table align=\"center\"><tr><td align=\"center\" width=\"442\">

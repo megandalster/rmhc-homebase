@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015 by Adrienne Beebe, Yonah Biers-Ariel, Connor Hargus, Phuong Le, 
+ * Copyright 2015 by Adrienne Beebe, Connor Hargus, Phuong Le, 
  * Xun Wang, and Allen Tucker. This program is part of RMHP-Homebase, which is free 
  * software.  It comes with absolutely no warranty. You can redistribute and/or 
  * modify it under the terms of the GNU General Public License as published by the 
@@ -430,9 +430,6 @@ function get_all_people_in_past_shifts() {
         if (substr($a_shift->get_id(),6,2)>=substr($today,6,2) && substr($a_shift->get_id(),0,5)>=substr($today,0,5))
             continue; // skip present and future shifts
         // okay, this is a past shift, so add person-shift pairs 
-        $p =  $a_shift->get_persons();
-        if (!p[0])  // skip vacant slot
-            array_shift($a_shift->get_persons());
         $persons = explode('*',$a_shift->get_persons());
         foreach ($persons as $a_person)
            if (strpos($a_person,"+")>0)
