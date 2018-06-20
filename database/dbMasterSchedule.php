@@ -14,10 +14,11 @@
  */
 
 include_once(dirname(__FILE__) . '/../domain/MasterScheduleEntry.php');
+include_once('dbShifts.php');
 include_once('dbinfo.php');
 
 /* remove from the master schedule all shifts that match $hoursvenue
- * 
+ * use with caution -- only to repair master schedule by removing selected shifts
  */
 function purge_dbMasterShifts($hoursvenue) {
     connect();
@@ -391,29 +392,4 @@ function check_valid_schedule($venue, $week_no, $day, $time) {
     }
     return true;
 }
-
-/*
- * update the number of vacancies for a particular venue, group, day, and time
- */
-
-function edit_schedule_vacancy($msentry, $change) {
-    connect();
-    $query1 = "SELECT * FROM dbMasterSchedule WHERE id = '" .
-            $msentry->get_id() . "'";
-    $result = mysql_query($query1);
-    if (!$result)
-        die("edit_schedule_vacancy could not query the database");
-    if (mysql_num_rows($result) !== 1) {
-    	mysql_close();
-        return false;
-    }
-    $result_row = mysql_fetch_array($result, MYSQL_ASSOC);
-    $result_row['slots'] = $result_row['slots'] + $change;
-    // id = venue.day.week_no.start_time."-".end_time
-    mysql_query("UPDATE dbMasterSchedule SET slots = '" . $result_row['slots'] .
-            "' WHERE id = '" . $msentry->get_id() . "'");
-    mysql_close();
-    return true;
-}
-
 ?>

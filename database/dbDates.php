@@ -22,32 +22,6 @@ include_once('domain/Shift.php');
 include_once('dbinfo.php');
 
 /**
- * reformats dbDates table from 2013 format to 2015 format 
- * Elements of dbDates:
- *  id: yy-mm-dd:venue
- *  shifts - * delimited list of shift ids
- *  manager notes
- */
-function massage_dbDates() {
-    connect();
-    $query="select * from dbDates";
-    $result = mysql_query($query,MYSQL_ASSOC);
-    foreach ($result as $r) {
-    	
-    	$r['id']=substr($r['id'],6,2).'-'.substr($r['id'],0,5).':portland';
-    	$ss = explode('*',$r['shifts']);
-    	$ssnew = array();
-    	foreach ($ss as $s) {
-    		$s = substr($s,6,2).'-'.substr($s,0,5).":".substr($s,9).':portland';
-    		$ssnew[] = $s;
-    	}
-    	$r['shifts']=implode('*',$ss);
-    	insert_dbDates($r);
-    }
-    mysql_close();
-}
-
-/**
  * Adds a RMHDate to the table
  * If the date already exists, the date is deleted and replaced.
  */
@@ -125,7 +99,6 @@ function replace_dbDates($old_s, $new_s) {
     update_dbDates($d);
     return true;
 }
-
 /**
  * selects a date from the table
  * @return RMHDate

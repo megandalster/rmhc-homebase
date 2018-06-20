@@ -180,11 +180,11 @@ session_cache_expire(30);
 		</b></td></tr>
 		<tr><td><form method=\"POST\" style=\"margin-bottom:0;\">
 			<select name=\"scheduled_vol\">
-			<option value=\"0\" style=\"width: 371px;\">Select a volunteer with this availability</option>"
+			<option value=\"0\" style=\"width: 371px;\">Select an active volunteer with this availability</option>"
                     . get_available_volunteer_options($msentry, get_persons($msentry->get_id())) .
                     "</select><br><br>
 			<select name=\"all_vol\">
-			<option value=\"0\" style=\"width: 371px;\">Select from all volunteers</option>"
+			<option value=\"0\" style=\"width: 371px;\">Select from all active volunteers</option>"
                     . get_all_volunteer_options(get_persons($msentry->get_id()), $msentry->get_venue()) .
                     "</select><br><br>
 			<input type=\"hidden\" name=\"_submit_add_volunteer\" value=\"1\">
@@ -221,7 +221,10 @@ session_cache_expire(30);
 
                 function process_add_slot($post, $msentry, $venue) {
                     if (array_key_exists('_submit_add_slot', $post)) {
-                        edit_schedule_vacancy($msentry, 1);
+                        $msentry->set_slots($msentry->get_slots() + 1);
+                        update_dbMasterSchedule($msentry);
+                        // add the slot to future calendar shifts as well
+                        edit_shift_onfuture_dates($msentry);
                         return true;
                     }
                     return false;
@@ -229,7 +232,10 @@ session_cache_expire(30);
 
                 function process_ignore_slot($post, $msentry, $venue) {
                     if (array_key_exists('_submit_ignore_vacancy', $post)) {
-                        edit_schedule_vacancy($msentry, -1);
+                        $msentry->set_slots($msentry->get_slots() - 1);
+                        update_dbMasterSchedule($msentry);
+                        // remove the slot from future calendar shifts as well
+                        edit_shift_onfuture_dates($msentry);
                         return true;
                     }
                     return false;
@@ -240,7 +246,7 @@ session_cache_expire(30);
                         array_shift($persons);
                     connect();
                     $chrtime =  $msentry ->get_day() . ":" . $msentry->get_hours().":".$msentry->get_venue();
-
+echo "chrtime = ". $chrtime;
                     $query = "SELECT * FROM dbPersons WHERE status = 'active' " .
                             "AND availability LIKE '%" . $chrtime . "%' ORDER BY last_name,first_name";
                     $result = mysql_query($query);

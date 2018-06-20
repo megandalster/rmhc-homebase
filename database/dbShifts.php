@@ -122,7 +122,7 @@ function select_dbShifts($id) {
     $result = mysql_query($query);
     mysql_close();
     if (!$result) {
-        echo 'Could not run query2: ' . mysql_error();
+        return null;
     } else {
         $result_row = mysql_fetch_row($result);
         if ($result_row != null) {
@@ -272,6 +272,33 @@ function move_shift($s, $new_start, $new_end) {
 }
 
 /**
+ * Tries to add a shift into a vacant start and end time.  Its times must
+ * not overlap with any other shift on the same date and venue
+ * @return false if shift exists or there's an overlap
+ * Otherwise, add the shift to the database and @return true
+ */
+function add_shift($s, $new_start, $new_end) {
+    // first, see if it exists
+    $old_s = select_dbShifts($s->get_id());
+    if ($old_s != null) // there's a shift already there
+        return false;
+    // now see if it can be added by looking at all other shifts for the same date and venue
+    $current_shifts = selectDateVenue_dbShifts($s->get_date(), $s->get_venue());
+    connect();
+    for ($i = 0; $i < mysql_num_rows($current_shifts); ++$i) {
+        $same_day_shift = mysql_fetch_row($current_shifts);
+        if (timeslots_overlap($same_day_shift[1], $same_day_shift[2], $s->get_start_time(), $s->get_end_time())) {
+            mysql_close();
+            return false;
+        }
+    }
+    mysql_close();
+    // we're good to go
+    insert_dbDates($s);
+    return true;
+}
+
+/**
  * @result == true if $s1's timeslot overlaps $s2's timeslot, and false otherwise.
  */
 function timeslots_overlap($s1_start, $s1_end, $s2_start, $s2_end) {
@@ -404,6 +431,49 @@ function add_to_future_shifts($msentry, $vol) {
 			//		echo "person added: ". $person_entry;
 		}
 	}
+}
+/**
+ * replaces each future date in the dbDates table that match the $msentry 
+ * by a new date with an added shift $new_s, if $new_s is not already there,
+ * and inserts the $new_shift into the dbShifts table.
+ * If $new_s is already there, make its numsber of slots the same as $msentry's
+ * and update it in the dbShifts table.
+ */
+function edit_shift_onfuture_dates($msentry) {
+    $today = date('y-m-d');
+    $mspersons = $msentry->get_persons();
+    if (!$mspersons[0])
+        array_shift($mspersons);
+    connect();
+    $query = "select * from dbDates where substring(id,1,8) >= '".$today .
+    "' AND id LIKE '%".$msentry->get_venue."%' ";
+    $result = mysql_query($query);
+    mysql_close();
+    while ($result_row = mysql_fetch_assoc($result)) {
+        $thedate = substr($result_row['id'],0,8);
+        $dww = get_dowwomoddeven($thedate);
+        if ($dww[0]!=$msentry->get_day()  // different day of week or week of month or year
+            ||	$dww[1]!=$msentry->get_week_no() && $dww[2]!=$msentry->get_week_no()
+            )
+            continue;
+        $msvacancies = ($msentry->get_slots())-sizeof($mspersons);
+        $new_s = new Shift ($thedate.":".$msentry->get_hours(),$msentry->get_venue(), $msvacancies, $mspersons, array(), "", "");     
+        $d = select_dbDates($new_s->get_yy_mm_dd().":".$new_s->get_venue());
+        $old_s = select_dbShifts($new_s->get_id());
+        // see if it's already there
+        if ($old_s!=null) {  // if so, update its number of slots to match msentry's
+//            echo "\n persons in this shift, slots = ".sizeof($old_s->get_persons()).",".$msentry->get_slots();
+//            var_dump($msentry);
+            if ($old_s->num_slots()!=$msentry->get_slots())
+                $old_s->match_slots($msentry->get_slots());
+            update_dbShifts($old_s);
+        }
+        else { // if not, add it to dbDates and insert it into dbShifts
+            $d = $d->insert_shift($new_s);
+            update_dbDates($d);
+            insert_dbShifts($new_s);
+        }
+    }
 }
 function get_dowwomoddeven ($ymd) {
 	$woms = array(1=>"1st",2=>"2nd",3=>"3rd",4=>"4th",5=>"5th");

@@ -22,7 +22,6 @@ include_once('dbDates.php');
 include_once('dbShifts.php');
 include_once('domain/Shift.php');
 
-
 /**
  * Drops the dbWeeks table if it exists, and creates a new one slots =
  * Table fields:
@@ -114,7 +113,7 @@ function update_dbWeeks($w) {
 /**
  * Selects a week from the database
  * @param $id week id --
- * @return mysql entry corresponding to id
+ * @return the db entry corresponding to id
  */
 function select_dbWeeks($id) {
 
@@ -147,8 +146,8 @@ function select_dbWeeks($id) {
 
 /**
  * retrieves a Week from the database
- * @param $id = mm-dd-yy of the week to retrieve
- * @return the desired week, or null
+ * @param $id = yy-mm-dd of the week to retrieve
+ * @return the week or null
  */
 function get_dbWeeks($id) {
     $result_row = select_dbWeeks($id);
@@ -170,7 +169,7 @@ function get_dbWeeks($id) {
 
 /**
  * the full contents of dbWeeks, used by addWeek to list all scheduld weeks
- * @return mysql result array of weeks
+ * @return array of weeks
  */
 function get_all_dbWeeks($venue) {
 	connect();

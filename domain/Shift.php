@@ -189,6 +189,14 @@ class Shift {
     function set_notes($notes) {
         $this->notes = $notes;
     }
+    // adjust a shift's vacancies so that its number of slots is not less than $slots in its corresponding msentry
+    function match_slots ($slots) {
+        if (!$this->persons[0])
+            $this->persons = array_shift($this->persons);
+        $this->vacancies = $slots - sizeof($this->persons);
+        if ($this->vacancies<0)
+            $this->vacancies = 0;
+    }
     
     function assign_persons($p) {
     	foreach ($this->persons as $person) {

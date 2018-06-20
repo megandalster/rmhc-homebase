@@ -37,9 +37,9 @@ include_once("domain/MasterScheduleEntry.php");
                 if ($_SESSION['access_level'] < 2) {
                     die("<p>Only managers can view the master schedule.</p>");
                 }
-// next 2 lines are temporary dbMasterSchedule fixes -- they should be commented out after first use.
-                purge_dbMasterShifts("9-5:bangor");
-                purge_dbMasterShifts("5-9:bangor");
+// next 2 lines are one-time dbMasterSchedule fixes -- they should be commented out after first use.
+//                purge_dbMasterShifts("9-5:bangor");
+//                purge_dbMasterShifts("5-9:bangor");
                 $venue = $_GET['venue'];
                 show_week_no ();
                 show_master_schedule($venue);
@@ -84,7 +84,8 @@ function show_master_schedule($venue) {
             	echo do_shift($master_shift,1);
             } else {
                 $master_shift = new MasterScheduleEntry($venue, $day, $group, $hour, 0, "", "");
-                echo do_shift($master_shift, 0);
+                insert_dbMasterSchedule($master_shift);
+                echo do_shift($master_shift, 1);
             }
         }
         echo ("<td class=\"masterhour\">" . $showgroup . " " . $hour . "</td></tr>");
@@ -93,10 +94,10 @@ function show_master_schedule($venue) {
     }
     echo "</table>";
     
-    $satshiftsportland = array("10-1","1-4","night");
-	$sunshiftsportland = array("9-12","2-5","5-9");
-	$satshiftsbangor = array("9-12","12-5","night");
-	$sunshiftsbangor = array("9-12","12-5","night");
+    $satshiftsportland = array("10-1","1-4","4-9","night");
+	$sunshiftsportland = array("9-12","12-2","2-5","5-9","night");
+	$satshiftsbangor = array("9-12","12-5","5-9","night");
+	$sunshiftsbangor = array("9-12","12-5","5-9","night");
 	if ($_SESSION['venue']=="portland") {
 		$satshifts = $satshiftsportland;
 		$sunshifts = $sunshiftsportland;
@@ -121,7 +122,8 @@ function show_master_schedule($venue) {
             	echo do_shift($master_shift,1);
             } else {
                 $master_shift = new MasterScheduleEntry($venue, $day, $group, $hour, 0, "", "");
-                echo do_shift($master_shift, 0);
+                insert_dbMasterSchedule($master_shift);
+                echo do_shift($master_shift, 1);
             }
         echo ("<td bgcolor='#ffffff'></td></tr>");
         $showgroup = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -144,7 +146,8 @@ function show_master_schedule($venue) {
             	echo do_shift($master_shift,1);
             } else {
                 $master_shift = new MasterScheduleEntry($venue, $day, $group, $hour, 0, "", "");
-                echo do_shift($master_shift, 0);
+                insert_dbMasterSchedule($master_shift);
+                echo do_shift($master_shift, 1);
             }
         echo ("<td bgcolor='#ffffff'></td></tr>");
         $showgroup = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";

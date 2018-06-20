@@ -232,14 +232,14 @@ if ($_SESSION['access_level']==0)
                 <?PHP
                 $shifts = array('9-12' => '9-12', '12-3' => '12-3', '3-6' => '3-6',
                     '6-9' => '6-9', 'night' => "night");
-                $satshiftsportland = array('9-12'=>'10-1', '12-3' => '1-4', '3-6' => '',
+                $satshiftsportland = array('9-12'=>'10-1', '12-3' => '1-4', '3-6' => '4-9',
                     '6-9' => '', 'night' => "night");
-                $sunshiftsportland = array('9-12' => '9-12', '12-3' => '2-5', '3-6' => '',
-                    '6-9' => '5-9', 'night' => "");
-                $satshiftsbangor = array('9-12'=>'9-5', '12-3' => '', '3-6' => '',
-                    '6-9' => '', 'night' => "night");
-                $sunshiftsbangor = array('9-12' => '9-5', '12-3' => '', '3-6' => '',
-                    '6-9' => '5-9', 'night' => "");
+                $sunshiftsportland = array('9-12' => '9-12', '12-3' => '12-2', '3-6' => '2-5',
+                    '6-9' => '5-9', 'night' => "night");
+                $satshiftsbangor = array('9-12'=>'9-12', '12-3' => '12-5', '3-6' => '',
+                    '6-9' => '5-9', 'night' => "night");
+                $sunshiftsbangor = array('9-12' => '9-12', '12-3' => '12-5', '3-6' => '',
+                    '6-9' => '5-9', 'night' => "night");
                 if ($_SESSION['venue']=="portland") {
                 	$satshifts = $satshiftsportland;
                 	$sunshifts = $sunshiftsportland;
@@ -260,7 +260,7 @@ if ($_SESSION['access_level']==0)
        			      else if ($day=="Sun")
     	  					$shiftdisplay=$sunshifts[$shift];
     	  			  else $shiftdisplay=$shiftvalue;
-    	  			  if (($shift!="night" || $day=="Fri" || $day=="Sat") && $shiftdisplay!="") {
+    	  			  if ($shiftdisplay!="") {
        					$realkey = $day . ":". $shiftdisplay. ":". $person->get_venue();
        	  				echo ('<td><input type="checkbox" name="availability[]" value="' . $realkey . '"');
     	  				if (in_array($realkey, $person->get_availability())) echo(' CHECKED');
