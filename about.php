@@ -46,12 +46,12 @@
 				Because <i>Homebase</i> must protect the privacy of individual RMH volunteers and staff, outside access to the system is
 				restricted.  If you are an RMH staff member or volunteer and have forgotten your Username or Password, please contact the <a href="mailto:jpowers@rmhprovidence.org">Volunteer Coordinator</a>.
                 </p>
-				<p> <i>Homebase</i> is free and open source software (see <a href="http://code.google.com/p/rmhp-homebase/" target="_blank">http://code.google.com/p/rmhp-homebase/</a>).  
+				<p> <i>Homebase</i> is free and open source software (see <a href="https://github.com/megandalster/rmhc-homebase" target="_blank">https://github.com/megandalster/rmhc-homebase</a>).  
 				From this site, its source code can be freely downloaded and adapted
 				 to fit the volunteer scheduling needs of other non-profits.  
 				 For more information about the capabilities or adaptability of <i>Homebase</i></i> to other settings, please 
-				 contact either <a href="mailto:allen@bowdoin.edu">Allen Tucker</a> or visit the website 
-				 <a href="http://npfi.org" target="_blank">http://npfi.org</a>.
+				 contact either <a href="mailto:allen@npfi.org">Allen Tucker</a> or visit the Web site 
+				 <a href="https://npfi.org/the-homebase-project/" target="_blank">https://npfi.org/the-homebase-project/</a>.
 				</p> 
 				
 			</div>

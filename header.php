@@ -37,27 +37,32 @@
          * can view it. If someone logged into the system attempts to access a page above their
          * permission level, they will be sent back to the home page.
          */
-        //pages guests are allowed to view
+        //pages all are allowed to view
         $permission_array['index.php'] = 0;
         $permission_array['about.php'] = 0;
-        $permission_array['apply.php'] = 0;
         //pages volunteers can view
         $permission_array['help.php'] = 1;
-        $permission_array['view.php'] = 1;
-        $permission_array['personSearch.php'] = 1;
-        $permission_array['personEdit.php'] = 1;
         $permission_array['calendar.php'] = 1;
         //pages only managers can view
-        $permission_array['personEdit.php'] = 2;
-        $permission_array['viewSchedule.php'] = 2;
-        $permission_array['addWeek.php'] = 2;
-        $permission_array['rmh.php'] = 2;
+        $permission_array['personsearch.php'] = 2;
+        $permission_array['personedit.php'] = 2;
+        $permission_array['viewschedule.php'] = 2;
+        $permission_array['addweek.php'] = 2;
         $permission_array['log.php'] = 2;
-        $permission_array['dataSearch.php'] = 2;
         $permission_array['reports.php'] = 2;
 
         //Check if they're at a valid page for their access level.
-        $current_page = substr($_SERVER['PHP_SELF'], 1);
+        $current_page = strtolower(substr($_SERVER['PHP_SELF'], strpos($_SERVER['PHP_SELF'],"/")+1));
+        $current_page = substr($current_page, strpos($current_page,"/")+1);
+        
+        if($permission_array[$current_page]>$_SESSION['access_level']){
+            //in this case, the user doesn't have permission to view this page.
+            //we redirect them to the index page.
+            echo "<script type=\"text/javascript\">window.location = \"index.php\";</script>";
+            //note: if javascript is disabled for a user's browser, it would still show the page.
+            //so we die().
+            die();
+        }
         //This line gives us the path to the html pages in question, useful if the server isn't installed @ root.
         $path = strrev(substr(strrev($_SERVER['SCRIPT_NAME']), strpos(strrev($_SERVER['SCRIPT_NAME']), '/')));
 		$venues = array("portland"=>"RMH Portland","bangor"=>"RMH Bangor");

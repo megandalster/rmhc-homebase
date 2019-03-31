@@ -32,36 +32,21 @@ session_cache_expire(30);
                 include_once('database/dbShifts.php');
                 date_default_timezone_set('America/New_York');
             //    fix_all_birthdays();
-                if ($_SESSION['_id'] != "guest") {
-                    $person = retrieve_person($_SESSION['_id']);
-                    echo "<p>Welcome, " . $person->get_first_name() . ", to Homebase!";
-                }
-                else 
-                    echo "<p>Welcome!";
+                $person = retrieve_person($_SESSION['_id']);
+                echo "<p>Welcome, " . $person->get_first_name() . ", to Homebase!";
                 echo "   Today is " . date('l F j, Y') . ".<p>";
                 ?>
 
                 <!-- your main page data goes here. This is the place to enter content -->
                 <p>
                     <?PHP
-                    if ($_SESSION['access_level'] == 0)
-                        echo('<p> To apply for volunteering at the Portland or Bangor Ronald McDonald House, '.
-                        		'please select <b>apply</b>.');
                     if ($person) {
                         /*
                          * Check type of person, and display home page based on that.
                          * all: password check
-                         * guests: show link to application form
-                         * applicants: show status of application form
                          * Volunteers, subs: show upcoming schedule and log sheet
                          * Managers: show upcoming vacancies, birthdays, anniversaries, applicants
                          */
-
-                        //APPLICANT CHECK
-                        if ($person->get_first_name() != 'guest' && $person->get_status() == 'applicant') {
-                            //SHOW STATUS
-                            echo('<div class="infobox"><p><strong>Your application has been submitted.</strong><br><br /><table><tr><td><strong>Step</strong></td><td><strong>Completed?</strong></td></tr><tr><td>Background Check</td><td>' . $person['background_check'] . '</td></tr><tr><td>Interview</td><td>' . $person['interview'] . '</td></tr><tr><td>Shadow</td><td>' . $person['shadow'] . '</td></tr></table></p></div>');
-                        }
 
                         //VOLUNTEER CHECK
                         if ($_SESSION['access_level'] == 1) {
@@ -102,10 +87,6 @@ session_cache_expire(30);
                                 echo('</ul><p>If you need to cancel an upcoming shift, please contact the <a href="mailto:hmportland@rmhcmaine.org">House Manager</a>.</p></div>');
                             }
                             
-                            // link to personal profile for editing
-                            echo('<br><div class="scheduleBox"><p><strong>Your Personal Profile:</strong><br /></p><ul>');  
-                                echo('</ul><p>Go <strong><a href="personEdit.php?id='.$person->get_id()
-                        	   .'">here</a></strong> to view or update your contact information.</p></div>');
                             // link to personal log sheet
                             echo('<br><div class="scheduleBox"><p><strong>Your Log Sheet:</strong><br /></p><ul>');
                                 echo('</ul><p>Go <strong><a href="volunteerLog.php?id='.$person->get_id()
