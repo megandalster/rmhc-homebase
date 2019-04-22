@@ -289,8 +289,8 @@ include_once('database/dbLog.php');
 			array_shift($persons);
 		$result = getall_available("volunteer", $day, $time, $venue);
 		$s="";
-		for($i=0;$i<mysql_num_rows($result);++$i) {
-			$row=mysql_fetch_row($result);
+		for($i=0;$i<mysqli_num_rows($result);++$i) {
+			$row=mysqli_fetch_row($result);
 			$value=$row[0]."+".$row[3]."+".$row[4];
 			$label=$row[4].", ".$row[3];
 			$match=false;
@@ -312,8 +312,8 @@ include_once('database/dbLog.php');
 			array_shift($persons);
 		$result = getall_available("volunteer", $day, $time, $venue);
 		$s="";
-		for($i=0;$i<mysql_num_rows($result);$i++) {
-		  $row=mysql_fetch_row($result);
+		for($i=0;$i<mysqli_num_rows($result);$i++) {
+		  $row=mysqli_fetch_row($result);
 		//  if (!strpos($row[15],"manager")) {
 			$value=$row[0]."+".$row[3]."+".$row[4];
 			$label=$row[4].", ".$row[3];

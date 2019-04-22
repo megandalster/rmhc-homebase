@@ -37,9 +37,6 @@ include_once("domain/MasterScheduleEntry.php");
                 if ($_SESSION['access_level'] < 2) {
                     die("<p>Only managers can view the master schedule.</p>");
                 }
-// next 2 lines are one-time dbMasterSchedule fixes -- they should be commented out after first use.
-//                purge_dbMasterShifts("9-5:bangor");
-//                purge_dbMasterShifts("5-9:bangor");
                 $venue = $_GET['venue'];
                 show_week_no ();
                 show_master_schedule($venue);

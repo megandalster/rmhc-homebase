@@ -11,7 +11,7 @@
  * @author Connor Hargus, Oliver Radwan, Judy Yang, Maxwell Palmer, and Allen Tucker
  * @version May 1, 2008, modified January 21, 2015
  */
-include_once('RMHdate.php');
+include_once(dirname(__FILE__).'/../domain/Week.php');
 /*
  * Week is an array of dates
  * Weeks start on Mondays

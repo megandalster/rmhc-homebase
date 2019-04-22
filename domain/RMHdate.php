@@ -5,8 +5,8 @@
  * modify it under the terms of the GNU General Public License as published by the 
  * Free Software Foundation (see <http://www.gnu.org/licenses/ for more information). new RMHdate
  */
-include_once("Shift.php");
-include_once("database/dbMasterSchedule.php");
+include_once(dirname(__FILE__).'/Shift.php');
+include_once(dirname(__FILE__).'/../database/dbMasterSchedule.php');
 /* A class to manage an RMHDate
  * @version May 1, 2008, revised February 10, 2015
  * @author Yonah Biers-Ariel, Phuong Le and Maxwell Palmer

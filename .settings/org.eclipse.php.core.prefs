@@ -1,3 +1,10 @@
-#Mon Oct 27 15:48:02 PDT 2014
 eclipse.preferences.version=1
-include_path=0;/rmhp-homebase
+include_path=0;/rmhc-homebase\u00051;/Applications/MAMP/htdocs/phpunit.phar
+pdt_validator/enabled=true
+pdt_validator/org.eclipse.php.internal.core.compiler.ast.parser.PHPProblemIdentifier/CannotInstantiateType/severity=ERROR
+pdt_validator/org.eclipse.php.internal.core.compiler.ast.parser.PHPProblemIdentifier/ImportNotFound/severity=ERROR
+pdt_validator/org.eclipse.php.internal.core.compiler.ast.parser.PHPProblemIdentifier/UndefinedType/severity=ERROR
+pdt_validator/org.eclipse.php.internal.core.compiler.ast.parser.PHPProblemIdentifier/UnnecessaryImport/severity=WARNING
+pdt_validator/org.eclipse.php.internal.core.compiler.ast.parser.PHPProblemIdentifier/UnusedImport/severity=WARNING
+phpVersion=php7.2
+useShortTags=true

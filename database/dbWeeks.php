@@ -16,55 +16,34 @@
  * @version May 1, 2008, modifications September 15, 2008, February 10, 2015
  * @author Adrienne Beebe, Maxwell Palmer and Allen Tucker
  */
-include_once('domain/Week.php');
-include_once('dbinfo.php');
-include_once('dbDates.php');
-include_once('dbShifts.php');
-include_once('domain/Shift.php');
-
-/**
- * Drops the dbWeeks table if it exists, and creates a new one slots =
- * Table fields:
- * [0] id: yy-mm-dd:venue
- * [1] dates: array of RMHDate ids
- * [2] venue: "portland" or "bangor"
- * [3] status: "unpublished", "published" or "archived"
- * [4] name: name of the week
- * [5] end: timestamp of the end of the week
- */
-function create_dbWeeks() {
-    connect();
-    mysql_query("DROP TABLE IF EXISTS dbWeeks");
-    $result = mysql_query("CREATE TABLE dbWeeks (id CHAR(8) NOT NULL, dates TEXT,
-								venue TEXT, status TEXT,
-								name TEXT, end INT, PRIMARY KEY (id))");
-    if (!$result)
-        echo mysql_error();
-    mysql_close();
-}
+ include_once(dirname(__FILE__).'/../domain/Week.php');
+ include_once(dirname(__FILE__).'/dbinfo.php');
+ include_once(dirname(__FILE__).'/dbDates.php');
+ include_once(dirname(__FILE__).'/dbShifts.php');
+ include_once(dirname(__FILE__).'/../domain/Shift.php');
 
 /**
  * Inserts a week into the db
- * @param $w the week to insert
+ * @param week to insert
  */
 function insert_dbWeeks($w) {
     if (!$w instanceof Week) {
         die("Invalid argument for dbWeeks->insert_dbWeeks function call");
     }
-    connect();
+    $con=connect();
     $query = "SELECT * FROM dbWeeks WHERE id =\"" . $w->get_id() . "\"";
-    $result = mysql_query($query);
-    if (mysql_num_rows($result) != 0) {
+    $result = mysqli_query($con,$query);
+    if (mysqli_num_rows($result) != 0) {
         delete_dbWeeks($w);
-        connect();
+        $con=connect();
     }
     $query = "INSERT INTO dbWeeks VALUES (\"" . $w->get_id() . "\"," . get_dates_text($w->get_dates()) . ",\"" .
             $w->get_venue() . "\",\"" .
             $w->get_status() . "\",\"" .
             $w->get_name() . "\",\"" .
             $w->get_end() . "\")";
-    $result = mysql_query($query);
-    mysql_close();
+    $result = mysqli_query($con,$query);
+    mysqli_close($con);
     if (!$result) {
         echo ("<br>unable to insert into dbWeeks: " . $w->get_id() . get_dates_text($w->get_dates()) .
         $w->get_venue() . $w->get_status() . $w->get_name() . $w->get_end() );
@@ -78,17 +57,17 @@ function insert_dbWeeks($w) {
 
 /**
  * Deletes a week from the db
- * @param $w the week to delete
+ * @param week to delete
  */
 function delete_dbWeeks($w) {
     if (!$w instanceof Week)
         die("Invalid argument for delete_dbWeeks function call");
-    connect();
+    $con=connect();
     $query = "DELETE FROM dbWeeks WHERE id=\"" . $w->get_id() . "\"";
-    $result = mysql_query($query);
-    mysql_close();
+    $result = mysqli_query($con,$query);
+    mysqli_close($con);
     if (!$result) {
-        echo ("unable to delete from dbWeeks: " . $w->get_id() . mysql_error());
+        echo ("unable to delete from dbWeeks: " . $w->get_id() . mysqli_error($con));
         return false;
     }
     else
@@ -99,7 +78,7 @@ function delete_dbWeeks($w) {
 
 /**
  * Updates a week in the db by deleting it and re-inserting it
- * @param $w the week to update
+ * @param week to update
  */
 function update_dbWeeks($w) {
     if (!$w instanceof Week)
@@ -112,8 +91,8 @@ function update_dbWeeks($w) {
 
 /**
  * Selects a week from the database
- * @param $id week id --
- * @return the db entry corresponding to id
+ * @param week id
+ * @return week corresponding to that id
  */
 function select_dbWeeks($id) {
 
@@ -125,29 +104,32 @@ function select_dbWeeks($id) {
         $id2 = date("y-m-d", mktime(0, 0, 0, substr($id, 3, 2), substr($id, 6, 2) - $dow + 1, substr($id, 0, 2)))
         . ":" . substr($id,9);
     }
-    connect();
+    $con=connect();
     $query = "SELECT * FROM dbWeeks WHERE id =\"" . $id2 . "\"";
-    $result = mysql_query($query);
-    if (!$result || mysql_numrows($result) == 0) {
+    $result = mysqli_query($con,$query);
+    
+    if (!$result || mysqli_num_rows($result) == 0) {
         $query = "SELECT * FROM dbWeeks WHERE id =\"" . $id . "\"";
-        $result = mysql_query($query);
+        $result = mysqli_query($con,$query);
+        
         if (!$result) {
-            echo '<br>Could not run query: ' . mysql_error();
+            echo '<br>Could not run query: ' . mysqli_error($con);
             $result_row = false;
         }
         else
-            $result_row = mysql_fetch_assoc($result);
+            $result_row = mysqli_fetch_assoc($result);
     }
     else
-        $result_row = mysql_fetch_assoc($result);
-    mysql_close();
+        $result_row = mysqli_fetch_assoc($result);
+    mysqli_close($con);
+    
     return $result_row;
 }
 
 /**
  * retrieves a Week from the database
- * @param $id = yy-mm-dd of the week to retrieve
- * @return the week or null
+ * @param $id = mm-dd-yy of the week to retrieve
+ * @return week with that id, or null
  */
 function get_dbWeeks($id) {
     $result_row = select_dbWeeks($id);
@@ -168,16 +150,16 @@ function get_dbWeeks($id) {
 }
 
 /**
- * the full contents of dbWeeks, used by addWeek to list all scheduld weeks
- * @return array of weeks
+ * the full contents of dbWeeks, used by addWeek to list all scheduled weeks
+ * @return $weeks -- all weeks in the database
  */
 function get_all_dbWeeks($venue) {
-	connect();
+	$con=connect();
 	$query = "SELECT * FROM dbWeeks WHERE venue =\"" . $venue . "\" ORDER BY end";
-	$result = mysql_query($query);
-	mysql_close();
+	$result = mysqli_query($con,$query);
+	mysqli_close($con);
     $weeks = array();
-    while ($result_row = mysql_fetch_assoc($result)) {
+    while ($result_row = mysqli_fetch_assoc($result)) {
     	error_log($result_row['id']);
     	$w = get_dbWeeks($result_row['id']);
     	$weeks[] = $w;

@@ -5,7 +5,7 @@
  * absolutely no warranty. You can redistribute and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation
  * (see <http://www.gnu.org/licenses/ for more information).
- * 
+ *  
  */
 
 session_start();
@@ -244,16 +244,16 @@ session_cache_expire(30);
                 function get_available_volunteer_options($msentry, $persons) {
                     if (!$persons[0])
                         array_shift($persons);
-                    connect();
+                    $con=connect();
                     $chrtime =  $msentry ->get_day() . ":" . $msentry->get_hours().":".$msentry->get_venue();
 echo "chrtime = ". $chrtime;
                     $query = "SELECT * FROM dbPersons WHERE status = 'active' " .
                             "AND availability LIKE '%" . $chrtime . "%' ORDER BY last_name,first_name";
-                    $result = mysql_query($query);
-                    mysql_close();
+                    $result = mysqli_query($con,$query);
+                    mysqli_close($con);
                     $s = "";
-                    for ($i = 0; $i < mysql_num_rows($result); ++$i) {
-                        $row = mysql_fetch_row($result);
+                    for ($i = 0; $i < mysqli_num_rows($result); ++$i) {
+                        $row = mysqli_fetch_row($result);
                         $value = $row[0];
                         $label = $row[4] . ", " . $row[3];
                         $match = false;
@@ -273,14 +273,14 @@ echo "chrtime = ". $chrtime;
                 function get_all_volunteer_options($persons, $venue) {
                     if (!$persons[0])
                         array_shift($persons);
-                    connect();
+                    $con=connect();
                     $query = "SELECT * FROM dbPersons WHERE status = 'active' " .
                     	"AND availability LIKE '%" . $venue . "%' ORDER BY last_name,first_name";
-                    $result = mysql_query($query);
-                    mysql_close();
+                    $result = mysqli_query($con,$query);
+                    mysqli_close($con);
                     $s = "";
-                    for ($i = 0; $i < mysql_num_rows($result); ++$i) {
-                        $row = mysql_fetch_row($result);
+                    for ($i = 0; $i < mysqli_num_rows($result); ++$i) {
+                        $row = mysqli_fetch_row($result);
                         $value = $row[0];
                         $label = $row[4] . ", " . $row[3];
                         $match = false;
