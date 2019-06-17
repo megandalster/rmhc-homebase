@@ -85,7 +85,7 @@
 		            echo(' | <a href="https://sites.google.com/site/rmhvolunteersite"  target="_BLANK">around the house </a>');
 	            }
 	            else {
-	            	echo(' | <a href="https://sites.google.com/site/aroundthehousebangor/home"  target="_BLANK">around the house </a>');
+	            	echo(' | <a href="https://sites.google.com/view/aroundthebangorhouse/home"  target="_BLANK">around the house </a>');
 	            }
 	        }
 	        if ($_SESSION['access_level'] >= 2) {

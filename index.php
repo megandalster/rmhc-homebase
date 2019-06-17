@@ -140,7 +140,7 @@ session_cache_expire(30);
                                 echo('<div class="vacancyBox">');
                                 echo('<p><strong>Upcoming Vacancies:</strong><ul>');
                                 while ($thisRow = mysqli_fetch_array($vacancy_list, MYSQLI_ASSOC)) {
-                                    $shift_date = mktime(0, 0, 0, substr($thisRow['id'], 0, 2), substr($thisRow['id'], 3, 2), substr($thisRow['id'], 6, 2));
+                                    $shift_date = mktime(0, 0, 0, substr($thisRow['id'], 3, 2), substr($thisRow['id'], 6, 2), substr($thisRow['id'], 0, 2));
                                     if ($shift_date > $today && $shift_date < $two_weeks) {
                                         echo('<li type="circle"><a href="' . $path . 'editShift.php?shift=' . $thisRow['id'] . '">' . get_shift_name_from_id($thisRow['id']) . '</a></li>');
                                     }
