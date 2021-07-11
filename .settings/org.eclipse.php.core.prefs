@@ -1,5 +1,5 @@
 eclipse.preferences.version=1
-include_path=0;/rmhc-homebase\u00051;/Applications/MAMP/htdocs/phpunit.phar
+include_path=0;/rmhc-homebase
 pdt_validator/enabled=true
 pdt_validator/org.eclipse.php.internal.core.compiler.ast.parser.PHPProblemIdentifier/CannotInstantiateType/severity=ERROR
 pdt_validator/org.eclipse.php.internal.core.compiler.ast.parser.PHPProblemIdentifier/ImportNotFound/severity=ERROR

@@ -76,9 +76,9 @@ if ($_SESSION['access_level'] == 0) {
         else 
         	echo '<p>First Name: '.$person->get_first_name();
     ?>  &nbsp;&nbsp;&nbsp;&nbsp;  Last Name<span style="font-size:x-small;color:FF0000">*</span>: <input type="text" name="last_name" tabindex="2" value="<?PHP echo($person->get_last_name()) ?>">
-        <p>Address<span style="font-size:x-small;color:FF0000">*</span>: <input type="text" name="address" tabindex="3" size=40 value="<?PHP echo($person->get_address()) ?>">
-        <p>City<span style="font-size:x-small;color:FF0000">*</span>: <input type="text" name="city" tabindex="4" value="<?PHP echo($person->get_city()) ?>">
-        State, Zip<span style="font-size:x-small;color:FF0000">*</span>:
+        <p>Address: <input type="text" name="address" tabindex="3" size=40 value="<?PHP echo($person->get_address()) ?>">
+        <p>City: <input type="text" name="city" tabindex="4" value="<?PHP echo($person->get_city()) ?>">
+        State, Zip:
             <select name="state" tabindex="5">
 <?PHP
 $states = array("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN", "IA",

@@ -25,12 +25,6 @@ function validate_form($person) {
         $errors[] = 'Please enter a first name';
     if ($_POST['last_name'] == null)
         $errors[] = 'Please enter a last name';
-    if ($_POST['city'] == null)
-        $errors[] = 'Please enter a city';
-    if ($_POST['address'] == null)
-        $errors[] = 'Please enter an address';
-    if (($_POST['zip'] != strval(intval($_POST['zip']))) || ($_POST['zip'] == null) || (strlen($_POST['zip']) != 5))
-        $errors[] = 'Please enter a valid zip code (5 digits: #####)';
     if ($_SESSION['access_level'] == 0 && ($_POST['status'] == null))
         $_POST['status'] = 'applicant';
     if ($_POST['type'] == null && $_SESSION['access_level'] >= 1)
